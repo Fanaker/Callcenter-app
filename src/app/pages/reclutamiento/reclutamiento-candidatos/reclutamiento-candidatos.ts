@@ -3,17 +3,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RqService } from '../../../services/rq';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CandidatosListadoComponent } from '../candidatos-listado/candidatos-listado.component';
 
 @Component({
   selector: 'app-reclutamiento-candidatos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CandidatosListadoComponent],
   templateUrl: './reclutamiento-candidatos.html',
   styleUrl: './reclutamiento-candidatos.css'
 })
 export class ReclutamientoCandidatos implements OnInit {
   rq: any;
   message = '';
+  selectedCandidate: any = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,9 +42,12 @@ export class ReclutamientoCandidatos implements OnInit {
     window.open(link, '_blank');
   }
 
-  saveCandidate(candidate: any) {
-    this.rqService.updateCandidate(this.rq.codigo, candidate);
-    this.message = 'Candidato guardado';
+  verDetallePostulante(candidate: any) {
+    this.selectedCandidate = candidate;
+  }
+
+  openCv(url: string) {
+    window.open(url, '_blank');
   }
 
   getAllCandidates() {

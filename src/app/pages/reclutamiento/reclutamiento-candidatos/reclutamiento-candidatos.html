@@ -1,66 +1,51 @@
 <div *ngIf="rq; else noRq">
-  <h2>RQ {{ rq.codigo }} - {{ rq.puesto }}</h2>
-  <p>
-    Personal necesario: {{ rq.cantidad }} | Inicio labores: {{ rq.fechaIngreso }} | Inicio capacitación:
-    {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
-  </p>
+  <div class="rq-header">
+    <div class="rq-identidad">
+      <div class="rq-codigo">RQ {{ rq.codigo }}</div>
+      <div class="rq-campania">{{ rq.campania || rq['campaña'] || rq.campaign || 'Sin campaña' }}</div>
+      <div class="rq-puesto">{{ rq.puesto }}</div>
+    </div>
+
+    <div class="rq-meta">
+      <span>Personal necesario: {{ rq.cantidad }}</span>
+      <span>Inicio labores: {{ rq.fechaIngreso }}</span>
+      <span>Inicio capacitación: {{ rq.fechaInicioCapacitacion }}</span>
+      <span>Fin capacitación: {{ rq.fechaFinCapacitacion }}</span>
+    </div>
+  </div>
+
   <p>Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+
   <div class="link-actions">
     <button (click)="copyApplyLink()">Copiar link</button>
     <button (click)="openApplyLink()">Ver link</button>
   </div>
+
   <p *ngIf="message" class="message">{{ message }}</p>
 
   <h3>Todos los candidatos postulados</h3>
 
-  <div *ngIf="getAllCandidates().length > 0" class="candidates-list">
-    <table class="candidates-table">
-      <thead>
-        <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Correo</th>
-          <th>Teléfono</th>
-          <th>Medio preferido</th>
-          <th>Apto</th>
-          <th>Entrevista</th>
-          <th>Guardar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let candidate of getAllCandidates()" class="candidate-row">
-          <td>{{ candidate.dni }}</td>
-          <td>{{ candidate.nombre }}</td>
-          <td>{{ candidate.apellido }}</td>
-          <td>{{ candidate.correo }}</td>
-          <td>{{ candidate.telefono }}</td>
-          <td>{{ candidate.medioPreferido }}</td>
-          <td>
-            <select [(ngModel)]="candidate.apto">
-              <option [ngValue]="true">Sí</option>
-              <option [ngValue]="false">No</option>
-            </select>
-          </td>
-          <td>
-            <select [(ngModel)]="candidate.entrevista">
-              <option [ngValue]="true">Sí</option>
-              <option [ngValue]="false">No</option>
-            </select>
-          </td>
-          <td>
-            <button (click)="saveCandidate(candidate)">Guardar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <app-candidatos-listado
+      [candidatos]="getAllCandidates()"
+      (verDetalle)="verDetallePostulante($event)">
+    </app-candidatos-listado>
 
-  <div *ngIf="getAllCandidates().length === 0" class="no-candidates">
-    <p>No hay candidatos postulados aún.</p>
+    <div *ngIf="selectedCandidate" class="detalle-postulante">
+      <h4>Detalle del postulante</h4>
+      <p><strong>DNI:</strong> {{ selectedCandidate.dni || selectedCandidate.id || 'No disponible' }}</p>
+      <p><strong>Nombre:</strong> {{ selectedCandidate.nombre }}</p>
+      <p><strong>Apellido:</strong> {{ selectedCandidate.apellido }}</p>
+      <p><strong>Email:</strong> {{ selectedCandidate.email || selectedCandidate.correo || 'No disponible' }}</p>
+      <p><strong>Teléfono:</strong> {{ selectedCandidate.telefono || 'No disponible' }}</p>
+      <p><strong>Apto:</strong> {{ selectedCandidate.apto }}</p>
+      <p><strong>Entrevista:</strong> {{ selectedCandidate.entrevista }}</p>
+      <p><strong>Medio preferido:</strong> {{ selectedCandidate.medioPreferido || 'No disponible' }}</p>
+      <div class="cv-actions">
+        <button *ngIf="selectedCandidate.cvUrl" (click)="openCv(selectedCandidate.cvUrl)">Ver CV</button>
+        <span *ngIf="!selectedCandidate.cvUrl">CV pendiente</span>
+      </div>
+    </div>
   </div>
-</div>
-
 <ng-template #noRq>
   <div class="no-rq">
     <p>RQ no encontrada.</p>

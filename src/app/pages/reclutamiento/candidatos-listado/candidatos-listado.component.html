@@ -1,0 +1,81 @@
+<div class="candidatos-container">
+  <div class="header">
+    <h2>Postulantes</h2>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <button
+      class="btn-filter"
+      [class.active]="filtroActual === null"
+      (click)="aplicarFiltro(null)">
+      Todos ({{ candidatosOriginales.length }})
+    </button>
+    <button
+      class="btn-filter"
+      [class.active]="filtroActual === 'apto-si'"
+      (click)="aplicarFiltro('apto-si')">
+      Aptos ({{ contarApto('si') }})
+    </button>
+    <button
+      class="btn-filter"
+      [class.active]="filtroActual === 'apto-no'"
+      (click)="aplicarFiltro('apto-no')">
+      No Aptos ({{ contarApto('no') }})
+    </button>
+    <button
+      class="btn-filter"
+      [class.active]="filtroActual === 'entrevista-si'"
+      (click)="aplicarFiltro('entrevista-si')">
+      Con Entrevista ({{ contarEntrevista('si') }})
+    </button>
+  </div>
+
+  <div class="tabla-container">
+    <div *ngIf="cargando" class="spinner">Cargando...</div>
+
+    <table class="candidatos-table" *ngIf="!cargando">
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Apto</th>
+          <th>Entrevista</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let candidato of candidatosFiltrados">
+          <td>{{ candidato.id || candidato.dni || '—' }}</td>
+          <td>{{ candidato.nombre }}</td>
+          <td>{{ candidato.apellido }}</td>
+          <td>
+            <select [ngModel]="candidato.apto" (ngModelChange)="cambiarApto(candidato, $event)">
+              <option [value]="'si'">Sí</option>
+              <option [value]="'no'">No</option>
+            </select>
+          </td>
+          <td>
+            <select
+              [ngModel]="candidato.entrevista"
+              (ngModelChange)="cambiarEntrevista(candidato, $event)"
+              [disabled]="!puedeMarcarEntrevista(candidato)">
+              <option [value]="'si'">Sí</option>
+              <option [value]="'no'">No</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn-secondary" (click)="verDetalleCandidato(candidato)">
+              Ver detalle
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="candidatosFiltrados.length === 0 && !cargando" class="sin-resultados">
+      No hay candidatos que mostrar
+    </div>
+  </div>
+</div>
