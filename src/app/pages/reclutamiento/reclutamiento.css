@@ -45,7 +45,7 @@
 
 button,
 .link-button {
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: none;
   border-radius: 8px;
   background-color: #2563eb;
@@ -55,6 +55,12 @@ button,
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-right: 8px;
+}
+
+button:last-child,
+.link-button:last-child {
+  margin-right: 0;
 }
 
 button:hover,
@@ -69,6 +75,11 @@ button:hover,
   background-color: #d1fae5;
   color: #065f46;
   font-weight: 600;
+}
+
+.estado-cerrado {
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
 .no-rqs {

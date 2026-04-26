@@ -26,23 +26,40 @@
   <h3>Todos los candidatos postulados</h3>
 
   <app-candidatos-listado
+      *ngIf="!selectedCandidate"
       [candidatos]="getAllCandidates()"
       (verDetalle)="verDetallePostulante($event)">
     </app-candidatos-listado>
 
-    <div *ngIf="selectedCandidate" class="detalle-postulante">
-      <h4>Detalle del postulante</h4>
-      <p><strong>DNI:</strong> {{ selectedCandidate.dni || selectedCandidate.id || 'No disponible' }}</p>
-      <p><strong>Nombre:</strong> {{ selectedCandidate.nombre }}</p>
-      <p><strong>Apellido:</strong> {{ selectedCandidate.apellido }}</p>
-      <p><strong>Email:</strong> {{ selectedCandidate.email || selectedCandidate.correo || 'No disponible' }}</p>
-      <p><strong>Teléfono:</strong> {{ selectedCandidate.telefono || 'No disponible' }}</p>
-      <p><strong>Apto:</strong> {{ selectedCandidate.apto }}</p>
-      <p><strong>Entrevista:</strong> {{ selectedCandidate.entrevista }}</p>
-      <p><strong>Medio preferido:</strong> {{ selectedCandidate.medioPreferido || 'No disponible' }}</p>
-      <div class="cv-actions">
-        <button *ngIf="selectedCandidate.cvUrl" (click)="openCv(selectedCandidate.cvUrl)">Ver CV</button>
-        <span *ngIf="!selectedCandidate.cvUrl">CV pendiente</span>
+    <div *ngIf="selectedCandidate" class="detalle-completo">
+      <button (click)="selectedCandidate = null" class="btn-volver">Volver a la lista</button>
+      <h3>Datos del RQ</h3>
+      <div class="rq-detalle">
+        <p><strong>Código:</strong> {{ rq.codigo }}</p>
+        <p><strong>Campaña:</strong> {{ rq.campaign }}</p>
+        <p><strong>Puesto:</strong> {{ rq.puesto }}</p>
+        <p><strong>Cantidad:</strong> {{ rq.cantidad }}</p>
+        <p><strong>Fecha de Ingreso:</strong> {{ rq.fechaIngreso }}</p>
+        <p><strong>Inicio Capacitación:</strong> {{ rq.fechaInicioCapacitacion }}</p>
+        <p><strong>Fin Capacitación:</strong> {{ rq.fechaFinCapacitacion }}</p>
+        <p><strong>Días Capacitación:</strong> {{ rq.diasCapacitacion }}</p>
+        <p><strong>Estado:</strong> {{ rq.estado }}</p>
+        <p><strong>Comentarios:</strong> {{ rq.comentarios || 'Sin comentarios' }}</p>
+      </div>
+      <h3>Datos del Postulante</h3>
+      <div class="postulante-detalle">
+        <p><strong>DNI:</strong> {{ selectedCandidate.dni || selectedCandidate.id || 'No disponible' }}</p>
+        <p><strong>Nombre:</strong> {{ selectedCandidate.nombre }}</p>
+        <p><strong>Apellido:</strong> {{ selectedCandidate.apellido }}</p>
+        <p><strong>Email:</strong> {{ selectedCandidate.email || selectedCandidate.correo || 'No disponible' }}</p>
+        <p><strong>Teléfono:</strong> {{ selectedCandidate.telefono || 'No disponible' }}</p>
+        <p><strong>Requisito:</strong> {{ selectedCandidate.apto === 'si' ? 'Cumple' : 'No Cumple' }}</p>
+        <p><strong>Entrevista:</strong> {{ selectedCandidate.entrevista === 'si' ? 'Apto' : 'No apto' }}</p>
+        <p><strong>Medio preferido:</strong> {{ selectedCandidate.medioPreferido || 'No disponible' }}</p>
+        <div class="cv-actions">
+          <button *ngIf="selectedCandidate.cvUrl" (click)="openCv(selectedCandidate.cvUrl)">Ver CV</button>
+          <span *ngIf="!selectedCandidate.cvUrl">CV pendiente</span>
+        </div>
       </div>
     </div>
   </div>

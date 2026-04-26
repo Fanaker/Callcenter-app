@@ -10,6 +10,10 @@
     <p>{{ getActiveRQs() }}</p>
   </div>
   <div class="metric">
+    <h3>Personal Requerido (Abiertos)</h3>
+    <p>{{ getTotalPersonalRequerido() }}</p>
+  </div>
+  <div class="metric">
     <h3>Postulantes Totales</h3>
     <p>{{ getTotalPostulantes() }}</p>
   </div>
@@ -27,37 +31,52 @@
 
 <h3>📋 RQs creados</h3>
 
-<div *ngIf="rqs.length > 0" class="rqs-list">
+<div class="filters">
+  <label>Estado:</label>
+  <select [(ngModel)]="statusFilter">
+    <option value="todos">Todos</option>
+    <option value="abierto">Abierto</option>
+    <option value="cerrado">Cerrado</option>
+  </select>
+
+  <label>Campaña:</label>
+  <select [(ngModel)]="campaignFilter">
+    <option value="">Todas las campañas</option>
+    <option *ngFor="let camp of uniqueCampaigns" [value]="camp">{{ camp }}</option>
+  </select>
+</div>
+
+<div *ngIf="filteredAndSortedRqs.length > 0" class="rqs-list">
   <table class="rqs-table">
     <thead>
       <tr>
-        <th>Código</th>
-        <th>Campaña</th>
-        <th>Puesto</th>
-        <th>Cantidad</th>
-        <th>Días capacitación</th>
-        <th>Fecha de Ingreso</th>
-        <th>Fin Capacitación</th>
-        <th>Inicio Capacitación</th>
+        <th (click)="sortBy('codigo')">Código</th>
+        <th (click)="sortBy('campaign')">Campaña</th>
+        <th (click)="sortBy('puesto')">Puesto</th>
+        <th (click)="sortBy('cantidad')">Cantidad</th>
+        <th (click)="sortBy('fechaInicioCapacitacion')">Inicio Capacitación</th>
+        <th (click)="sortBy('fechaFinCapacitacion')">Fin Capacitación</th>
+        <th (click)="sortBy('diasCapacitacion')">Días capacitación</th>
+        <th (click)="sortBy('fechaIngreso')">Fecha de Ingreso</th>
         <th>Estado</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let rq of rqs" class="rq-row">
+      <tr *ngFor="let rq of filteredAndSortedRqs" class="rq-row">
         <td>{{ rq.codigo }}</td>
         <td>{{ rq.campaign }}</td>
         <td>{{ rq.puesto }}</td>
         <td>{{ rq.cantidad }}</td>
+        <td>{{ rq.fechaInicioCapacitacion }}</td>
+        <td>{{ rq.fechaFinCapacitacion }}</td>
         <td>{{ rq.diasCapacitacion }}</td>
         <td>{{ rq.fechaIngreso }}</td>
-        <td>{{ rq.fechaFinCapacitacion }}</td>
-        <td>{{ rq.fechaInicioCapacitacion }}</td>
-        <td><span class="estado-badge">{{ rq.estado }}</span></td>
+        <td><span class="estado-badge" [class.estado-cerrado]="rq.estado === 'CERRADO'">{{ rq.estado }}</span></td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div *ngIf="rqs.length === 0" class="no-rqs">
-  <p>No hay RQs registrados aún.</p>
+<div *ngIf="filteredAndSortedRqs.length === 0" class="no-rqs">
+  <p>No hay RQs que coincidan con los filtros seleccionados.</p>
 </div>

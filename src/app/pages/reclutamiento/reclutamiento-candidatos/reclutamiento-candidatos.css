@@ -1,3 +1,39 @@
+.detalle-completo {
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
+
+.btn-volver {
+  padding: 10px 20px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.btn-volver:hover {
+  background-color: #4b5563;
+}
+
+.rq-detalle, .postulante-detalle {
+  margin-bottom: 30px;
+}
+
+.rq-detalle p, .postulante-detalle p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.rq-detalle h3, .postulante-detalle h3 {
+  color: #2563eb;
+  margin-bottom: 15px;
+}
+
 .link-actions {
   margin-bottom: 20px;
 }

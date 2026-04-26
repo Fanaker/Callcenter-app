@@ -4,13 +4,14 @@
   <table class="rqs-table">
     <thead>
       <tr>
-        <th>RQ</th>
+        <th>Código</th>
         <th>Campaña</th>
         <th>Puesto</th>
-        <th>Personal necesario</th>
-        <th>Inicio labores</th>
-        <th>Inicio capacitación</th>
-        <th>Fin capacitación</th>
+        <th>Cantidad</th>
+        <th>Inicio Capacitación</th>
+        <th>Fin Capacitación</th>
+        <th>Días capacitación</th>
+        <th>Fecha de Ingreso</th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>
@@ -21,10 +22,11 @@
         <td>{{ rq.campaign }}</td>
         <td>{{ rq.puesto }}</td>
         <td>{{ rq.cantidad }}</td>
-        <td>{{ rq.fechaIngreso }}</td>
         <td>{{ rq.fechaInicioCapacitacion }}</td>
         <td>{{ rq.fechaFinCapacitacion }}</td>
-        <td><span class="estado-badge">{{ rq.estado }}</span></td>
+        <td>{{ rq.diasCapacitacion }}</td>
+        <td>{{ rq.fechaIngreso }}</td>
+        <td><span class="estado-badge" [class.estado-cerrado]="rq.estado === 'CERRADO'">{{ rq.estado }}</span></td>
         <td>
           <a [routerLink]="['/reclutamiento/rq', rq.codigo, 'candidatos']" class="link-button">Ver candidatos</a>
           <a [routerLink]="['/reclutamiento/rq', rq.codigo]" class="link-button">Ver resultados</a>
