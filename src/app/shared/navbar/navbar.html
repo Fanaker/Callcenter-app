@@ -1,0 +1,15 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <h3>Quantia</h3>
+  </div>
+  <div class="navbar-menu">
+    <a routerLink="/planeamiento" class="navbar-link">Planeamiento</a>
+    <a routerLink="/reclutamiento" class="navbar-link">Reclutamiento</a>
+    <a routerLink="/formacion" class="navbar-link">Formación</a>
+  </div>
+  <div class="navbar-user">
+    <span class="user-info">Usuario: admin</span>
+    <button class="navbar-button" (click)="reportIssue()">Reportar problema</button>
+    <button class="navbar-button logout" (click)="logout()">Cerrar sesión</button>
+  </div>
+</nav>

@@ -1,0 +1,58 @@
+.login-container, .register-container, .verification-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-form, .register-form, .verification-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-form label, .register-form label, .verification-form label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.login-form input, .register-form input, .verification-form input {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.login-form button, .register-form button, .verification-form button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.login-form button:disabled, .register-form button:disabled, .verification-form button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.switch-mode {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.link {
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: #1d4ed8;
+}

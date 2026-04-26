@@ -1,0 +1,85 @@
+.link-actions {
+  margin-bottom: 20px;
+}
+
+.link-actions button {
+  margin-right: 10px;
+  padding: 8px 16px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.link-actions button:hover {
+  background-color: #1d4ed8;
+}
+
+.message {
+  color: green;
+  margin-bottom: 20px;
+}
+
+.candidates-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.candidates-table thead {
+  background-color: #f0f2f5;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.candidates-table th {
+  padding: 14px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.candidates-table tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.candidates-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.candidates-table td {
+  padding: 14px;
+  color: #555;
+  font-size: 14px;
+}
+
+.candidates-table select {
+  padding: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+}
+
+.candidates-table button {
+  padding: 6px 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.candidates-table button:hover {
+  background-color: #1d4ed8;
+}
+
+.no-candidates, .no-rq {
+  text-align: center;
+  margin-top: 50px;
+  color: #666;
+}

@@ -1,0 +1,57 @@
+<div *ngIf="rq; else noRq">
+  <h2>RQ {{ rq.codigo }} - {{ rq.puesto }}</h2>
+  <p>
+    Personal necesario: {{ rq.cantidad }} | Inicio labores: {{ rq.fechaIngreso }} | Inicio capacitación:
+    {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
+  </p>
+  <p>Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+  <h3>Resultados aprobados</h3>
+
+  <div *ngIf="getResults().length > 0" class="candidates-list">
+    <table class="candidates-table">
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
+          <th>Medio preferido</th>
+          <th>Contratar</th>
+          <th>Guardar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let candidate of getResults()" class="candidate-row">
+          <td>{{ candidate.dni }}</td>
+          <td>{{ candidate.nombre }}</td>
+          <td>{{ candidate.apellido }}</td>
+          <td>{{ candidate.correo }}</td>
+          <td>{{ candidate.telefono }}</td>
+          <td>{{ candidate.medioPreferido }}</td>
+          <td>
+            <select [(ngModel)]="candidate.contratar">
+              <option [ngValue]="true">Sí</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </td>
+          <td>
+            <button (click)="saveCandidate(candidate)">Guardar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="getResults().length === 0" class="no-rqs">
+    <p>No hay candidatos aprobados para esta RQ.</p>
+  </div>
+</div>
+
+<ng-template #noRq>
+  <div class="no-rqs">
+    <p>RQ no encontrada.</p>
+  </div>
+</ng-template>

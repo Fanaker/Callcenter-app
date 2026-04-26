@@ -1,0 +1,59 @@
+<div *ngIf="rq; else noRq">
+  <h2>Detalle de Formación - {{ rq.codigo }}</h2>
+  <p>
+    Campaña: {{ rq.campaign }} | Puesto: {{ rq.puesto }} | Inicio capacitación: {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
+  </p>
+
+  <div class="config-panel">
+    <label>Número de tests</label>
+    <input type="number" min="1" max="5" [(ngModel)]="rq.testCount">
+
+    <label>Nota aprobatoria</label>
+    <input type="number" min="0" max="20" [(ngModel)]="rq.aprobacionPromedio">
+
+    <button class="save-button" (click)="saveConfig()">Guardar configuración</button>
+  </div>
+
+  <div class="link-actions">
+    <a [routerLink]="['/formacion']" class="link-button">Volver a formación</a>
+  </div>
+
+  <div *ngIf="rq.candidatos?.length > 0" class="candidates-table-wrapper">
+    <table class="candidates-table">
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th *ngFor="let index of getTestIndexes()">Test {{ index }}</th>
+          <th>Promedio</th>
+          <th>Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let candidato of rq.candidatos">
+          <td>{{ candidato.dni }}</td>
+          <td>{{ candidato.nombre }}</td>
+          <td>{{ candidato.apellido }}</td>
+          <td *ngFor="let index of getTestIndexes()">
+            <input type="number" min="0" max="20" [(ngModel)]="candidato['test' + index]">
+          </td>
+          <td>{{ getAverage(candidato) }}</td>
+          <td>{{ isApproved(candidato) ? 'Aprobado' : 'No aprobado' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="save-button" (click)="saveResults()">Guardar resultados</button>
+    <p *ngIf="message" class="message">{{ message }}</p>
+  </div>
+
+  <div *ngIf="rq.candidatos?.length === 0" class="no-rqs">
+    <p>No hay candidatos registrados para esta RQ.</p>
+  </div>
+</div>
+
+<ng-template #noRq>
+  <div class="no-rqs">
+    <p>RQ no encontrada para formación.</p>
+  </div>
+</ng-template>

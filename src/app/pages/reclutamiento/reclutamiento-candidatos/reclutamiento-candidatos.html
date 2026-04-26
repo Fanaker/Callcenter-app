@@ -1,0 +1,68 @@
+<div *ngIf="rq; else noRq">
+  <h2>RQ {{ rq.codigo }} - {{ rq.puesto }}</h2>
+  <p>
+    Personal necesario: {{ rq.cantidad }} | Inicio labores: {{ rq.fechaIngreso }} | Inicio capacitación:
+    {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
+  </p>
+  <p>Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+  <div class="link-actions">
+    <button (click)="copyApplyLink()">Copiar link</button>
+    <button (click)="openApplyLink()">Ver link</button>
+  </div>
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+  <h3>Todos los candidatos postulados</h3>
+
+  <div *ngIf="getAllCandidates().length > 0" class="candidates-list">
+    <table class="candidates-table">
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
+          <th>Medio preferido</th>
+          <th>Apto</th>
+          <th>Entrevista</th>
+          <th>Guardar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let candidate of getAllCandidates()" class="candidate-row">
+          <td>{{ candidate.dni }}</td>
+          <td>{{ candidate.nombre }}</td>
+          <td>{{ candidate.apellido }}</td>
+          <td>{{ candidate.correo }}</td>
+          <td>{{ candidate.telefono }}</td>
+          <td>{{ candidate.medioPreferido }}</td>
+          <td>
+            <select [(ngModel)]="candidate.apto">
+              <option [ngValue]="true">Sí</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </td>
+          <td>
+            <select [(ngModel)]="candidate.entrevista">
+              <option [ngValue]="true">Sí</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </td>
+          <td>
+            <button (click)="saveCandidate(candidate)">Guardar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="getAllCandidates().length === 0" class="no-candidates">
+    <p>No hay candidatos postulados aún.</p>
+  </div>
+</div>
+
+<ng-template #noRq>
+  <div class="no-rq">
+    <p>RQ no encontrada.</p>
+  </div>
+</ng-template>

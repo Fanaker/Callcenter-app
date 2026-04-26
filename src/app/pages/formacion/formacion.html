@@ -1,0 +1,16 @@
+<h2>🟦 Formación - RQs para capacitar</h2>
+
+<div *ngIf="rqs.length > 0" class="formacion-container">
+  <div *ngFor="let rq of rqs" class="rq-card">
+    <h3>{{ rq.codigo }} - {{ rq.puesto }}</h3>
+    <p>
+      Campaña: {{ rq.campaign }} | Fecha ingreso: {{ rq.fechaIngreso }} | Inicio capacitación: {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
+    </p>
+    <p>Candidatos registrados: {{ rq.candidatos?.length || 0 }}</p>
+    <a [routerLink]="['/formacion/rq', rq.codigo]" class="link-button">Ver detalle</a>
+  </div>
+</div>
+
+<div *ngIf="rqs.length === 0" class="no-rqs">
+  <p>No hay RQs registradas para formación.</p>
+</div>

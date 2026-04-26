@@ -1,0 +1,81 @@
+.rqs-list {
+  margin-top: 20px;
+}
+
+.rqs-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.rqs-table th,
+.rqs-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.rqs-table th {
+  background-color: #f8fafc;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+}
+
+.rqs-table td {
+  text-align: center;
+}
+
+.rqs-table tr:hover {
+  background-color: #f3f4f6;
+}
+
+.rq-link {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.rq-link:hover {
+  text-decoration: underline;
+}
+
+button,
+.link-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover,
+.link-button:hover {
+  background-color: #1d4ed8;
+}
+
+.estado-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: #d1fae5;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.no-rqs {
+  margin-top: 18px;
+  padding: 20px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  color: #475569;
+}

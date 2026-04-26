@@ -1,0 +1,58 @@
+.postular-form {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.postular-form label {
+  font-weight: 600;
+  color: #111827;
+}
+
+.postular-form input,
+.postular-form textarea,
+.postular-form select {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.postular-form button {
+  width: fit-content;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.success-message {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 10px;
+  background-color: #d1fae5;
+  color: #064e3b;
+}
+
+.info-text {
+  margin: 0;
+  color: #475569;
+  font-size: 13px;
+}
+
+.no-rqs {
+  margin-top: 18px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}

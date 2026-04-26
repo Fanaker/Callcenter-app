@@ -1,0 +1,47 @@
+<div *ngIf="rq; else noRq">
+  <h2>Postularse a {{ rq.codigo }} - {{ rq.puesto }}</h2>
+  <p>Por favor completa los datos del formulario y envía tu postulación.</p>
+
+  <form class="postular-form" (ngSubmit)="enviar()">
+    <input type="hidden" name="rqCodigo" [value]="rq.codigo">
+
+    <label>Nombre</label>
+    <input type="text" [(ngModel)]="nombre" name="nombre" required>
+
+    <label>Apellido</label>
+    <input type="text" [(ngModel)]="apellido" name="apellido" required>
+
+    <label>Número de DNI</label>
+    <input type="text" [(ngModel)]="dni" name="dni" maxlength="8" pattern="[0-9]*" inputmode="numeric" required>
+
+    <label>Correo</label>
+    <input type="email" [(ngModel)]="correo" name="correo" required>
+
+    <label>Teléfono</label>
+    <input type="tel" [(ngModel)]="telefono" name="telefono" required>
+
+    <label>Medio de comunicación preferido</label>
+    <select [(ngModel)]="medioPreferido" name="medioPreferido">
+      <option value="llamada">Llamada</option>
+      <option value="whatsapp">Whatsapp</option>
+      <option value="email">Email</option>
+    </select>
+
+    <label>Adjuntar CV</label>
+    <input type="file" (change)="onFileChange($event)">
+    <p *ngIf="cvName" class="info-text">CV seleccionado: {{ cvName }}</p>
+
+    <label>Comentarios extras (opcional)</label>
+    <textarea rows="4" [(ngModel)]="comentarios" name="comentarios"></textarea>
+
+    <button type="submit">Enviar postulación</button>
+  </form>
+
+  <p *ngIf="message" class="success-message">{{ message }}</p>
+</div>
+
+<ng-template #noRq>
+  <div class="no-rqs">
+    <p>RQ no encontrada para postularse.</p>
+  </div>
+</ng-template>

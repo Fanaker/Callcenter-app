@@ -1,0 +1,80 @@
+.formacion-container {
+  display: grid;
+  gap: 24px;
+}
+
+.rq-card {
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.rq-card h3 {
+  margin-bottom: 8px;
+}
+
+.candidates-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.candidates-table th,
+.candidates-table td {
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.candidates-table th {
+  background-color: #f8fafc;
+  font-weight: 700;
+}
+
+.candidates-table tr:hover {
+  background-color: #f9fafb;
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.save-button {
+  margin-top: 16px;
+  padding: 10px 16px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #1d4ed8;
+}
+
+.no-rqs {
+  margin-top: 16px;
+  padding: 18px;
+  border-radius: 10px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: white;
+  text-decoration: none;
+}
+
+.link-button:hover {
+  background-color: #1d4ed8;
+}

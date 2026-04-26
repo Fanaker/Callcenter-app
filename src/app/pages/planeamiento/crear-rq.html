@@ -1,0 +1,34 @@
+<h2>Crear Nueva RQ</h2>
+
+<div class="form-container">
+  <label>Campaña</label>
+  <input type="text" placeholder="Nombre de la campaña" [(ngModel)]="campaign">
+
+  <label>Puesto solicitado</label>
+  <input type="text" placeholder="Nombre del puesto" [(ngModel)]="puesto">
+
+  <label>Cantidad de personal a reclutar</label>
+  <input type="number" placeholder="Cantidad de personal" [(ngModel)]="cantidad">
+
+  <label>Fecha prevista de inicio del personal</label>
+  <input type="date" [(ngModel)]="fechaIngreso" (change)="onFechaChange()">
+
+  <label>Fin capacitación</label>
+  <input type="date" [(ngModel)]="fechaFinCapacitacion" (change)="onFechaChange()">
+  <div *ngIf="errorFechaFinCapacitacion" class="error-message">{{ errorFechaFinCapacitacion }}</div>
+
+  <label>Inicio capacitación</label>
+  <input type="date" [(ngModel)]="fechaInicioCapacitacion" (change)="onFechaChange()">
+  <div *ngIf="errorFechaInicioCapacitacion" class="error-message">{{ errorFechaInicioCapacitacion }}</div>
+
+  <label>Días de capacitación necesarias</label>
+  <input type="number" min="1" placeholder="Días de capacitación" [(ngModel)]="diasCapacitacion">
+
+  <label>Comentarios adicionales (opcional)</label>
+  <textarea rows="3" placeholder="Comentarios adicionales" [(ngModel)]="comentarios"></textarea>
+
+  <button (click)="crearRQ()"
+          [disabled]="campaign.trim() === '' || cantidad <= 0 || !puesto.trim() || !fechaIngreso || !fechaFinCapacitacion || !fechaInicioCapacitacion || diasCapacitacion <= 0">
+    Crear RQ
+  </button>
+</div>

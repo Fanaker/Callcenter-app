@@ -1,0 +1,39 @@
+<h2>🟦 Reclutamiento - RQs activos</h2>
+
+<div *ngIf="rqs.length > 0" class="rqs-list">
+  <table class="rqs-table">
+    <thead>
+      <tr>
+        <th>RQ</th>
+        <th>Campaña</th>
+        <th>Puesto</th>
+        <th>Personal necesario</th>
+        <th>Inicio labores</th>
+        <th>Inicio capacitación</th>
+        <th>Fin capacitación</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rq of rqs" class="rq-row">
+        <td><a [routerLink]="['/reclutamiento/rq', rq.codigo, 'candidatos']" class="rq-link">{{ rq.codigo }}</a></td>
+        <td>{{ rq.campaign }}</td>
+        <td>{{ rq.puesto }}</td>
+        <td>{{ rq.cantidad }}</td>
+        <td>{{ rq.fechaIngreso }}</td>
+        <td>{{ rq.fechaInicioCapacitacion }}</td>
+        <td>{{ rq.fechaFinCapacitacion }}</td>
+        <td><span class="estado-badge">{{ rq.estado }}</span></td>
+        <td>
+          <a [routerLink]="['/reclutamiento/rq', rq.codigo, 'candidatos']" class="link-button">Ver candidatos</a>
+          <a [routerLink]="['/reclutamiento/rq', rq.codigo]" class="link-button">Ver resultados</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="rqs.length === 0" class="no-rqs">
+  <p>No hay RQs disponibles en este momento.</p>
+</div>
