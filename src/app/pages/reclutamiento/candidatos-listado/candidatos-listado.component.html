@@ -15,13 +15,13 @@
       class="btn-filter"
       [class.active]="filtroActual === 'apto-si'"
       (click)="aplicarFiltro('apto-si')">
-      Aptos ({{ contarApto('si') }})
+      Cumplen Requisito ({{ contarApto('si') }})
     </button>
     <button
       class="btn-filter"
       [class.active]="filtroActual === 'apto-no'"
       (click)="aplicarFiltro('apto-no')">
-      No Aptos ({{ contarApto('no') }})
+      No Cumplen Requisito ({{ contarApto('no') }})
     </button>
     <button
       class="btn-filter"
@@ -40,7 +40,7 @@
           <th>DNI</th>
           <th>Nombre</th>
           <th>Apellido</th>
-          <th>Apto</th>
+          <th>Requisito</th>
           <th>Entrevista</th>
           <th>Acciones</th>
         </tr>
@@ -52,8 +52,8 @@
           <td>{{ candidato.apellido }}</td>
           <td>
             <select [ngModel]="candidato.apto" (ngModelChange)="cambiarApto(candidato, $event)">
-              <option [value]="'si'">Sí</option>
-              <option [value]="'no'">No</option>
+              <option [value]="'si'">Cumple</option>
+              <option [value]="'no'">No Cumple</option>
             </select>
           </td>
           <td>
@@ -61,8 +61,8 @@
               [ngModel]="candidato.entrevista"
               (ngModelChange)="cambiarEntrevista(candidato, $event)"
               [disabled]="!puedeMarcarEntrevista(candidato)">
-              <option [value]="'si'">Sí</option>
-              <option [value]="'no'">No</option>
+              <option [value]="'si'">Apto</option>
+              <option [value]="'no'">No apto</option>
             </select>
           </td>
           <td>
