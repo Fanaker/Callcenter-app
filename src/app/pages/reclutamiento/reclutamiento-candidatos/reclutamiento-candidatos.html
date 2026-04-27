@@ -1,26 +1,26 @@
 <div *ngIf="rq; else noRq">
-  <button class="btn-back" [routerLink]="['/reclutamiento']">
+  <button class="btn-back" title="Volver a reclutamiento" [routerLink]="['/reclutamiento']">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
 
-  <h2>Requerimiento número {{ rq.codigo }}</h2>
+  <h2 class="rq-title">REQUERIMIENTO NÚMERO {{ rq.codigo }}</h2>
 
   <div class="rq-info-box">
     <div class="rq-identidad">
-      <div class="rq-campaña">{{ rq.campania || rq['campaña'] || rq.campaign || 'Sin campaña' }}</div>
-      <div class="rq-puesto">{{ rq.puesto }}</div>
+      <div class="rq-campaña">CAMPAÑA: {{ rq.campania || rq['campaña'] || rq.campaign || 'SIN CAMPAÑA' }}</div>
+      <div class="rq-puesto">PUESTO: {{ rq.puesto }}</div>
     </div>
 
     <div class="rq-meta">
-      <span>Personal necesario: {{ rq.cantidad }}</span>
-      <span>Inicio labores: {{ rq.fechaIngreso }}</span>
-      <span>Inicio capacitación: {{ rq.fechaInicioCapacitacion }}</span>
-      <span>Fin capacitación: {{ rq.fechaFinCapacitacion }}</span>
+      <span>PERSONAL NECESARIO: {{ rq.cantidad }}</span>
+      <span>INICIO LABORES: {{ rq.fechaIngreso }}</span>
+      <span>INICIO CAPACITACIÓN: {{ rq.fechaInicioCapacitacion }}</span>
+      <span>FIN CAPACITACIÓN: {{ rq.fechaFinCapacitacion }}</span>
     </div>
 
-    <p class="rq-comentarios">Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+    <p class="rq-comentarios">COMENTARIOS: {{ rq.comentarios || 'SIN COMENTARIOS' }}</p>
   </div>
 
   <div class="link-actions">
@@ -30,8 +30,6 @@
 
   <p *ngIf="message" class="message">{{ message }}</p>
 
-  <h3>Postulantes a este Requerimiento</h3>
-
   <app-candidatos-listado
       *ngIf="!selectedCandidate"
       [candidatos]="getAllCandidates()"
@@ -39,7 +37,7 @@
     </app-candidatos-listado>
 
     <div *ngIf="selectedCandidate" class="detalle-completo">
-      <button class="btn-back" (click)="selectedCandidate = null">
+      <button class="btn-back" title="Volver a lista de candidatos" (click)="selectedCandidate = null">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>

@@ -70,4 +70,9 @@ export class Home {
     this.confirmPassword = '';
     this.verificationCode = '';
   }
+
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 }

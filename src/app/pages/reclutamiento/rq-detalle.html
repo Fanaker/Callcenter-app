@@ -1,11 +1,11 @@
 <div *ngIf="rq; else noRq">
-  <button class="btn-back" (click)="goBack()">
+  <button class="btn-back" title="Volver a reclutamiento" (click)="goBack()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
 
-  <h2>Resultado del Requerimiento {{ rq.codigo }} para el puesto {{ rq.puesto }}</h2>
+  <h2 class="rq-title">RESULTADO DEL REQUERIMIENTO {{ rq.codigo }} PARA EL PUESTO {{ rq.puesto | uppercase }}</h2>
 
   <div class="rq-info-box">
     <p>
@@ -56,13 +56,13 @@
           <td>{{ candidate.telefono }}</td>
           <td>{{ candidate.medioPreferido }}</td>
           <td>
-            <select [(ngModel)]="candidate.contratar">
+            <select title="Seleccionar si contratar" [(ngModel)]="candidate.contratar">
               <option [ngValue]="true">Sí</option>
               <option [ngValue]="false">No</option>
             </select>
           </td>
           <td>
-            <button class="btn-primary" (click)="saveCandidate(candidate)">Guardar</button>
+            <button class="btn-primary" title="Guardar candidato" (click)="saveCandidate(candidate)">Guardar</button>
           </td>
         </tr>
       </tbody>

@@ -1,39 +1,39 @@
 <div *ngIf="rq; else noRq">
-  <h2>Postulación al puesto de {{ rq.puesto }} para la campaña {{ rq.campaign || rq.campaña || rq['campaña'] }}</h2>
+  <h2 class="form-title">FORMULARIO DE POSTULACIÓN PARA {{ rq.puesto | uppercase }} EN LA {{ (rq.campaign || rq.campania || rq['campaña']) | uppercase }}</h2>
 
   <form class="postular-form" (ngSubmit)="enviar()">
     <input type="hidden" name="rqCodigo" [value]="rq.codigo">
 
     <div class="form-group">
       <label>Nombre</label>
-      <input type="text" [(ngModel)]="nombre" name="nombre" required>
+      <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
     </div>
 
     <div class="form-group">
       <label>Apellido</label>
-      <input type="text" [(ngModel)]="apellido" name="apellido" required>
+      <input type="text" [(ngModel)]="apellido" name="apellido" placeholder="Ingresa tu apellido" required>
     </div>
 
     <div class="form-group">
       <label>Número de DNI</label>
-      <input type="text" [(ngModel)]="dni" name="dni" maxlength="8" pattern="[0-9]*" inputmode="numeric" required (blur)="validateDni()">
+      <input type="text" [(ngModel)]="dni" name="dni" placeholder="12345678" maxlength="8" pattern="[0-9]*" inputmode="numeric" required (blur)="validateDni()">
       <div *ngIf="errorDni" class="error-message">{{ errorDni }}</div>
     </div>
 
     <div class="form-group">
       <label>Correo</label>
-      <input type="email" [(ngModel)]="correo" name="correo" required (blur)="validateEmail()">
+      <input type="email" [(ngModel)]="correo" name="correo" placeholder="tu@email.com" required (blur)="validateEmail()">
       <div *ngIf="errorEmail" class="error-message">{{ errorEmail }}</div>
     </div>
 
     <div class="form-group">
       <label>Teléfono</label>
-      <input type="tel" [(ngModel)]="telefono" name="telefono" required>
+      <input type="tel" [(ngModel)]="telefono" name="telefono" placeholder="999999999" required>
     </div>
 
     <div class="form-group">
       <label>Medio de comunicación preferido</label>
-      <select [(ngModel)]="medioPreferido" name="medioPreferido">
+      <select title="Selecciona medio de comunicación" [(ngModel)]="medioPreferido" name="medioPreferido">
         <option value="llamada">Llamada</option>
         <option value="whatsapp">Whatsapp</option>
         <option value="email">Email</option>
@@ -42,13 +42,13 @@
 
     <div class="form-group">
       <label>Adjuntar CV</label>
-      <input type="file" (change)="onFileChange($event)">
+      <input type="file" title="Selecciona tu CV" (change)="onFileChange($event)">
       <p *ngIf="cvName" class="info-text">CV seleccionado: {{ cvName }}</p>
     </div>
 
     <div class="form-group">
       <label>Comentarios extras (opcional)</label>
-      <textarea rows="4" [(ngModel)]="comentarios" name="comentarios"></textarea>
+      <textarea rows="4" [(ngModel)]="comentarios" name="comentarios" placeholder="Comentarios adicionales"></textarea>
     </div>
 
     <button class="btn-primary" type="submit" [disabled]="!isFormValid()">Enviar Postulación</button>

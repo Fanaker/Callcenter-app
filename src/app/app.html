@@ -1,8 +1,14 @@
-<div class="app-shell">
-  <app-navbar *ngIf="!isLoginPage()"></app-navbar>
-  <main class="app-main">
-    <div class="app-page-shell">
-      <router-outlet></router-outlet>
-    </div>
-  </main>
-</div>
+<ng-container *ngIf="!isLoginPage(); else authLayout">
+  <div class="app-shell">
+    <app-navbar></app-navbar>
+    <main class="app-main">
+      <div class="app-page-shell">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</ng-container>
+
+<ng-template #authLayout>
+  <router-outlet></router-outlet>
+</ng-template>

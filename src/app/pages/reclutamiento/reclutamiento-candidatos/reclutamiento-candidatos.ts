@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { RqService } from '../../../services/rq';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,7 @@ import { CandidatosListadoComponent } from '../candidatos-listado/candidatos-lis
 @Component({
   selector: 'app-reclutamiento-candidatos',
   standalone: true,
-  imports: [CommonModule, FormsModule, CandidatosListadoComponent],
+  imports: [CommonModule, FormsModule, RouterModule, CandidatosListadoComponent],
   templateUrl: './reclutamiento-candidatos.html',
   styleUrl: './reclutamiento-candidatos.css'
 })

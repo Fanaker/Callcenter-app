@@ -14,7 +14,7 @@ export class App {
 
   constructor(private router: Router) {}
 
-  isLoginPage(): boolean {
-    return this.router.url === '/';
+isLoginPage(): boolean {
+  return this.router.url === '/' || this.router.url.includes('login');
   }
 }

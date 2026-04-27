@@ -67,8 +67,15 @@
   letter-spacing: 0.5px;
   border-bottom: 1px solid var(--border-color);
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   transition: background-color 0.2s ease;
+}
+
+.sort-arrow {
+  margin-left: 6px;
+  font-size: 0.8em;
+  color: var(--text-muted);
 }
 
 .rqs-table th:hover {
@@ -203,6 +210,14 @@
   font-weight: 700;
   color: var(--primary-fuchsia);
   text-align: center;
+}
+
+.dashboard-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  margin-bottom: 24px;
 }
 
 /* Form Container (For create-rq) */

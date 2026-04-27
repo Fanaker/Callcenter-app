@@ -53,13 +53,23 @@
   background: white;
 }
 
+.page-title,
+.rqs-header {
+  text-align: left;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
 .rqs-table thead {
   background-color: #F3F4F6;
 }
 
 .rqs-table th {
   padding: 12px 16px;
-  text-align: left;
+  text-align: center;
   font-size: 12px;
   font-weight: 600;
   color: var(--purple-medium);
@@ -67,8 +77,65 @@
   letter-spacing: 0.5px;
   border-bottom: 1px solid var(--border-color);
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   transition: background-color 0.2s ease;
+}
+
+.sort-arrow {
+  margin-left: 6px;
+  font-size: 0.8em;
+  color: var(--text-muted);
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: var(--shadow-light);
+  transition: all 0.2s ease;
+}
+
+.metric:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.metric-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--primary-fuchsia);
+  margin-bottom: 8px;
+}
+
+.metric h3 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+}
+
+.metric p {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-fuchsia);
+  text-align: center;
 }
 
 .rqs-table th:hover {
@@ -91,11 +158,18 @@
   text-align: center;
 }
 
+.rqs-table tbody tr.rq-row td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text-main);
+  text-align: center;
+}
+
 .actions-cell {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 /* Links in Table */
@@ -116,14 +190,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 12px;
-  margin-right: 4px;
-  border-radius: 6px;
+  padding: 10px 14px;
+  border-radius: 10px;
   border: none;
   background-color: var(--primary-fuchsia);
   color: white;
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 13px;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;

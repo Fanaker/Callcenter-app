@@ -1,0 +1,107 @@
+/* Formación Detalle Styles - Quantia Design System */
+
+.rq-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.rq-info-box {
+  background-color: rgba(155, 89, 182, 0.08);
+  border: 2px solid rgba(155, 89, 182, 0.35);
+  border-radius: 18px;
+  padding: 26px;
+  margin-bottom: 24px;
+  min-height: 120px;
+}
+
+.rq-identidad {
+  margin-bottom: 14px;
+}
+
+.rq-campaña {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.rq-puesto {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+}
+
+.rq-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 14px;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.config-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.config-row {
+  display: flex;
+  gap: 24px;
+  align-items: end;
+}
+
+.config-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.config-item label {
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+.config-item input {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  width: 60px;
+}
+
+.filters {
+  background-color: rgba(155, 89, 182, 0.08);
+  border: 2px solid rgba(155, 89, 182, 0.35);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.filters label {
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.filters select {
+  margin-left: 8px;
+  padding: 4px;
+}
+
+.save-results-btn {
+  margin-top: 24px;
+}

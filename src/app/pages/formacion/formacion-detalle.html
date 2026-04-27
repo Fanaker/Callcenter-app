@@ -1,32 +1,44 @@
 <div *ngIf="rq; else noRq">
-  <h2>Calificaciones para la capacitación del Requerimiento número {{ rq.codigo }}</h2>
+  <h2 class="rq-title">CALIFICACIONES PARA LA CAPACITACIÓN DEL REQUERIMIENTO NÚMERO {{ rq.codigo }}</h2>
 
-  <button class="btn-back" [routerLink]="['/formacion']">
+  <button class="btn-back" title="Volver a formación" [routerLink]="['/formacion']">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
 
   <div class="rq-info-box">
-    <p>
-      Campaña: {{ rq.campaign }} | Puesto: {{ rq.puesto }} | Inicio capacitación: {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
-    </p>
+    <div class="rq-identidad">
+      <div class="rq-campaña">CAMPAÑA: {{ rq.campaign }}</div>
+      <div class="rq-puesto">PUESTO: {{ rq.puesto }}</div>
+    </div>
+
+    <div class="rq-meta">
+      <span>INICIO CAPACITACIÓN: {{ rq.fechaInicioCapacitacion }}</span>
+      <span>FIN CAPACITACIÓN: {{ rq.fechaFinCapacitacion }}</span>
+    </div>
   </div>
 
   <div class="config-panel">
-    <label>Número de tests</label>
-    <input type="number" min="1" max="5" [(ngModel)]="rq.testCount">
-
-    <label>Nota aprobatoria</label>
-    <input type="number" min="0" max="20" [(ngModel)]="rq.aprobacionPromedio">
-
-    <button class="btn-primary" (click)="saveConfig()">Guardar configuración</button>
+    <div class="config-row">
+      <div class="config-item">
+        <label>Cantidad de evaluaciones a realizar</label>
+        <input type="number" min="1" max="5" placeholder="1-5" [(ngModel)]="rq.testCount">
+      </div>
+      <div class="config-item">
+        <label>Nota aprobatoria</label>
+        <input type="number" min="0" max="20" placeholder="0-20" [(ngModel)]="rq.aprobacionPromedio">
+      </div>
+    </div>
+    <div class="config-row">
+      <button class="btn-primary" (click)="saveConfig()">Guardar configuración</button>
+    </div>
   </div>
 
   <div *ngIf="rq.candidatos?.length > 0" class="candidates-table-wrapper">
     <div class="filters">
       <label>Resultado:</label>
-      <select [(ngModel)]="approvalFilter">
+      <select title="Filtrar por resultado" [(ngModel)]="approvalFilter">
         <option value="todos">Todos</option>
         <option value="aprobados">Aprobados</option>
         <option value="no aprobados">No aprobados</option>
@@ -35,11 +47,11 @@
     <table class="candidates-table">
       <thead>
         <tr>
-          <th (click)="sortBy('dni')">DNI</th>
-          <th (click)="sortBy('nombre')">Nombre</th>
-          <th (click)="sortBy('apellido')">Apellido</th>
+          <th (click)="sortBy('dni')">DNI <span class="sort-arrow" *ngIf="sortColumn === 'dni'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="sortBy('nombre')">Nombre <span class="sort-arrow" *ngIf="sortColumn === 'nombre'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="sortBy('apellido')">Apellido <span class="sort-arrow" *ngIf="sortColumn === 'apellido'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
           <th *ngFor="let index of getTestIndexes()">Test {{ index }}</th>
-          <th (click)="sortBy('promedio')">Promedio</th>
+          <th (click)="sortBy('promedio')">Promedio <span class="sort-arrow" *ngIf="sortColumn === 'promedio'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
           <th>Resultado</th>
         </tr>
       </thead>
@@ -49,14 +61,15 @@
           <td>{{ candidato.nombre }}</td>
           <td>{{ candidato.apellido }}</td>
           <td *ngFor="let index of getTestIndexes()">
-            <input type="number" min="0" max="20" [(ngModel)]="candidato['test' + index]">
+            <input type="number" min="0" max="20" placeholder="0-20" [(ngModel)]="candidato['test' + index]">
           </td>
           <td>{{ getAverage(candidato) }}</td>
           <td>{{ isApproved(candidato) ? 'Aprobado' : 'No aprobado' }}</td>
         </tr>
       </tbody>
     </table>
-    <button class="btn-primary" (click)="saveResults()">Guardar resultados</button>
+    <br>
+    <button class="btn-primary save-results-btn" (click)="saveResults()">Guardar resultados</button>
     <p *ngIf="message" class="message">{{ message }}</p>
   </div>
 

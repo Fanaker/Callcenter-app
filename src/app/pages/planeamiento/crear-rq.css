@@ -11,10 +11,12 @@
 }
 
 .form-title {
-  margin: 0 0 8px 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-main);
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  margin-bottom: 24px;
 }
 
 .form-subtitle {
