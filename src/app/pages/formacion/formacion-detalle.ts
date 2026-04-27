@@ -14,11 +14,9 @@ import { RqService } from '../../services/rq';
 export class FormacionDetalle {
   rq: any;
   message = '';
+  approvalFilter: string = 'todos';
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
-  filterDni: string = '';
-  filterNombre: string = '';
-  filterApellido: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -33,28 +31,40 @@ export class FormacionDetalle {
     return Array.from({ length: Math.min(Math.max(count, 1), 5) }, (_, index) => index + 1);
   }
 
-  getFilteredCandidates() {
+  getFilteredAndSortedCandidates() {
     if (!this.rq?.candidatos) return [];
-    return this.rq.candidatos.filter((candidato: any) => {
-      const dniMatch = !this.filterDni || candidato.dni.toString().includes(this.filterDni);
-      const nombreMatch = !this.filterNombre || candidato.nombre.toLowerCase().includes(this.filterNombre.toLowerCase());
-      const apellidoMatch = !this.filterApellido || candidato.apellido.toLowerCase().includes(this.filterApellido.toLowerCase());
-      return dniMatch && nombreMatch && apellidoMatch;
-    }).sort((a: any, b: any) => {
-      if (!this.sortColumn) return 0;
-      let aValue = a[this.sortColumn];
-      let bValue = b[this.sortColumn];
-      if (this.sortColumn === 'promedio') {
-        aValue = parseFloat(this.getAverage(a));
-        bValue = parseFloat(this.getAverage(b));
-      } else if (this.sortColumn === 'resultado') {
-        aValue = this.isApproved(a) ? 1 : 0;
-        bValue = this.isApproved(b) ? 1 : 0;
-      }
-      if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
-      if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
-      return 0;
-    });
+    let filtered = this.rq.candidatos;
+
+    if (this.approvalFilter === 'aprobados') {
+      filtered = filtered.filter((c: any) => this.isApproved(c));
+    } else if (this.approvalFilter === 'no aprobados') {
+      filtered = filtered.filter((c: any) => !this.isApproved(c));
+    }
+
+    if (this.sortColumn) {
+      filtered.sort((a: any, b: any) => {
+        let aVal: any, bVal: any;
+        if (this.sortColumn === 'dni') {
+          aVal = parseInt(a.dni);
+          bVal = parseInt(b.dni);
+        } else if (this.sortColumn === 'promedio') {
+          aVal = parseFloat(this.getAverage(a));
+          bVal = parseFloat(this.getAverage(b));
+        } else {
+          aVal = a[this.sortColumn];
+          bVal = b[this.sortColumn];
+        }
+        let result = 0;
+        if (typeof aVal === 'number') {
+          result = aVal - bVal;
+        } else {
+          result = aVal.localeCompare(bVal);
+        }
+        return this.sortDirection === 'asc' ? result : -result;
+      });
+    }
+
+    return filtered;
   }
 
   sortBy(column: string) {

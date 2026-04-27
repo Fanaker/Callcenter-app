@@ -1,16 +1,55 @@
 <h2>🟦 Formación - RQs para capacitar</h2>
 
-<div *ngIf="rqs.length > 0" class="formacion-container">
-  <div *ngFor="let rq of rqs" class="rq-card">
-    <h3>{{ rq.codigo }} - {{ rq.puesto }}</h3>
-    <p>
-      Campaña: {{ rq.campaign }} | Fecha ingreso: {{ rq.fechaIngreso }} | Inicio capacitación: {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
-    </p>
-    <p>Candidatos registrados: {{ rq.candidatos?.length || 0 }}</p>
-    <a [routerLink]="['/formacion/rq', rq.codigo]" class="link-button">Ver detalle</a>
-  </div>
+<div class="filters">
+  <label>Estado:</label>
+  <select [(ngModel)]="statusFilter">
+    <option value="todos">Todos</option>
+    <option value="abierto">Abierto</option>
+    <option value="cerrado">Cerrado</option>
+  </select>
+
+  <label>Campaña:</label>
+  <select [(ngModel)]="campaignFilter">
+    <option value="">Todas las campañas</option>
+    <option *ngFor="let camp of uniqueCampaigns" [value]="camp">{{ camp }}</option>
+  </select>
 </div>
 
-<div *ngIf="rqs.length === 0" class="no-rqs">
-  <p>No hay RQs registradas para formación.</p>
+<div *ngIf="filteredAndSortedRqs.length > 0" class="rqs-list">
+  <table class="rqs-table">
+    <thead>
+      <tr>
+        <th (click)="sortBy('codigo')">Código</th>
+        <th (click)="sortBy('campaign')">Campaña</th>
+        <th (click)="sortBy('puesto')">Puesto</th>
+        <th (click)="sortBy('cantidad')">Cantidad</th>
+        <th (click)="sortBy('fechaInicioCapacitacion')">Inicio Capacitación</th>
+        <th (click)="sortBy('fechaFinCapacitacion')">Fin Capacitación</th>
+        <th (click)="sortBy('diasCapacitacion')">Días capacitación</th>
+        <th (click)="sortBy('fechaIngreso')">Fecha de Ingreso</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rq of filteredAndSortedRqs" class="rq-row">
+        <td>{{ rq.codigo }}</td>
+        <td>{{ rq.campaign }}</td>
+        <td>{{ rq.puesto }}</td>
+        <td>{{ rq.cantidad }}</td>
+        <td>{{ rq.fechaInicioCapacitacion }}</td>
+        <td>{{ rq.fechaFinCapacitacion }}</td>
+        <td>{{ rq.diasCapacitacion }}</td>
+        <td>{{ rq.fechaIngreso }}</td>
+        <td><span class="estado-badge" [class.estado-cerrado]="rq.estado === 'CERRADO'">{{ rq.estado }}</span></td>
+        <td>
+          <a [routerLink]="['/formacion/rq', rq.codigo]" class="link-button">Ver detalle</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="filteredAndSortedRqs.length === 0" class="no-rqs">
+  <p>No hay RQs que coincidan con los filtros seleccionados.</p>
 </div>

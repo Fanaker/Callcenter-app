@@ -20,23 +20,26 @@
 
   <div *ngIf="rq.candidatos?.length > 0" class="candidates-table-wrapper">
     <div class="filters">
-      <input type="text" placeholder="Filtrar por DNI" [(ngModel)]="filterDni">
-      <input type="text" placeholder="Filtrar por Nombre" [(ngModel)]="filterNombre">
-      <input type="text" placeholder="Filtrar por Apellido" [(ngModel)]="filterApellido">
+      <label>Resultado:</label>
+      <select [(ngModel)]="approvalFilter">
+        <option value="todos">Todos</option>
+        <option value="aprobados">Aprobados</option>
+        <option value="no aprobados">No aprobados</option>
+      </select>
     </div>
     <table class="candidates-table">
       <thead>
         <tr>
-          <th (click)="sortBy('dni')">DNI {{ sortColumn === 'dni' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}</th>
-          <th (click)="sortBy('nombre')">Nombre {{ sortColumn === 'nombre' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}</th>
-          <th (click)="sortBy('apellido')">Apellido {{ sortColumn === 'apellido' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}</th>
+          <th (click)="sortBy('dni')">DNI</th>
+          <th (click)="sortBy('nombre')">Nombre</th>
+          <th (click)="sortBy('apellido')">Apellido</th>
           <th *ngFor="let index of getTestIndexes()">Test {{ index }}</th>
-          <th (click)="sortBy('promedio')">Promedio {{ sortColumn === 'promedio' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}</th>
-          <th (click)="sortBy('resultado')">Resultado {{ sortColumn === 'resultado' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}</th>
+          <th (click)="sortBy('promedio')">Promedio</th>
+          <th>Resultado</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let candidato of getFilteredCandidates()">
+        <tr *ngFor="let candidato of getFilteredAndSortedCandidates()">
           <td>{{ candidato.dni }}</td>
           <td>{{ candidato.nombre }}</td>
           <td>{{ candidato.apellido }}</td>
