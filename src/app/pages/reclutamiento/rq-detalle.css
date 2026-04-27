@@ -5,29 +5,36 @@
 }
 
 .message {
-  color: #2c7a7b;
+  color: #5b21b6;
   margin-bottom: 18px;
 }
 
 .candidates-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 24px;
+  overflow: hidden;
   margin-top: 12px;
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.08), rgba(236, 72, 153, 0.06));
+  box-shadow: 0 24px 60px rgba(124, 58, 237, 0.08);
 }
 
 .candidates-table th,
 .candidates-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 16px 14px;
   text-align: left;
+  color: #344154;
 }
 
 .candidates-table th {
-  background-color: #f5f5f5;
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.9), rgba(236, 72, 153, 0.9));
+  color: white;
+  font-weight: 700;
 }
 
 .candidates-table tr:hover {
-  background-color: #fafafa;
+  background: rgba(236, 72, 153, 0.08);
 }
 
 .rq-link,
@@ -37,8 +44,9 @@ button {
 
 .no-rqs {
   padding: 20px;
-  border-radius: 6px;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  background-color: #faf0ff;
+  border: 1px solid rgba(236, 72, 153, 0.18);
   margin-top: 12px;
+  color: #5b21b6;
 }
