@@ -1,5 +1,13 @@
 /* RQ Detalle Styles - Quantia Design System */
 
+.rq-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
 .btn-back {
   position: absolute;
   top: 20px;

@@ -1,4 +1,4 @@
-<h2>Crear nuevo Requerimiento</h2>
+<h2 class="form-title">CREAR NUEVO REQUERIMIENTO</h2>
 
 <div class="form-container">
   <div class="form-group">
@@ -18,18 +18,18 @@
 
   <div class="form-group">
     <label>Fecha prevista de inicio del personal</label>
-    <input type="date" [(ngModel)]="fechaIngreso" (change)="onFechaChange()">
+    <input type="date" title="Selecciona fecha de ingreso" [(ngModel)]="fechaIngreso" (change)="onFechaChange()">
   </div>
 
   <div class="form-group">
     <label>Fecha de Inicio de capacitación</label>
-    <input type="date" [(ngModel)]="fechaInicioCapacitacion" (change)="onFechaChange()">
+    <input type="date" title="Selecciona fecha de inicio de capacitación" [(ngModel)]="fechaInicioCapacitacion" (change)="onFechaChange()">
     <div *ngIf="errorFechaInicioCapacitacion" class="error-message">{{ errorFechaInicioCapacitacion }}</div>
   </div>
 
   <div class="form-group">
     <label>Fecha de Fin de capacitación</label>
-    <input type="date" [(ngModel)]="fechaFinCapacitacion" (change)="onFechaChange()">
+    <input type="date" title="Selecciona fecha de fin de capacitación" [(ngModel)]="fechaFinCapacitacion" (change)="onFechaChange()">
     <div *ngIf="errorFechaFinCapacitacion" class="error-message">{{ errorFechaFinCapacitacion }}</div>
   </div>
 

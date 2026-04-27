@@ -66,4 +66,25 @@ export class Formacion {
   get uniqueCampaigns() {
     return [...new Set(this.rqs.map(rq => rq.campaign))];
   }
+
+  getTotalRQs() {
+    return this.rqs.length;
+  }
+
+  getActiveRQs() {
+    return this.rqs.filter(rq => rq.estado.toLowerCase() === 'abierto').length;
+  }
+
+  getTotalPersonalRequerido() {
+    return this.rqs.filter(rq => rq.estado.toLowerCase() === 'abierto').reduce((sum, rq) => sum + (rq.cantidad || 0), 0);
+  }
+
+  getTotalPostulantes() {
+    const allDnis = this.rqs.flatMap(rq => rq.candidatos ? rq.candidatos.map((c: any) => c.dni) : []);
+    return new Set(allDnis).size;
+  }
+
+  getContratados() {
+    return this.rqs.flatMap(rq => rq.candidatos ? rq.candidatos.filter((c: any) => c.contratar) : []).length;
+  }
 }
