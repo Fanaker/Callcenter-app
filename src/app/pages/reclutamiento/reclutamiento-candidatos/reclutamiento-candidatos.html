@@ -1,8 +1,15 @@
 <div *ngIf="rq; else noRq">
+  <button class="btn-back" [routerLink]="['/reclutamiento']">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <h2>Requerimiento número {{ rq.codigo }}</h2>
+
   <div class="rq-info-box">
     <div class="rq-identidad">
-      <div class="rq-codigo">RQ {{ rq.codigo }}</div>
-      <div class="rq-campania">{{ rq.campania || rq['campaña'] || rq.campaign || 'Sin campaña' }}</div>
+      <div class="rq-campaña">{{ rq.campania || rq['campaña'] || rq.campaign || 'Sin campaña' }}</div>
       <div class="rq-puesto">{{ rq.puesto }}</div>
     </div>
 
@@ -12,9 +19,9 @@
       <span>Inicio capacitación: {{ rq.fechaInicioCapacitacion }}</span>
       <span>Fin capacitación: {{ rq.fechaFinCapacitacion }}</span>
     </div>
-  </div>
 
-  <p class="rq-comentarios">Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+    <p class="rq-comentarios">Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+  </div>
 
   <div class="link-actions">
     <button class="btn-primary" (click)="copyApplyLink()">Copiar link</button>
@@ -23,7 +30,7 @@
 
   <p *ngIf="message" class="message">{{ message }}</p>
 
-  <h3>Todos los candidatos postulados</h3>
+  <h3>Postulantes a este Requerimiento</h3>
 
   <app-candidatos-listado
       *ngIf="!selectedCandidate"

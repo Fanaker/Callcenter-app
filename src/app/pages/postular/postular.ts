@@ -22,6 +22,8 @@ export class Postular {
   comentarios = '';
   cvName = '';
   message = '';
+  errorDni = '';
+  errorEmail = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -38,19 +40,44 @@ export class Postular {
     }
   }
 
+  validateDni() {
+    if (this.dni && this.dni.length !== 8) {
+      this.errorDni = 'El DNI debe tener 8 dígitos';
+    } else {
+      this.errorDni = '';
+    }
+  }
+
+  validateEmail() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (this.correo && !emailRegex.test(this.correo)) {
+      this.errorEmail = 'El correo debe ser válido';
+    } else {
+      this.errorEmail = '';
+    }
+  }
+
+  isFormValid(): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return (
+      this.nombre.trim() !== '' &&
+      this.apellido.trim() !== '' &&
+      this.dni.trim().length === 8 &&
+      /^[0-9]{8}$/.test(this.dni) &&
+      emailRegex.test(this.correo) &&
+      this.telefono.trim() !== '' &&
+      !this.errorDni &&
+      !this.errorEmail
+    );
+  }
+
   enviar() {
     if (!this.rq) {
       return;
     }
 
-    const dniValido = /^[0-9]{1,8}$/.test(this.dni.trim());
-    if (!this.nombre.trim() || !this.apellido.trim() || !this.dni.trim() || !this.correo.trim() || !this.telefono.trim()) {
-      alert('Completa todos los campos obligatorios.');
-      return;
-    }
-
-    if (!dniValido) {
-      alert('El DNI debe tener hasta 8 números.');
+    if (!this.isFormValid()) {
+      alert('Completa todos los campos obligatorios correctamente.');
       return;
     }
 
@@ -74,5 +101,7 @@ export class Postular {
     this.medioPreferido = 'whatsapp';
     this.comentarios = '';
     this.cvName = '';
+    this.errorDni = '';
+    this.errorEmail = '';
   }
 }
