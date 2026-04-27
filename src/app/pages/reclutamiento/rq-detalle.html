@@ -5,8 +5,9 @@
     </svg>
   </button>
 
+  <h2>Resultado del Requerimiento {{ rq.codigo }} para el puesto {{ rq.puesto }}</h2>
+
   <div class="rq-info-box">
-    <h2>RQ {{ rq.codigo }} - {{ rq.puesto }}</h2>
     <p>
       Personal necesario: {{ rq.cantidad }} | Inicio labores: {{ rq.fechaIngreso }} | Inicio capacitación:
       {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
@@ -15,7 +16,7 @@
   </div>
   <p *ngIf="message" class="message">{{ message }}</p>
 
-  <h3>Resultados aprobados</h3>
+  <h3>Candidatos Aprobados y disponibles para su contratación</h3>
 
   <div *ngIf="getResults().length > 0" class="candidates-list">
     <table class="candidates-table">

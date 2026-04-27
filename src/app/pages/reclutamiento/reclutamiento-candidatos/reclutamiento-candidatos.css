@@ -144,6 +144,25 @@
   background-color: #F9FAFB;
 }
 
+/* Postulante Detalle */
+.postulante-detalle {
+  background-color: #F8F5FF;
+  border: 2px solid var(--sidebar-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.postulante-detalle p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.postulante-detalle strong {
+  color: var(--purple-medium);
+}
+
 /* Action Buttons in Table */
 .btn-pequeño {
   padding: 6px 12px;

@@ -123,7 +123,7 @@
 
 .rqs-table th {
   padding: 12px 16px;
-  text-align: left;
+  text-align: center;
   font-size: 12px;
   font-weight: 600;
   color: var(--purple-medium);
@@ -151,6 +151,7 @@
   padding: 14px 16px;
   font-size: 14px;
   color: var(--text-main);
+  text-align: center;
 }
 
 /* Badges */
@@ -208,6 +209,34 @@
 .no-rqs p {
   margin: 0;
   font-size: 14px;
+}
+
+/* Candidates Table */
+.candidates-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.candidates-table thead {
+  background-color: #F3F4F6;
+}
+
+.candidates-table th {
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.candidates-table tbody tr:hover {
+  background-color: #F9FAFB;
 }
 
 /* Responsive */

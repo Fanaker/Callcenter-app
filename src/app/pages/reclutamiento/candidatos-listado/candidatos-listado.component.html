@@ -27,7 +27,7 @@
       class="btn-filter"
       [class.active]="filtroActual === 'entrevista-si'"
       (click)="aplicarFiltro('entrevista-si')">
-      Con Entrevista ({{ contarEntrevista('si') }})
+      Entrevista Aprobada ({{ contarEntrevista('si') }})
     </button>
   </div>
 
@@ -75,7 +75,7 @@
             </select>
           </td>
           <td>
-            <button class="btn-secondary" (click)="verDetalleCandidato(candidato)">
+            <button class="btn-action" (click)="verDetalleCandidato(candidato)">
               Ver detalle
             </button>
           </td>

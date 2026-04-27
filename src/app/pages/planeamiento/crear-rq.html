@@ -1,4 +1,4 @@
-<h2>Crear Nueva RQ</h2>
+<h2>Crear nuevo Requerimiento</h2>
 
 <div class="form-container">
   <div class="form-group">
@@ -22,15 +22,15 @@
   </div>
 
   <div class="form-group">
-    <label>Fin capacitación</label>
-    <input type="date" [(ngModel)]="fechaFinCapacitacion" (change)="onFechaChange()">
-    <div *ngIf="errorFechaFinCapacitacion" class="error-message">{{ errorFechaFinCapacitacion }}</div>
+    <label>Fecha de Inicio de capacitación</label>
+    <input type="date" [(ngModel)]="fechaInicioCapacitacion" (change)="onFechaChange()">
+    <div *ngIf="errorFechaInicioCapacitacion" class="error-message">{{ errorFechaInicioCapacitacion }}</div>
   </div>
 
   <div class="form-group">
-    <label>Inicio capacitación</label>
-    <input type="date" [(ngModel)]="fechaInicioCapacitacion" (change)="onFechaChange()">
-    <div *ngIf="errorFechaInicioCapacitacion" class="error-message">{{ errorFechaInicioCapacitacion }}</div>
+    <label>Fecha de Fin de capacitación</label>
+    <input type="date" [(ngModel)]="fechaFinCapacitacion" (change)="onFechaChange()">
+    <div *ngIf="errorFechaFinCapacitacion" class="error-message">{{ errorFechaFinCapacitacion }}</div>
   </div>
 
   <div class="form-group">
@@ -43,8 +43,8 @@
     <textarea rows="3" placeholder="Comentarios adicionales" [(ngModel)]="comentarios"></textarea>
   </div>
 
-  <button (click)="crearRQ()"
+  <button class="btn-primary" (click)="crearRQ()"
           [disabled]="campaign.trim() === '' || cantidad <= 0 || !puesto.trim() || !fechaIngreso || !fechaFinCapacitacion || !fechaInicioCapacitacion || diasCapacitacion <= 0">
-    Crear RQ
+    Enviar Nuevo Requerimiento
   </button>
 </div>

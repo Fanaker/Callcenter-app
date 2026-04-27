@@ -1,35 +1,50 @@
-<h2>Planeamiento - Dashboard</h2>
+<h2>Dashboard de estado actual</h2>
 
 <div class="dashboard">
   <div class="metric">
-    <h3>RQ Totales</h3>
+    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="currentColor"/>
+    </svg>
+    <h3>Requerimientos<br>Totales</h3>
     <p>{{ getTotalRQs() }}</p>
   </div>
   <div class="metric">
-    <h3>RQ Activos</h3>
+    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+    </svg>
+    <h3>Requerimientos<br>Activos</h3>
     <p>{{ getActiveRQs() }}</p>
   </div>
   <div class="metric">
-    <h3>Personal Requerido (Abiertos)</h3>
+    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+    </svg>
+    <h3>Personal<br>necesario a incorporar</h3>
     <p>{{ getTotalPersonalRequerido() }}</p>
   </div>
   <div class="metric">
-    <h3>Postulantes Totales</h3>
+    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 7v-2.5c0-1.88 3.13-2.85 5-2.85s5 .97 5 2.85V17H6zm9-6v-3h3v-2h-3V4h-2v3h-3v2h3v3h2z" fill="currentColor"/>
+    </svg>
+    <h3>Postulantes<br>Totales</h3>
     <p>{{ getTotalPostulantes() }}</p>
   </div>
   <div class="metric">
-    <h3>Trabajadores Contratados</h3>
+    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+    </svg>
+    <h3>Trabajadores<br>Contratados</h3>
     <p>{{ getContratados() }}</p>
   </div>
 </div>
 
 <div class="actions">
-  <a [routerLink]="['/planeamiento/crear-rq']" class="link-button">Crear RQ</a>
+  <a [routerLink]="['/planeamiento/crear-rq']" class="link-button">Crear Requerimiento</a>
 </div>
 
 <hr>
 
-<h3>RQs creados</h3>
+<h3>Tabla de Requerimientos</h3>
 
 <div class="filters">
   <label>Estado:</label>

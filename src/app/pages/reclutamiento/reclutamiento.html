@@ -1,4 +1,4 @@
-<h2>Reclutamiento - RQs activos</h2>
+<h2>Requerimientos Actuales</h2>
 
 <div class="filters">
   <label>Estado:</label>
@@ -43,8 +43,10 @@
         <td>{{ rq.fechaIngreso }}</td>
         <td><span class="estado-badge" [class.estado-cerrado]="rq.estado === 'CERRADO'">{{ rq.estado }}</span></td>
         <td>
-          <a [routerLink]="['/reclutamiento/rq', rq.codigo, 'candidatos']" class="link-button">Ver candidatos</a>
-          <a [routerLink]="['/reclutamiento/rq', rq.codigo]" class="link-button">Ver resultados</a>
+          <div class="actions-cell">
+            <a [routerLink]="['/reclutamiento/rq', rq.codigo, 'candidatos']" class="link-button">Ver candidatos</a>
+            <a [routerLink]="['/reclutamiento/rq', rq.codigo]" class="link-button">Ver resultados</a>
+          </div>
         </td>
       </tr>
     </tbody>

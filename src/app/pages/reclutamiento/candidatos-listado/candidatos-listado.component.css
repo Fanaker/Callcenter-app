@@ -39,6 +39,7 @@
   border: 1px solid var(--border-color);
   border-radius: 8px;
   margin-bottom: 24px;
+  width: fit-content;
 }
 
 .btn-filter {
@@ -87,7 +88,7 @@
 
 .candidatos-table th {
   padding: 12px 16px;
-  text-align: left;
+  text-align: center;
   font-size: 12px;
   font-weight: 600;
   color: var(--purple-medium);
@@ -118,6 +119,7 @@
   font-size: 14px;
   color: var(--text-main);
   border-bottom: 1px solid var(--border-color);
+  text-align: center;
 }
 
 .candidatos-table tbody tr:hover {
@@ -131,7 +133,7 @@
   background-color: var(--primary-fuchsia);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 16px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;

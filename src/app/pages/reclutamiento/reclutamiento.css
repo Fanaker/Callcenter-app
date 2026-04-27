@@ -88,6 +88,14 @@
   padding: 14px 16px;
   font-size: 14px;
   color: var(--text-main);
+  text-align: center;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* Links in Table */
