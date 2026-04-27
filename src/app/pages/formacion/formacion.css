@@ -30,6 +30,19 @@
 .candidates-table th {
   background-color: #f8fafc;
   font-weight: 700;
+  cursor: pointer;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filters input {
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
 }
 
 .candidates-table tr:hover {
