@@ -1,14 +1,15 @@
 <nav class="navbar">
   <div class="navbar-brand">
-    <h3>Quantia</h3>
+    <img src="/Logo.jpeg" alt="Quantia" class="brand-logo" />
   </div>
   <div class="navbar-menu">
-    <a routerLink="/planeamiento" class="navbar-link">Planeamiento</a>
-    <a routerLink="/reclutamiento" class="navbar-link">Reclutamiento</a>
-    <a routerLink="/formacion" class="navbar-link">Formación</a>
+    <a routerLink="/planeamiento" routerLinkActive="active" class="navbar-link">Planeamiento</a>
+    <a routerLink="/reclutamiento" routerLinkActive="active" class="navbar-link">Reclutamiento</a>
+    <a routerLink="/formacion" routerLinkActive="active" class="navbar-link">Formación</a>
   </div>
   <div class="navbar-user">
-    <span class="user-info">Usuario: admin</span>
+    <div class="user-info">María Torres</div>
+    <div class="user-role">Planeamiento</div>
     <button class="navbar-button" (click)="reportIssue()">Reportar problema</button>
     <button class="navbar-button logout" (click)="logout()">Cerrar sesión</button>
   </div>
