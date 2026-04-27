@@ -1,16 +1,70 @@
-<nav class="navbar">
+<nav class="navbar" [class.collapsed]="isCollapsed">
   <div class="navbar-brand">
     <img src="/Logo.jpeg" alt="Quantia" class="brand-logo" />
+    <button
+      type="button"
+      class="navbar-toggle"
+      (click)="toggleCollapsed()"
+      [attr.aria-label]="isCollapsed ? 'Expandir menú' : 'Colapsar menú'"
+    >
+      <span class="toggle-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>
   </div>
   <div class="navbar-menu">
-    <a routerLink="/planeamiento" routerLinkActive="active" class="navbar-link">Planeamiento</a>
-    <a routerLink="/reclutamiento" routerLinkActive="active" class="navbar-link">Reclutamiento</a>
-    <a routerLink="/formacion" routerLinkActive="active" class="navbar-link">Formación</a>
+    <a routerLink="/planeamiento" routerLinkActive="active" class="navbar-link">
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 6v6l4 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="label">Planeamiento</span>
+    </a>
+    <a routerLink="/reclutamiento" routerLinkActive="active" class="navbar-link">
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M8 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM16 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M4 19c0-2 2-3 4-3s4 1 4 3M12 16c0-2 2-3 4-3s4 1 4 3" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </span>
+      <span class="label">Reclutamiento</span>
+    </a>
+    <a routerLink="/formacion" routerLinkActive="active" class="navbar-link">
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 3 2 8l10 5 10-5-10-5z" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M2 8v4c0 5 10 8 10 8s10-3 10-8V8" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </span>
+      <span class="label">Formación</span>
+    </a>
   </div>
   <div class="navbar-user">
     <div class="user-info">María Torres</div>
     <div class="user-role">Planeamiento</div>
-    <button class="navbar-button" (click)="reportIssue()">Reportar problema</button>
-    <button class="navbar-button logout" (click)="logout()">Cerrar sesión</button>
+    <button class="navbar-button" type="button" (click)="reportIssue()">
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 9v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 17h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M10 3h4l6 6-6 6h-4l-6-6 6-6z" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </span>
+      <span class="label">Reportar problema</span>
+    </button>
+    <button class="navbar-button logout" type="button" (click)="logout()">
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M10 8l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 12H6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="label">Cerrar sesión</span>
+    </button>
   </div>
 </nav>
