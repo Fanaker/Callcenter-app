@@ -14,6 +14,9 @@ import { RqService } from '../../services/rq';
 export class FormacionDetalle {
   rq: any;
   message = '';
+  approvalFilter: string = 'todos';
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(
     private route: ActivatedRoute,
@@ -26,6 +29,51 @@ export class FormacionDetalle {
   getTestIndexes() {
     const count = this.rq?.testCount || 1;
     return Array.from({ length: Math.min(Math.max(count, 1), 5) }, (_, index) => index + 1);
+  }
+
+  getFilteredAndSortedCandidates() {
+    if (!this.rq?.candidatos) return [];
+    let filtered = this.rq.candidatos;
+
+    if (this.approvalFilter === 'aprobados') {
+      filtered = filtered.filter((c: any) => this.isApproved(c));
+    } else if (this.approvalFilter === 'no aprobados') {
+      filtered = filtered.filter((c: any) => !this.isApproved(c));
+    }
+
+    if (this.sortColumn) {
+      filtered.sort((a: any, b: any) => {
+        let aVal: any, bVal: any;
+        if (this.sortColumn === 'dni') {
+          aVal = parseInt(a.dni);
+          bVal = parseInt(b.dni);
+        } else if (this.sortColumn === 'promedio') {
+          aVal = parseFloat(this.getAverage(a));
+          bVal = parseFloat(this.getAverage(b));
+        } else {
+          aVal = a[this.sortColumn];
+          bVal = b[this.sortColumn];
+        }
+        let result = 0;
+        if (typeof aVal === 'number') {
+          result = aVal - bVal;
+        } else {
+          result = aVal.localeCompare(bVal);
+        }
+        return this.sortDirection === 'asc' ? result : -result;
+      });
+    }
+
+    return filtered;
+  }
+
+  sortBy(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
   }
 
   getAverage(candidate: any) {

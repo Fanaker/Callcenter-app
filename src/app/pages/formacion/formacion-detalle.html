@@ -19,19 +19,27 @@
   </div>
 
   <div *ngIf="rq.candidatos?.length > 0" class="candidates-table-wrapper">
+    <div class="filters">
+      <label>Resultado:</label>
+      <select [(ngModel)]="approvalFilter">
+        <option value="todos">Todos</option>
+        <option value="aprobados">Aprobados</option>
+        <option value="no aprobados">No aprobados</option>
+      </select>
+    </div>
     <table class="candidates-table">
       <thead>
         <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
+          <th (click)="sortBy('dni')">DNI</th>
+          <th (click)="sortBy('nombre')">Nombre</th>
+          <th (click)="sortBy('apellido')">Apellido</th>
           <th *ngFor="let index of getTestIndexes()">Test {{ index }}</th>
-          <th>Promedio</th>
+          <th (click)="sortBy('promedio')">Promedio</th>
           <th>Resultado</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let candidato of rq.candidatos">
+        <tr *ngFor="let candidato of getFilteredAndSortedCandidates()">
           <td>{{ candidato.dni }}</td>
           <td>{{ candidato.nombre }}</td>
           <td>{{ candidato.apellido }}</td>
