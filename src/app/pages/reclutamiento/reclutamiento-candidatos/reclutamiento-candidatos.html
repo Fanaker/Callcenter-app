@@ -1,5 +1,5 @@
 <div *ngIf="rq; else noRq">
-  <div class="rq-header">
+  <div class="rq-info-box">
     <div class="rq-identidad">
       <div class="rq-codigo">RQ {{ rq.codigo }}</div>
       <div class="rq-campania">{{ rq.campania || rq['campaña'] || rq.campaign || 'Sin campaña' }}</div>
@@ -14,11 +14,11 @@
     </div>
   </div>
 
-  <p>Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+  <p class="rq-comentarios">Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
 
   <div class="link-actions">
-    <button (click)="copyApplyLink()">Copiar link</button>
-    <button (click)="openApplyLink()">Ver link</button>
+    <button class="btn-primary" (click)="copyApplyLink()">Copiar link</button>
+    <button class="btn-primary" (click)="openApplyLink()">Ver link</button>
   </div>
 
   <p *ngIf="message" class="message">{{ message }}</p>
@@ -32,20 +32,11 @@
     </app-candidatos-listado>
 
     <div *ngIf="selectedCandidate" class="detalle-completo">
-      <button (click)="selectedCandidate = null" class="btn-volver">Volver a la lista</button>
-      <h3>Datos del RQ</h3>
-      <div class="rq-detalle">
-        <p><strong>Código:</strong> {{ rq.codigo }}</p>
-        <p><strong>Campaña:</strong> {{ rq.campaign }}</p>
-        <p><strong>Puesto:</strong> {{ rq.puesto }}</p>
-        <p><strong>Cantidad:</strong> {{ rq.cantidad }}</p>
-        <p><strong>Fecha de Ingreso:</strong> {{ rq.fechaIngreso }}</p>
-        <p><strong>Inicio Capacitación:</strong> {{ rq.fechaInicioCapacitacion }}</p>
-        <p><strong>Fin Capacitación:</strong> {{ rq.fechaFinCapacitacion }}</p>
-        <p><strong>Días Capacitación:</strong> {{ rq.diasCapacitacion }}</p>
-        <p><strong>Estado:</strong> {{ rq.estado }}</p>
-        <p><strong>Comentarios:</strong> {{ rq.comentarios || 'Sin comentarios' }}</p>
-      </div>
+      <button class="btn-back" (click)="selectedCandidate = null">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
       <h3>Datos del Postulante</h3>
       <div class="postulante-detalle">
         <p><strong>DNI:</strong> {{ selectedCandidate.dni || selectedCandidate.id || 'No disponible' }}</p>

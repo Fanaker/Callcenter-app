@@ -1,10 +1,18 @@
 <div *ngIf="rq; else noRq">
-  <h2>RQ {{ rq.codigo }} - {{ rq.puesto }}</h2>
-  <p>
-    Personal necesario: {{ rq.cantidad }} | Inicio labores: {{ rq.fechaIngreso }} | Inicio capacitación:
-    {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
-  </p>
-  <p>Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+  <button class="btn-back" (click)="goBack()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <div class="rq-info-box">
+    <h2>RQ {{ rq.codigo }} - {{ rq.puesto }}</h2>
+    <p>
+      Personal necesario: {{ rq.cantidad }} | Inicio labores: {{ rq.fechaIngreso }} | Inicio capacitación:
+      {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
+    </p>
+    <p>Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+  </div>
   <p *ngIf="message" class="message">{{ message }}</p>
 
   <h3>Resultados aprobados</h3>
@@ -13,11 +21,26 @@
     <table class="candidates-table">
       <thead>
         <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Correo</th>
-          <th>Teléfono</th>
+          <th (click)="sortBy('dni')" class="sortable-header">
+            DNI
+            <span class="sort-icon" *ngIf="sortField === 'dni'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+          </th>
+          <th (click)="sortBy('nombre')" class="sortable-header">
+            Nombre
+            <span class="sort-icon" *ngIf="sortField === 'nombre'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+          </th>
+          <th (click)="sortBy('apellido')" class="sortable-header">
+            Apellido
+            <span class="sort-icon" *ngIf="sortField === 'apellido'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+          </th>
+          <th (click)="sortBy('correo')" class="sortable-header">
+            Correo
+            <span class="sort-icon" *ngIf="sortField === 'correo'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+          </th>
+          <th (click)="sortBy('telefono')" class="sortable-header">
+            Teléfono
+            <span class="sort-icon" *ngIf="sortField === 'telefono'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+          </th>
           <th>Medio preferido</th>
           <th>Contratar</th>
           <th>Guardar</th>
@@ -38,7 +61,7 @@
             </select>
           </td>
           <td>
-            <button (click)="saveCandidate(candidate)">Guardar</button>
+            <button class="btn-primary" (click)="saveCandidate(candidate)">Guardar</button>
           </td>
         </tr>
       </tbody>

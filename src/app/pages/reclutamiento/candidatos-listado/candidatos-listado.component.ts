@@ -25,6 +25,8 @@ export class CandidatosListadoComponent implements OnInit, OnChanges {
   candidatosOriginales: Candidato[] = [];
   cargando = false;
   filtroActual: string | null = null;
+  sortField: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   ngOnInit(): void {
     this.actualizarListado();
@@ -39,7 +41,7 @@ export class CandidatosListadoComponent implements OnInit, OnChanges {
   private actualizarListado(): void {
     this.candidatosOriginales = [...(this.candidatos || [])];
     this.aplicarFiltro(this.filtroActual);
-    this.cargando = false;
+    this.aplicarOrdenamiento();
   }
 
   /**
@@ -61,6 +63,48 @@ export class CandidatosListadoComponent implements OnInit, OnChanges {
       default:
         this.candidatosFiltrados = [...this.candidatosOriginales];
     }
+    this.aplicarOrdenamiento();
+  }
+
+  /**
+   * Ordena la tabla por un campo específico
+   */
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.aplicarOrdenamiento();
+  }
+
+  /**
+   * Aplica el ordenamiento actual a la lista filtrada
+   */
+  private aplicarOrdenamiento(): void {
+    if (!this.sortField) return;
+
+    this.candidatosFiltrados.sort((a, b) => {
+      let aValue: any = a[this.sortField as keyof Candidato];
+      let bValue: any = b[this.sortField as keyof Candidato];
+
+      // Handle DNI field which might be in 'id' property
+      if (this.sortField === 'dni') {
+        aValue = a.dni || a.id || '';
+        bValue = b.dni || b.id || '';
+      }
+
+      // Convert to strings for comparison
+      const aStr = String(aValue || '').toLowerCase();
+      const bStr = String(bValue || '').toLowerCase();
+
+      if (this.sortDirection === 'asc') {
+        return aStr.localeCompare(bStr);
+      } else {
+        return bStr.localeCompare(aStr);
+      }
+    });
   }
 
   /**

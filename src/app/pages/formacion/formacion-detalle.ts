@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RqService } from '../../services/rq';
 
 @Component({
@@ -20,6 +20,7 @@ export class FormacionDetalle {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private rqService: RqService
   ) {
     const codigo = this.route.snapshot.paramMap.get('codigo') || '';
@@ -104,5 +105,9 @@ export class FormacionDetalle {
       this.rqService.updateCandidate(this.rq.codigo, candidate);
     });
     this.message = 'Resultados guardados para ' + this.rq.codigo;
+  }
+
+  goBack() {
+    this.router.navigate(['/formacion']);
   }
 }

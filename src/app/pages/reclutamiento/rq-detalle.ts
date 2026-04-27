@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RqService } from '../../services/rq';
 
 @Component({
@@ -15,9 +15,12 @@ export class RqDetalle {
   rq: any;
   message = '';
   applyUrl = '';
+  sortField: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private rqService: RqService
   ) {
     const codigo = this.route.snapshot.paramMap.get('codigo') || '';
@@ -31,7 +34,34 @@ export class RqDetalle {
     if (!this.rq) {
       return [];
     }
-    return this.rq.candidatos.filter((candidate: any) => candidate.apto && candidate.entrevistaAprobada);
+    let results = this.rq.candidatos.filter((candidate: any) => candidate.apto && candidate.entrevistaAprobada);
+
+    if (this.sortField) {
+      results.sort((a: any, b: any) => {
+        let aValue = a[this.sortField] || '';
+        let bValue = b[this.sortField] || '';
+
+        const aStr = String(aValue).toLowerCase();
+        const bStr = String(bValue).toLowerCase();
+
+        if (this.sortDirection === 'asc') {
+          return aStr.localeCompare(bStr);
+        } else {
+          return bStr.localeCompare(aStr);
+        }
+      });
+    }
+
+    return results;
+  }
+
+  sortBy(field: string) {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
   }
 
   saveCandidate(candidate: any) {
@@ -60,5 +90,9 @@ export class RqDetalle {
     }
 
     window.open(this.applyUrl, '_blank');
+  }
+
+  goBack() {
+    this.router.navigate(['/reclutamiento']);
   }
 }

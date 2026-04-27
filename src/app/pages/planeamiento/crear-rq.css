@@ -1,67 +1,184 @@
+/* Crear RQ Form Styles - Quantia Design System */
+
 .form-container {
   max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  margin: 24px auto;
+  padding: 24px;
+  background-color: #F8F5FF;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-light);
 }
 
-.form-container label {
-  display: block;
-  margin-bottom: 8px;
+.form-title {
+  margin: 0 0 8px 0;
+  font-size: 20px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-main);
 }
 
-.form-container input,
-.form-container textarea {
-  width: 100%;
-  padding: 10px;
+.form-subtitle {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.form-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.form-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  color: var(--text-main);
   font-size: 14px;
 }
 
-.form-container input:focus,
-.form-container textarea:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  color: var(--text-main);
+  font-family: 'Inter', inherit;
+  transition: all 0.2s ease;
 }
 
-.form-container button {
-  width: 100%;
-  padding: 12px;
-  background-color: #2563eb;
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-fuchsia);
+  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Helper Text */
+.form-group small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.form-group small.required {
+  color: #EF4444;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-submit {
+  padding: 10px 20px;
+  background-color: var(--primary-fuchsia);
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
   font-weight: 600;
-  cursor: pointer;
-}
-
-.form-container button:hover:not(:disabled) {
-  background-color: #1d4ed8;
-}
-
-.form-container button:disabled {
-  background-color: #93c5fd;
-  cursor: not-allowed;
-}
-
-.error-message {
-  color: #dc2626;
   font-size: 14px;
-  margin-top: -12px;
-  margin-bottom: 16px;
-  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.form-container button:disabled {
-  background-color: #9ca3af;
+.btn-submit:hover {
+  background-color: #c2185b;
+  transform: translateY(-1px);
+}
+
+.btn-submit:disabled {
+  background-color: #C9C9C9;
   cursor: not-allowed;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+/* Messages */
+.message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.message.success {
+  background: #F0FDF4;
+  border: 1px solid #BBECB5;
+  color: #166534;
+}
+
+.message.error {
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  color: #991B1B;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-container {
+    margin: 16px;
+    padding: 16px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-submit,
+  .btn-cancel {
+    width: 100%;
+  }
 }

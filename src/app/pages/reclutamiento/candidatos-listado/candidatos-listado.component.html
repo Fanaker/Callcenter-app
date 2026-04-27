@@ -37,9 +37,18 @@
     <table class="candidatos-table" *ngIf="!cargando">
       <thead>
         <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
+          <th (click)="sortBy('dni')" class="sortable-header">
+            DNI
+            <span class="sort-icon" *ngIf="sortField === 'dni'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+          </th>
+          <th (click)="sortBy('nombre')" class="sortable-header">
+            Nombre
+            <span class="sort-icon" *ngIf="sortField === 'nombre'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+          </th>
+          <th (click)="sortBy('apellido')" class="sortable-header">
+            Apellido
+            <span class="sort-icon" *ngIf="sortField === 'apellido'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+          </th>
           <th>Requisito</th>
           <th>Entrevista</th>
           <th>Acciones</th>

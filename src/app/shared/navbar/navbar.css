@@ -1,10 +1,13 @@
+/* Sidebar Navbar - Design System Quantia */
+
 .navbar {
   display: flex;
   flex-direction: column;
-  width: 300px;
-  padding: 32px 24px;
-  gap: 36px;
-  background: linear-gradient(180deg, #5b21b6 0%, #8b5cf6 48%, #ec4899 100%);
+  width: 250px;
+  height: 100vh;
+  padding: 24px 16px;
+  gap: 24px;
+  background-color: var(--sidebar-bg);
   color: white;
   position: fixed;
   left: 0;
@@ -17,19 +20,11 @@
 }
 
 .navbar.collapsed {
-  width: 112px;
-  padding: 24px 12px;
+  width: 80px;
+  padding: 16px 12px;
 }
 
-.navbar::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 25%),
-    radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.12), transparent 20%);
-  pointer-events: none;
-}
-
+/* Navbar Brand (Logo) */
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -47,86 +42,91 @@
 }
 
 .brand-logo {
-  width: 56px;
-  height: 56px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.18);
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  max-width: 150px;
+  height: auto;
+  object-fit: contain;
 }
 
+.navbar.collapsed .brand-logo {
+  max-width: 40px;
+  height: auto;
+}
+
+/* Toggle Button */
 .navbar-toggle {
   border: none;
-  background: rgba(255, 255, 255, 0.18);
-  color: white;
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.navbar.collapsed .navbar-toggle {
-  width: 34px;
-  height: 34px;
+  transition: background-color 0.2s, color 0.2s;
+  padding: 0;
 }
 
 .navbar-toggle:hover {
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 1);
 }
 
 .toggle-icon {
   display: inline-flex;
   width: 20px;
   height: 20px;
+  color: inherit;
 }
 
 .toggle-icon svg,
 .icon svg {
   width: 20px;
   height: 20px;
+  stroke: currentColor;
 }
 
 .navbar.collapsed .toggle-icon svg {
   transform: rotate(180deg);
 }
 
+/* Navbar Menu (Navigation Links) */
 .navbar-menu {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   position: relative;
   z-index: 1;
+  flex: 1;
 }
 
 .navbar-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
-  border-radius: 18px;
-  color: rgba(255, 255, 255, 0.94);
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #D1D5DB;
   text-decoration: none;
-  font-weight: 700;
-  transition: background-color 0.2s, transform 0.2s;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.navbar-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.navbar-link.active {
+  background-color: var(--primary-fuchsia);
+  color: white;
+  font-weight: 600;
 }
 
 .navbar.collapsed .navbar-link {
   justify-content: center;
-  padding: 14px 0;
-}
-
-.navbar-link:hover,
-.navbar-link.active {
-  background-color: rgba(255, 255, 255, 0.16);
-  transform: translateX(4px);
-}
-
-.navbar.collapsed .navbar-link:hover,
-.navbar.collapsed .navbar-link.active {
-  transform: none;
+  padding: 10px 0;
 }
 
 .icon {
@@ -135,6 +135,7 @@
   justify-content: center;
   width: 24px;
   height: 24px;
+  flex-shrink: 0;
 }
 
 .label {
@@ -146,24 +147,27 @@
   display: none;
 }
 
+/* Navbar User Section (Footer) */
 .navbar-user {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   z-index: 1;
 }
 
 .navbar.collapsed .navbar-user {
   align-items: center;
+  gap: 8px;
 }
 
 .user-info,
 .user-role {
   transition: opacity 0.2s ease;
+  font-size: 13px;
 }
 
 .navbar.collapsed .user-info,
@@ -172,49 +176,55 @@
 }
 
 .user-info {
-  font-weight: 800;
+  font-weight: 600;
   color: #ffffff;
 }
 
 .user-role {
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
 }
 
+/* Navbar Buttons */
 .navbar-button {
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 12px;
   border: none;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.14);
-  color: white;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 500;
+  font-size: 13px;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   justify-content: flex-start;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+}
+
+.navbar-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 1);
 }
 
 .navbar.collapsed .navbar-button {
   justify-content: center;
-  padding: 12px 0;
+  padding: 10px 0;
   width: auto;
 }
 
-.navbar-button:hover {
-  background: rgba(255, 255, 255, 0.24);
+.navbar-button.logout {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
 }
 
-.logout {
-  background: #fda4af;
+.navbar-button.logout:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #fecaca;
 }
 
-.logout:hover {
-  background: #fb7185;
-}
-
+/* Responsive */
 @media (max-width: 960px) {
   .navbar {
     width: 100%;
@@ -226,6 +236,8 @@
     align-items: center;
     position: relative;
     top: auto;
+    padding: 16px;
+    gap: 16px;
   }
 
   .navbar.collapsed {
@@ -242,11 +254,14 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
+    flex: none;
   }
 
   .navbar-link {
+    flex: 1;
+    min-width: 100px;
     justify-content: center;
-    padding: 10px 14px;
+    padding: 10px 12px;
   }
 
   .navbar-user {
@@ -256,10 +271,16 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+    gap: 8px;
   }
 
   .navbar-user .user-info,
   .navbar-user .user-role {
     display: none;
+  }
+
+  .navbar-button {
+    width: auto;
+    padding: 8px 12px;
   }
 }

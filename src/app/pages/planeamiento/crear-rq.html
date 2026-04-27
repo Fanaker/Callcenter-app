@@ -1,31 +1,47 @@
 <h2>Crear Nueva RQ</h2>
 
 <div class="form-container">
-  <label>Campaña</label>
-  <input type="text" placeholder="Nombre de la campaña" [(ngModel)]="campaign">
+  <div class="form-group">
+    <label>Campaña</label>
+    <input type="text" placeholder="Nombre de la campaña" [(ngModel)]="campaign">
+  </div>
 
-  <label>Puesto solicitado</label>
-  <input type="text" placeholder="Nombre del puesto" [(ngModel)]="puesto">
+  <div class="form-group">
+    <label>Puesto solicitado</label>
+    <input type="text" placeholder="Nombre del puesto" [(ngModel)]="puesto">
+  </div>
 
-  <label>Cantidad de personal a reclutar</label>
-  <input type="number" placeholder="Cantidad de personal" [(ngModel)]="cantidad">
+  <div class="form-group">
+    <label>Cantidad de personal a reclutar</label>
+    <input type="number" placeholder="Cantidad de personal" [(ngModel)]="cantidad">
+  </div>
 
-  <label>Fecha prevista de inicio del personal</label>
-  <input type="date" [(ngModel)]="fechaIngreso" (change)="onFechaChange()">
+  <div class="form-group">
+    <label>Fecha prevista de inicio del personal</label>
+    <input type="date" [(ngModel)]="fechaIngreso" (change)="onFechaChange()">
+  </div>
 
-  <label>Fin capacitación</label>
-  <input type="date" [(ngModel)]="fechaFinCapacitacion" (change)="onFechaChange()">
-  <div *ngIf="errorFechaFinCapacitacion" class="error-message">{{ errorFechaFinCapacitacion }}</div>
+  <div class="form-group">
+    <label>Fin capacitación</label>
+    <input type="date" [(ngModel)]="fechaFinCapacitacion" (change)="onFechaChange()">
+    <div *ngIf="errorFechaFinCapacitacion" class="error-message">{{ errorFechaFinCapacitacion }}</div>
+  </div>
 
-  <label>Inicio capacitación</label>
-  <input type="date" [(ngModel)]="fechaInicioCapacitacion" (change)="onFechaChange()">
-  <div *ngIf="errorFechaInicioCapacitacion" class="error-message">{{ errorFechaInicioCapacitacion }}</div>
+  <div class="form-group">
+    <label>Inicio capacitación</label>
+    <input type="date" [(ngModel)]="fechaInicioCapacitacion" (change)="onFechaChange()">
+    <div *ngIf="errorFechaInicioCapacitacion" class="error-message">{{ errorFechaInicioCapacitacion }}</div>
+  </div>
 
-  <label>Días de capacitación necesarias</label>
-  <input type="number" min="1" placeholder="Días de capacitación" [(ngModel)]="diasCapacitacion">
+  <div class="form-group">
+    <label>Días de capacitación necesarias</label>
+    <input type="number" min="1" placeholder="Días de capacitación" [(ngModel)]="diasCapacitacion">
+  </div>
 
-  <label>Comentarios adicionales (opcional)</label>
-  <textarea rows="3" placeholder="Comentarios adicionales" [(ngModel)]="comentarios"></textarea>
+  <div class="form-group">
+    <label>Comentarios adicionales (opcional)</label>
+    <textarea rows="3" placeholder="Comentarios adicionales" [(ngModel)]="comentarios"></textarea>
+  </div>
 
   <button (click)="crearRQ()"
           [disabled]="campaign.trim() === '' || cantidad <= 0 || !puesto.trim() || !fechaIngreso || !fechaFinCapacitacion || !fechaInicioCapacitacion || diasCapacitacion <= 0">

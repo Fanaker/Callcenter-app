@@ -1,8 +1,16 @@
 <div *ngIf="rq; else noRq">
-  <h2>Detalle de Formación - {{ rq.codigo }}</h2>
-  <p>
-    Campaña: {{ rq.campaign }} | Puesto: {{ rq.puesto }} | Inicio capacitación: {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
-  </p>
+  <button class="btn-back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <div class="rq-info-box">
+    <h2>Detalle de Formación - {{ rq.codigo }}</h2>
+    <p>
+      Campaña: {{ rq.campaign }} | Puesto: {{ rq.puesto }} | Inicio capacitación: {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
+    </p>
+  </div>
 
   <div class="config-panel">
     <label>Número de tests</label>
@@ -11,7 +19,7 @@
     <label>Nota aprobatoria</label>
     <input type="number" min="0" max="20" [(ngModel)]="rq.aprobacionPromedio">
 
-    <button class="save-button" (click)="saveConfig()">Guardar configuración</button>
+    <button class="save-button btn-primary" (click)="saveConfig()">Guardar configuración</button>
   </div>
 
   <div class="link-actions">

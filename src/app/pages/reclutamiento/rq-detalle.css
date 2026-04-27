@@ -1,52 +1,283 @@
+/* RQ Detalle Styles - Quantia Design System */
+
+.btn-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--primary-fuchsia);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.btn-back:hover {
+  background-color: #c2185b;
+  transform: scale(1.05);
+}
+
+.btn-back svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rq-info-box {
+  background-color: #F8F5FF;
+  border: 2px solid var(--sidebar-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.rq-info-box h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  color: var(--text-main);
+}
+
+.rq-info-box p {
+  margin: 4px 0;
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+.btn-primary {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-fuchsia);
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #c2185b;
+  transform: translateY(-1px);
+}
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.sortable-header:hover {
+  color: var(--primary-fuchsia);
+}
+
+.sort-icon {
+  margin-left: 4px;
+  font-size: 10px;
+  color: var(--primary-fuchsia);
+}
+
+/* Actions */
 .link-actions {
   display: flex;
-  gap: 10px;
-  margin: 18px 0;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
+.btn-action {
+  padding: 10px 16px;
+  background-color: var(--primary-fuchsia);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+  background-color: #c2185b;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+/* Info Message */
 .message {
-  color: #5b21b6;
-  margin-bottom: 18px;
+  padding: 12px 16px;
+  background: #F0F9FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 8px;
+  color: #1E40AF;
+  font-size: 14px;
+  margin-bottom: 16px;
 }
 
+/* Tab Navigation */
+.tab-container {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 24px;
+}
+
+.tab-button {
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: -2px;
+}
+
+.tab-button:hover {
+  color: var(--text-main);
+  border-bottom-color: var(--primary-fuchsia);
+}
+
+.tab-button.active {
+  color: var(--primary-fuchsia);
+  border-bottom-color: var(--primary-fuchsia);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Candidates Table */
 .candidates-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 24px;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
   overflow: hidden;
-  margin-top: 12px;
-  background: linear-gradient(180deg, rgba(124, 58, 237, 0.08), rgba(236, 72, 153, 0.06));
-  box-shadow: 0 24px 60px rgba(124, 58, 237, 0.08);
+  box-shadow: var(--shadow-light);
 }
 
-.candidates-table th,
-.candidates-table td {
-  padding: 16px 14px;
-  text-align: left;
-  color: #344154;
+.candidates-table thead {
+  background-color: #F3F4F6;
 }
 
 .candidates-table th {
-  background: linear-gradient(90deg, rgba(124, 58, 237, 0.9), rgba(236, 72, 153, 0.9));
-  color: white;
-  font-weight: 700;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--purple-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.candidates-table tr:hover {
-  background: rgba(236, 72, 153, 0.08);
+.candidates-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
 }
 
-.rq-link,
-button {
-  cursor: pointer;
+.candidates-table tbody tr:hover {
+  background-color: #F9FAFB;
 }
 
-.no-rqs {
-  padding: 20px;
+/* Section Cards */
+.section-card {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  background-color: #faf0ff;
-  border: 1px solid rgba(236, 72, 153, 0.18);
-  margin-top: 12px;
-  color: #5b21b6;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-light);
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 16px 0;
+}
+
+.section-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.info-value {
+  font-size: 14px;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+/* No Data */
+.no-data,
+.no-rqs {
+  padding: 40px 20px;
+  text-align: center;
+  background: #FAFAFA;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-muted);
+}
+
+.no-data p,
+.no-rqs p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .link-actions {
+    flex-direction: column;
+  }
+
+  .btn-action,
+  .btn-secondary {
+    width: 100%;
+  }
+
+  .tab-container {
+    flex-wrap: wrap;
+  }
+
+  .section-content {
+    grid-template-columns: 1fr;
+  }
 }
