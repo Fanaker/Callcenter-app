@@ -2,13 +2,23 @@
   display: flex;
   flex-direction: column;
   width: 300px;
-  min-height: 100vh;
   padding: 32px 24px;
   gap: 36px;
   background: linear-gradient(180deg, #5b21b6 0%, #8b5cf6 48%, #ec4899 100%);
   color: white;
-  position: relative;
-  overflow: hidden;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  transition: width 0.25s ease, padding 0.25s ease;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.navbar.collapsed {
+  width: 112px;
+  padding: 24px 12px;
 }
 
 .navbar::after {
@@ -23,7 +33,17 @@
 .navbar-brand {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.navbar.collapsed .navbar-brand {
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 8px;
 }
 
 .brand-logo {
@@ -33,8 +53,44 @@
   background: rgba(255, 255, 255, 0.18);
   padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  position: relative;
-  z-index: 1;
+}
+
+.navbar-toggle {
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.navbar.collapsed .navbar-toggle {
+  width: 34px;
+  height: 34px;
+}
+
+.navbar-toggle:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.toggle-icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+}
+
+.toggle-icon svg,
+.icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar.collapsed .toggle-icon svg {
+  transform: rotate(180deg);
 }
 
 .navbar-menu {
@@ -48,6 +104,7 @@
 .navbar-link {
   display: inline-flex;
   align-items: center;
+  gap: 14px;
   padding: 14px 18px;
   border-radius: 18px;
   color: rgba(255, 255, 255, 0.94);
@@ -56,10 +113,37 @@
   transition: background-color 0.2s, transform 0.2s;
 }
 
+.navbar.collapsed .navbar-link {
+  justify-content: center;
+  padding: 14px 0;
+}
+
 .navbar-link:hover,
 .navbar-link.active {
   background-color: rgba(255, 255, 255, 0.16);
   transform: translateX(4px);
+}
+
+.navbar.collapsed .navbar-link:hover,
+.navbar.collapsed .navbar-link.active {
+  transform: none;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.label {
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.navbar.collapsed .label {
+  display: none;
 }
 
 .navbar-user {
@@ -71,6 +155,20 @@
   border-top: 1px solid rgba(255, 255, 255, 0.18);
   position: relative;
   z-index: 1;
+}
+
+.navbar.collapsed .navbar-user {
+  align-items: center;
+}
+
+.user-info,
+.user-role {
+  transition: opacity 0.2s ease;
+}
+
+.navbar.collapsed .user-info,
+.navbar.collapsed .user-role {
+  display: none;
 }
 
 .user-info {
@@ -92,7 +190,17 @@
   color: white;
   cursor: pointer;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
   transition: background-color 0.2s;
+}
+
+.navbar.collapsed .navbar-button {
+  justify-content: center;
+  padding: 12px 0;
+  width: auto;
 }
 
 .navbar-button:hover {
@@ -111,16 +219,34 @@
   .navbar {
     width: 100%;
     min-height: 0;
+    height: auto;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    top: auto;
+  }
+
+  .navbar.collapsed {
+    width: 100%;
+  }
+
+  .navbar-brand {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .navbar-menu {
+    width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
+  }
+
+  .navbar-link {
+    justify-content: center;
+    padding: 10px 14px;
   }
 
   .navbar-user {
@@ -130,5 +256,10 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+  }
+
+  .navbar-user .user-info,
+  .navbar-user .user-role {
+    display: none;
   }
 }

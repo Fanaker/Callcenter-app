@@ -1,5 +1,5 @@
 <div *ngIf="!isRegisterMode && !isVerificationMode" class="login-container">
-  <h2>🔐 Iniciar Sesión - Quantia</h2>
+  <h2>Iniciar Sesión - Quantia</h2>
 
   <div class="login-form">
     <label>Usuario</label>
@@ -17,7 +17,7 @@
 </div>
 
 <div *ngIf="isRegisterMode && !isVerificationMode" class="register-container">
-  <h2>📝 Crear Cuenta - Quantia</h2>
+  <h2>Crear Cuenta - Quantia</h2>
 
   <div class="register-form">
     <label>DNI (8 dígitos)</label>
@@ -47,7 +47,7 @@
 </div>
 
 <div *ngIf="isVerificationMode" class="verification-container">
-  <h2>📧 Verificar Correo - Quantia</h2>
+  <h2>Verificar Correo - Quantia</h2>
 
   <div class="verification-form">
     <p>Se ha enviado un código de verificación a {{ correo }}.</p>

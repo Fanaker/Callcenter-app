@@ -9,7 +9,14 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './navbar.css'
 })
 export class Navbar {
+  isCollapsed = false;
+
   constructor(private router: Router) {}
+
+  toggleCollapsed() {
+    this.isCollapsed = !this.isCollapsed;
+    document.body.classList.toggle('sidebar-collapsed', this.isCollapsed);
+  }
 
   logout() {
     this.router.navigate(['/']);

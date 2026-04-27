@@ -44,12 +44,20 @@ button {
   display: flex;
   flex-direction: row;
   gap: 0;
+  align-items: stretch;
 }
 
 .app-main {
   flex: 1;
+  min-height: 100vh;
   padding: 28px 32px;
+  margin-left: 300px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 239, 255, 0.9));
+  transition: margin-left 0.25s ease;
+}
+
+:host-context(.sidebar-collapsed) .app-main {
+  margin-left: 112px;
 }
 
 .app-page-shell {
@@ -296,5 +304,6 @@ h4 {
 
   .app-main {
     padding: 20px;
+    margin-left: 0;
   }
 }
