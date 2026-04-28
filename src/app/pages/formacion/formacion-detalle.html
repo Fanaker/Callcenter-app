@@ -1,21 +1,32 @@
 <div *ngIf="rq; else noRq">
-  <h2 class="rq-title">CALIFICACIONES PARA LA CAPACITACIÓN DEL REQUERIMIENTO NÚMERO {{ rq.codigo }}</h2>
-
   <button class="btn-back" title="Volver a formación" [routerLink]="['/formacion']">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
 
-  <div class="rq-info-box">
-    <div class="rq-identidad">
-      <div class="rq-campaña">CAMPAÑA: {{ rq.campaign }}</div>
-      <div class="rq-puesto">PUESTO: {{ rq.puesto }}</div>
-    </div>
+  <h2 class="rq-title">CALIFICACIONES PARA LA CAPACITACIÓN DEL REQUERIMIENTO NÚMERO {{ rq.codigo }}</h2>
 
-    <div class="rq-meta">
-      <span>INICIO CAPACITACIÓN: {{ rq.fechaInicioCapacitacion }}</span>
-      <span>FIN CAPACITACIÓN: {{ rq.fechaFinCapacitacion }}</span>
+  <div class="rq-info-box">
+    <div class="rq-content">
+      <div class="rq-grid">
+        <div class="rq-label">CAMPAÑA:</div>
+        <div class="rq-value">{{ rq.campaign }}</div>
+
+        <div class="rq-label">PUESTO:</div>
+        <div class="rq-value">{{ rq.puesto }}</div>
+
+        <div class="rq-label">INICIO CAPACITACIÓN:</div>
+        <div class="rq-value">{{ rq.fechaInicioCapacitacion }}</div>
+
+        <div class="rq-label">FIN CAPACITACIÓN:</div>
+        <div class="rq-value">{{ rq.fechaFinCapacitacion }}</div>
+      </div>
+
+      <div class="rq-comments">
+        <div class="rq-label">COMENTARIOS:</div>
+        <div class="rq-value">{{ rq.comentarios || 'SIN COMENTARIOS' }}</div>
+      </div>
     </div>
   </div>
 
@@ -31,7 +42,7 @@
       </div>
     </div>
     <div class="config-row">
-      <button class="btn-primary" (click)="saveConfig()">Guardar configuración</button>
+      <button class="btn-primary save-config-btn" (click)="saveConfig()">Aplicar cambios</button>
     </div>
   </div>
 

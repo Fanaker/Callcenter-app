@@ -9,9 +9,6 @@
 }
 
 .btn-back {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   width: 32px;
   height: 32px;
   border: none;
@@ -23,7 +20,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  z-index: 10;
+  margin-bottom: 16px;
 }
 
 .btn-back:hover {
@@ -35,23 +32,82 @@
   width: 16px;
   height: 16px;
 }
-
+.candidates-title {
+  color: #000000;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 28px;
+  margin-bottom: 20px;
+}
 .rq-info-box {
-  background-color: #F8F5FF;
-  border: 2px solid var(--sidebar-bg);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 16px;
+  background-color: rgba(155, 89, 182, 0.08);
+  border: 2px solid rgba(155, 89, 182, 0.25);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rq-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+  align-items: center;
+}
+
+.rq-label {
+  font-weight: 600;
+  color: #6B4A8A;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.rq-value {
+  font-weight: 500;
+  color: #333333;
+  font-size: 14px;
+}
+
+.rq-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rq-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background-color: rgba(155, 89, 182, 0.12);
+  color: #5F3F7B;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.rq-comments {
+  display: grid;
+  gap: 8px;
+}
+
+.rq-comments .rq-label {
+  margin-bottom: 0;
+}
+
+.rq-comments .rq-value {
+  color: #4B4B4B;
 }
 
 .rq-info-box h2 {
-  margin: 0 0 8px 0;
+  margin: 0;
   font-size: 24px;
   color: var(--text-main);
 }
 
 .rq-info-box p {
-  margin: 4px 0;
+  margin: 0;
   color: var(--text-main);
   font-size: 14px;
 }
@@ -174,7 +230,9 @@
   display: block;
 }
 
+
 /* Candidates Table */
+
 .candidates-table {
   width: 100%;
   border-collapse: collapse;
@@ -289,4 +347,10 @@
   .section-content {
     grid-template-columns: 1fr;
   }
+}
+
+.candidates-list h3 {
+  color: #000000;
+  margin-bottom: 28px;
+  font-weight: 600;
 }

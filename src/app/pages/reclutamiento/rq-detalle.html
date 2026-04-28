@@ -8,15 +8,29 @@
   <h2 class="rq-title">RESULTADO DEL REQUERIMIENTO {{ rq.codigo }} PARA EL PUESTO {{ rq.puesto | uppercase }}</h2>
 
   <div class="rq-info-box">
-    <p>
-      Personal necesario: {{ rq.cantidad }} | Inicio labores: {{ rq.fechaIngreso }} | Inicio capacitación:
-      {{ rq.fechaInicioCapacitacion }} | Fin capacitación: {{ rq.fechaFinCapacitacion }}
-    </p>
-    <p>Comentarios: {{ rq.comentarios || 'Sin comentarios' }}</p>
+    <div class="rq-info-grid">
+      <div class="rq-label">CAMPAÑA</div>
+      <div class="rq-value">{{ rq.campaign }}</div>
+      <div class="rq-label">PUESTO</div>
+      <div class="rq-value">{{ rq.puesto }}</div>
+      <div class="rq-label">CANTIDAD</div>
+      <div class="rq-value">{{ rq.cantidad }}</div>
+    </div>
+
+    <div class="rq-badges">
+      <span class="rq-badge">Inicio labores: {{ rq.fechaIngreso }}</span>
+      <span class="rq-badge">Inicio capacitación: {{ rq.fechaInicioCapacitacion }}</span>
+      <span class="rq-badge">Fin capacitación: {{ rq.fechaFinCapacitacion }}</span>
+    </div>
+
+    <div class="rq-comments">
+      <div class="rq-label">COMENTARIOS</div>
+      <div class="rq-value">{{ rq.comentarios || 'Sin comentarios' }}</div>
+    </div>
   </div>
   <p *ngIf="message" class="message">{{ message }}</p>
 
-  <h3>Candidatos Aprobados y disponibles para su contratación</h3>
+  <h3 class="candidates-title">Candidatos aprobados y disponibles para su contratación</h3>
 
   <div *ngIf="getResults().length > 0" class="candidates-list">
     <table class="candidates-table">

@@ -1,50 +1,64 @@
 /* Formación Detalle Styles - Quantia Design System */
 
-.rq-title {
-  font-size: 24px;
+:host ::ng-deep .rq-title {
+  font-size: 26px;
   font-weight: 700;
-  color: var(--purple-medium);
+  color: #4A148C !important;
   text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.header-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
   margin-bottom: 16px;
 }
 
 .rq-info-box {
   background-color: rgba(155, 89, 182, 0.08);
-  border: 2px solid rgba(155, 89, 182, 0.35);
-  border-radius: 18px;
-  padding: 26px;
+  border: 2px solid rgba(155, 89, 182, 0.25);
+  border-radius: 16px;
+  padding: 24px;
   margin-bottom: 24px;
-  min-height: 120px;
-}
-
-.rq-identidad {
-  margin-bottom: 14px;
-}
-
-.rq-campaña {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--purple-medium);
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-
-.rq-puesto {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--purple-medium);
-  text-transform: uppercase;
-}
-
-.rq-meta {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  font-size: 14px;
-  color: var(--purple-medium);
-  text-transform: uppercase;
-  font-weight: 700;
+  flex-direction: column;
+  gap: 20px;
 }
+
+.rq-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 20px;
+  align-items: start;
+}
+
+.rq-label {
+  font-weight: 600;
+  color: #6B4A8A;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.rq-value {
+  font-weight: 500;
+  color: #333333;
+  font-size: 14px;
+}
+
+.rq-comments {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
 
 .config-panel {
   display: flex;
