@@ -1,60 +1,133 @@
 <div *ngIf="rq; else noRq">
-  <h2 class="form-title">FORMULARIO DE POSTULACIÓN PARA {{ rq.puesto | uppercase }} EN LA {{ (rq.campaign || rq.campania || rq['campaña']) | uppercase }}</h2>
+  <h2 class="form-title">
+    FORMULARIO DE POSTULACIÓN PARA {{ rq.puesto | uppercase }} EN LA {{ rq.campaign | uppercase }}
+  </h2>
 
-  <form class="postular-form" (ngSubmit)="enviar()">
-    <input type="hidden" name="rqCodigo" [value]="rq.codigo">
+  <div *ngIf="formularioBloqueado" class="no-rqs">
+    <p>Este requerimiento ya se encuentra cerrado. No se pueden registrar más postulantes.</p>
+  </div>
+
+  <form *ngIf="!formularioBloqueado" class="postular-form" (ngSubmit)="enviar()">
+    <input type="hidden" name="rqCodigo" [value]="rq.codigo" />
 
     <div class="form-group">
       <label>Nombre</label>
-      <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
+      <input
+        type="text"
+        [(ngModel)]="nombre"
+        name="nombre"
+        placeholder="Ingresa tu nombre"
+        required
+      />
     </div>
 
     <div class="form-group">
       <label>Apellido</label>
-      <input type="text" [(ngModel)]="apellido" name="apellido" placeholder="Ingresa tu apellido" required>
+      <input
+        type="text"
+        [(ngModel)]="apellido"
+        name="apellido"
+        placeholder="Ingresa tu apellido"
+        required
+      />
     </div>
 
     <div class="form-group">
       <label>Número de DNI</label>
-      <input type="text" [(ngModel)]="dni" name="dni" placeholder="12345678" maxlength="8" pattern="[0-9]*" inputmode="numeric" required (blur)="validateDni()">
-      <div *ngIf="errorDni" class="error-message">{{ errorDni }}</div>
+      <input
+        type="text"
+        [(ngModel)]="dni"
+        name="dni"
+        placeholder="12345678"
+        maxlength="8"
+        pattern="[0-9]*"
+        inputmode="numeric"
+        required
+        (blur)="validateDni()"
+      />
+      <div *ngIf="errorDni" class="error-message">
+        {{ errorDni }}
+      </div>
     </div>
 
     <div class="form-group">
       <label>Correo</label>
-      <input type="email" [(ngModel)]="correo" name="correo" placeholder="tu@email.com" required (blur)="validateEmail()">
-      <div *ngIf="errorEmail" class="error-message">{{ errorEmail }}</div>
+      <input
+        type="email"
+        [(ngModel)]="correo"
+        name="correo"
+        placeholder="tu@email.com"
+        required
+        (blur)="validateEmail()"
+      />
+      <div *ngIf="errorEmail" class="error-message">
+        {{ errorEmail }}
+      </div>
     </div>
 
     <div class="form-group">
       <label>Teléfono</label>
-      <input type="tel" [(ngModel)]="telefono" name="telefono" placeholder="999999999" required>
+      <input
+        type="tel"
+        [(ngModel)]="telefono"
+        name="telefono"
+        placeholder="999999999"
+        required
+      />
     </div>
 
     <div class="form-group">
       <label>Medio de comunicación preferido</label>
-      <select title="Selecciona medio de comunicación" [(ngModel)]="medioPreferido" name="medioPreferido">
-        <option value="llamada">Llamada</option>
-        <option value="whatsapp">Whatsapp</option>
-        <option value="email">Email</option>
+      <select
+        title="Selecciona medio de comunicación"
+        [(ngModel)]="medioPreferido"
+        name="medioPreferido"
+      >
+        <option [ngValue]="'whatsapp'">Whatsapp</option>
+        <option [ngValue]="'llamada'">Llamada</option>
+        <option [ngValue]="'email'">Email</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Adjuntar CV</label>
-      <input type="file" title="Selecciona tu CV" (change)="onFileChange($event)">
-      <p *ngIf="cvName" class="info-text">CV seleccionado: {{ cvName }}</p>
+      <label>Enlace del CV en Google Drive</label>
+      <input
+        type="url"
+        [(ngModel)]="cvUrl"
+        name="cvUrl"
+        placeholder="https://drive.google.com/..."
+        required
+        (blur)="validateCvUrl()"
+      />
+
+      <p class="info-text">
+        Sube tu CV a Google Drive, activa la opción “cualquier persona con el enlace puede ver”
+        y pega aquí el enlace.
+      </p>
+
+      <div *ngIf="errorCvUrl" class="error-message">
+        {{ errorCvUrl }}
+      </div>
     </div>
 
     <div class="form-group">
       <label>Comentarios extras (opcional)</label>
-      <textarea rows="4" [(ngModel)]="comentarios" name="comentarios" placeholder="Comentarios adicionales"></textarea>
+      <textarea
+        rows="4"
+        [(ngModel)]="comentarios"
+        name="comentarios"
+        placeholder="Comentarios adicionales"
+      ></textarea>
     </div>
 
-    <button class="btn-primary" type="submit" [disabled]="!isFormValid()">Enviar Postulación</button>
+    <button class="btn-primary" type="submit" [disabled]="!isFormValid()">
+      Enviar Postulación
+    </button>
   </form>
 
-  <p *ngIf="message" class="success-message">{{ message }}</p>
+  <p *ngIf="message" class="success-message">
+    {{ message }}
+  </p>
 </div>
 
 <ng-template #noRq>

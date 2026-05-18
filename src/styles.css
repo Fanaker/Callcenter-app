@@ -1,30 +1,68 @@
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* Global CSS Variables - Design System Quantia */
+/* =========================================================
+   QUANTIA DESIGN SYSTEM - GLOBAL
+   ========================================================= */
+
 :root {
-  /* Primary Palette */
-  --bg-main: #FFFFFF;
-  --sidebar-bg: #2E1A47;
-  --purple-medium: #5B2C83;
-  --primary-fuchsia: #D63384;
-  
-  /* Text Colors */
-  --text-main: #1F1F1F;
-  --text-muted: #6B7280;
-  
-  /* Borders & Accents */
-  --border-color: #EAEAEA;
-  --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
-  
-  /* Status Colors */
-  --status-active-bg: #E6F4EA;
-  --status-active-text: #1E8E3E;
-  --status-closed-bg: #F1F3F4;
-  --status-closed-text: #5F6368;
+  /* Brand palette */
+  --bg-main: #ffffff;
+  --bg-page: #f8f7fb;
+  --bg-soft: #fafafa;
+
+  --sidebar-bg: #2e1a47;
+  --purple-dark: #2e1a47;
+  --purple-medium: #5b2c83;
+  --purple-soft: #f3e8ff;
+
+  --primary-fuchsia: #d63384;
+  --primary-fuchsia-hover: #c2185b;
+  --primary-fuchsia-soft: #fde7f2;
+
+  /* Text */
+  --text-main: #1f1f1f;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-light: #ffffff;
+
+  /* Borders & surfaces */
+  --border-color: #e5e7eb;
+  --border-strong: #d1d5db;
+  --surface-card: #ffffff;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 10px 28px rgba(15, 23, 42, 0.08);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* Status */
+  --status-active-bg: #e6f4ea;
+  --status-active-text: #1e8e3e;
+
+  --status-closed-bg: #f1f3f4;
+  --status-closed-text: #5f6368;
+
+  --status-warning-bg: #fef3c7;
+  --status-warning-text: #92400e;
+
+  --status-danger-bg: #fee2e2;
+  --status-danger-text: #991b1b;
+
+  --status-info-bg: #e0f2fe;
+  --status-info-text: #075985;
 }
 
-/* Global Styles */
+/* =========================================================
+   RESET BASE
+   ========================================================= */
+
 * {
   box-sizing: border-box;
 }
@@ -34,7 +72,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-color: var(--bg-main);
+  background-color: var(--bg-page);
   color: var(--text-main);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   font-size: 14px;
@@ -42,54 +80,518 @@ body {
 }
 
 body {
-  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  color: var(--text-main);
-  font-weight: 600;
-}
-
-h1 { font-size: 28px; }
-h2 { font-size: 24px; }
-h3 { font-size: 18px; }
-h4 { font-size: 16px; }
-h5 { font-size: 14px; }
-h6 { font-size: 12px; }
-
-p {
-  margin: 0;
-  color: var(--text-main);
-}
-
-/* Form Elements */
 button,
 input,
 select,
 textarea {
   font: inherit;
-  font-family: 'Inter', inherit;
+  font-family: inherit;
 }
 
 button {
   cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+a {
+  color: inherit;
+}
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--text-main);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+p {
+  margin: 0;
+}
+
+.form-title,
+.page-title,
+.rq-title {
+  margin-bottom: 20px;
+  color: var(--purple-dark);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* =========================================================
+   LAYOUT HELPERS
+   ========================================================= */
+
+.page-container,
+.planeamiento-container,
+.reclutamiento-container,
+.reclutamiento-candidatos-container,
+.formacion-container,
+.home-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.section-card,
+.card,
+.form-container,
+.rq-info-box,
+.postulante-card,
+.tabla-container,
+.candidatos-container,
+.rqs-list {
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.card,
+.section-card {
+  padding: 20px;
+}
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+.form-container {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 input,
 select,
 textarea {
+  width: 100%;
+  min-height: 42px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  background: #ffffff;
+  color: var(--text-main);
   font-size: 14px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
 }
 
-/* Utilities */
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary-fuchsia);
+  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.12);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+.error-message {
+  color: var(--status-danger-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.info-text {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.success-message,
+.message {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--status-active-bg);
+  color: var(--status-active-text);
+  font-weight: 700;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn-primary,
+.button-primary,
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary-fuchsia);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(214, 51, 132, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.btn-primary:hover,
+.button-primary:hover,
+.link-button:hover {
+  background: var(--primary-fuchsia-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(214, 51, 132, 0.28);
+}
+
+.btn-secondary,
+.button-secondary,
+.btn-action,
+.btn-cv {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 9px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--purple-medium);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+.btn-secondary:hover,
+.button-secondary:hover,
+.btn-action:hover,
+.btn-cv:hover {
+  border-color: var(--primary-fuchsia);
+  background: var(--primary-fuchsia-soft);
+  transform: translateY(-1px);
+}
+
+.btn-back,
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--purple-medium);
+  box-shadow: var(--shadow-xs);
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.btn-back:hover,
+.icon-button:hover {
+  border-color: var(--primary-fuchsia);
+  background: var(--primary-fuchsia-soft);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   FILTERS & ACTION ROWS
+   ========================================================= */
+
+.filters,
+.filtros,
+.page-actions,
+.actions,
+.rq-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filters,
+.filtros {
+  margin-bottom: 18px;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 8px 13px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.btn-filter:hover {
+  border-color: var(--primary-fuchsia);
+  color: var(--primary-fuchsia);
+}
+
+.btn-filter.active {
+  border-color: var(--primary-fuchsia);
+  background: var(--primary-fuchsia);
+  color: #ffffff;
+}
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
+.tabla-container,
+.rqs-list {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0;
+}
+
+table,
+.rqs-table,
+.candidatos-table,
+.candidates-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+thead {
+  background: #f9fafb;
+}
+
+th {
+  padding: 13px 16px;
+  color: var(--purple-medium);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+td {
+  padding: 14px 16px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+tbody tr {
+  transition: background-color 0.18s ease;
+}
+
+tbody tr:hover {
+  background: #faf7ff;
+}
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sort-icon,
+.sort-arrow {
+  margin-left: 6px;
+  color: var(--primary-fuchsia);
+  font-size: 12px;
+}
+
+/* =========================================================
+   BADGES / STATUS
+   ========================================================= */
+
+.badge,
+.estado-badge,
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.badge.active,
+.estado-badge.estado-abierto,
+.status-active {
+  background: var(--status-active-bg);
+  color: var(--status-active-text);
+}
+
+.badge.closed,
+.estado-badge.estado-cerrado,
+.status-closed {
+  background: var(--status-closed-bg);
+  color: var(--status-closed-text);
+}
+
+.badge.pending,
+.status-warning,
+.status-cv-pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+}
+
+.status-no-cumple,
+.status-no-apto,
+.status-danger {
+  background: var(--status-danger-bg);
+  color: var(--status-danger-text);
+}
+
+.status-whatsapp,
+.status-info {
+  background: var(--status-info-bg);
+  color: var(--status-info-text);
+}
+
+/* =========================================================
+   DETAIL BLOCKS
+   ========================================================= */
+
+.rq-info-box {
+  padding: 22px;
+}
+
+.rq-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rq-grid,
+.postulante-grid {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 12px 18px;
+}
+
+.rq-label,
+.postulante-label {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.rq-value,
+.postulante-value {
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.rq-comments,
+.cv-section {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 12px 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.detalle-completo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.postulante-card {
+  padding: 22px;
+}
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.no-rqs,
+.no-rq,
+.no-data,
+.sin-resultados {
+  padding: 34px 20px;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  color: var(--text-muted);
+  text-align: center;
+  font-weight: 600;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -102,8 +604,78 @@ textarea {
   border-width: 0;
 }
 
-.sort-arrow {
-  margin-left: 6px;
-  font-size: 0.8em;
-  color: var(--text-muted);
+*:focus-visible {
+  outline: 3px solid rgba(214, 51, 132, 0.28);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .form-container {
+    max-width: 100%;
+  }
+
+  .rq-grid,
+  .postulante-grid,
+  .rq-comments,
+  .cv-section {
+    grid-template-columns: 150px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 26px;
+  }
+
+  h2,
+  .form-title,
+  .page-title,
+  .rq-title {
+    font-size: 22px;
+  }
+
+  .form-container,
+  .rq-info-box,
+  .postulante-card,
+  .card,
+  .section-card {
+    padding: 18px;
+  }
+
+  .filters,
+  .filtros,
+  .page-actions,
+  .actions,
+  .rq-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .button-primary,
+  .link-button,
+  .btn-secondary,
+  .button-secondary,
+  .btn-action,
+  .btn-cv,
+  .btn-filter {
+    width: 100%;
+  }
+
+  .rq-grid,
+  .postulante-grid,
+  .rq-comments,
+  .cv-section {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  th,
+  td {
+    padding: 11px 12px;
+  }
 }

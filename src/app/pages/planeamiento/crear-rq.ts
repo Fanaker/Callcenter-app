@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
 import { RqService } from '../../services/rq';
+import { Campania } from '../../models/campania.model';
+import { Puesto } from '../../models/puesto.model';
+import { Rq } from '../../models/rq.model';
 
 @Component({
   selector: 'app-crear-rq',
@@ -11,9 +15,7 @@ import { RqService } from '../../services/rq';
   templateUrl: './crear-rq.html',
   styleUrl: './crear-rq.css'
 })
-export class CrearRq {
-  campaign = '';
-  puesto = '';
+export class CrearRq implements OnInit {
   cantidad = 0;
   fechaIngreso = '';
   fechaFinCapacitacion = '';
@@ -21,25 +23,65 @@ export class CrearRq {
   diasCapacitacion = 0;
   comentarios = '';
 
-  // Mensajes de error
+  campaniasActivas: Campania[] = [];
+  puestosActivos: Puesto[] = [];
+
+  campaniaId: number | null = null;
+  puestoId: number | null = null;
+
   errorFechaFinCapacitacion = '';
   errorFechaInicioCapacitacion = '';
 
-  constructor(private rqService: RqService, private router: Router) {}
+  constructor(
+    private rqService: RqService,
+    private router: Router
+  ) {}
 
-  crearRQ() {
-    // Limpiar mensajes de error previos
+  ngOnInit(): void {
+    this.campaniasActivas = this.rqService.getCampaniasActivas();
+    this.puestosActivos = this.rqService.getPuestosActivos();
+  }
+
+  crearRQ(): void {
     this.errorFechaFinCapacitacion = '';
     this.errorFechaInicioCapacitacion = '';
+
+    if (this.campaniaId === null) {
+      alert('❌ Debes seleccionar una campaña');
+      return;
+    }
+
+    if (this.puestoId === null) {
+      alert('❌ Debes seleccionar un puesto');
+      return;
+    }
 
     if (!this.validarRQ()) {
       return;
     }
 
-    const rq = {
+    const campaniaIdSeleccionada = Number(this.campaniaId);
+    const puestoIdSeleccionado = Number(this.puestoId);
+
+    const campaniaSeleccionada = this.campaniasActivas.find(
+      (campania) => campania.id === campaniaIdSeleccionada
+    );
+
+    const puestoSeleccionado = this.puestosActivos.find(
+      (puesto) => puesto.id === puestoIdSeleccionado
+    );
+
+    if (!campaniaSeleccionada || !puestoSeleccionado) {
+      alert('❌ Error: campaña o puesto no encontrado');
+      return;
+    }
+
+    const rq: Partial<Rq> = {
       codigo: this.rqService.generateCode(),
-      campaign: this.campaign,
-      puesto: this.puesto,
+      campaniaId: campaniaIdSeleccionada,
+      campaign: campaniaSeleccionada.nombre,
+      puestoId: puestoIdSeleccionado,
+      puesto: puestoSeleccionado.nombre,
       comentarios: this.comentarios,
       cantidad: this.cantidad,
       diasCapacitacion: this.diasCapacitacion,
@@ -56,11 +98,8 @@ export class CrearRq {
   validarRQ(): boolean {
     let isValid = true;
 
-    // Validar campos requeridos
     if (
-      this.campaign.trim() === '' ||
       this.cantidad <= 0 ||
-      this.puesto.trim() === '' ||
       this.fechaIngreso === '' ||
       this.fechaFinCapacitacion === '' ||
       this.fechaInicioCapacitacion === '' ||
@@ -70,23 +109,22 @@ export class CrearRq {
       return false;
     }
 
-    // Validar fechas
     const fechaIngreso = new Date(this.fechaIngreso);
     const fechaFin = new Date(this.fechaFinCapacitacion);
     const fechaInicioCap = new Date(this.fechaInicioCapacitacion);
     const diaMs = 24 * 60 * 60 * 1000;
 
-    // Validar que fecha fin capacitación < fecha ingreso
     if (fechaFin >= fechaIngreso) {
-      this.errorFechaFinCapacitacion = 'La fecha de fin de capacitación debe ser anterior a la fecha prevista de inicio del personal.';
+      this.errorFechaFinCapacitacion =
+        'La fecha de fin de capacitación debe ser anterior a la fecha prevista de inicio del personal.';
       isValid = false;
     } else {
       this.errorFechaFinCapacitacion = '';
     }
 
-    // Validar que fecha inicio capacitación sea al menos 3 días antes de fecha fin capacitación
     if (fechaFin.getTime() - fechaInicioCap.getTime() < 3 * diaMs) {
-      this.errorFechaInicioCapacitacion = 'La fecha de inicio de capacitación debe ser al menos 3 días anterior a la fecha de fin de capacitación.';
+      this.errorFechaInicioCapacitacion =
+        'La fecha de inicio de capacitación debe ser al menos 3 días anterior a la fecha de fin de capacitación.';
       isValid = false;
     } else {
       this.errorFechaInicioCapacitacion = '';
@@ -95,14 +133,14 @@ export class CrearRq {
     return isValid;
   }
 
-  // Método para validar en tiempo real
-  onFechaChange() {
+  onFechaChange(): void {
     if (this.fechaIngreso && this.fechaFinCapacitacion) {
       const fechaIngreso = new Date(this.fechaIngreso);
       const fechaFin = new Date(this.fechaFinCapacitacion);
 
       if (fechaFin >= fechaIngreso) {
-        this.errorFechaFinCapacitacion = 'La fecha de fin de capacitación debe ser anterior a la fecha prevista de inicio del personal.';
+        this.errorFechaFinCapacitacion =
+          'La fecha de fin de capacitación debe ser anterior a la fecha prevista de inicio del personal.';
       } else {
         this.errorFechaFinCapacitacion = '';
       }
@@ -114,7 +152,8 @@ export class CrearRq {
       const diaMs = 24 * 60 * 60 * 1000;
 
       if (fechaFin.getTime() - fechaInicioCap.getTime() < 3 * diaMs) {
-        this.errorFechaInicioCapacitacion = 'La fecha de inicio de capacitación debe ser al menos 3 días anterior a la fecha de fin de capacitación.';
+        this.errorFechaInicioCapacitacion =
+          'La fecha de inicio de capacitación debe ser al menos 3 días anterior a la fecha de fin de capacitación.';
       } else {
         this.errorFechaInicioCapacitacion = '';
       }
