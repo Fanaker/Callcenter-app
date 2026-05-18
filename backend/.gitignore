@@ -1,0 +1,194 @@
+# AWS SAM
+.aws-sam/
+sam-tests/
+samconfig.toml.metadata.json
+
+# CloudFormation
+*.template
+*.template.json
+
+# Build artifacts
+build/
+dist/
+.aws-sam-build/
+.sam/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.log
+tests/.pytest_cache/
+
+# Environment variables (SENSITIVE!)
+.env
+.env.local
+.env.*.local
+*.env
+
+# AWS credentials (NEVER COMMIT!)
+~/.aws/credentials
+~/.aws/config
+aws_credentials
+aws_access_key_id
+aws_secret_access_key
+
+# Secrets & Keys
+*.key
+*.pem
+*.p8
+secrets/
+.secrets/
+**/secret*.json
+**/credentials*.json
+.aws/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# Node modules (if using frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS
+.DS_Store
+Thumbs.db
+.vscode-settings/
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+temp/
+tmp/
+
+# Lambda layers (auto-generated)
+layers/
+layer.zip
+odbc-dependencies.zip
+
+# SAM deployment artifacts
+packaged.yaml
+packaged-*.yaml
+
+# IDE files to ignore
+.LSOverride
+.AppleDouble
+.AppleDB
+*.stTheme-meta.xml
+*.jmconfig
+*.sublime-workspace
+
+# Deployment artifacts
+*.cfn.json
+outputs.json
+
+# Local testing
+local-testing/
+.localstack/
+docker-compose.override.yml
+
+# IDE extensions
+extensions/
+
+# Python
+*.egg-info/
+*.eggs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+bin/
+lib/
+lib64/
+.venv/
+.env/
+
+# MacOS
+.AppleDouble
+.AppleDB
+
+# Windows
+desktop.ini
+
+# Project specific
+*.xlsx
+*.csv
+*.pdf
+
+# Docker
+.dockerignore
+docker-compose.local.yml
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Backup files
+*.backup
+*.restore
+backups/
+
+# Configuration overrides (local)
+samconfig.local.toml
+settings.local.json
+
+# IDE cache
+.cache/
+.parcel-cache/
+
+# Sensitive data patterns
+*password*
+*secret*
+*token*
+*key*
+*credential*
+
+# Except examples and documentation
+!.env.example
+!infrastructure/.env.example
+!.github/
+!docs/
+
+# Build output
+dist/
+build/
+*.egg-info/
+
+# Coverage
+.coverage*
+htmlcov/
+.pytest_cache/
+
+# Local environment
+.envrc
+direnv.allow
+
+# SAM CLI local resources
+sam-tests/
+```
