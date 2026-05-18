@@ -3,48 +3,107 @@
 <div class="form-container">
   <div class="form-group">
     <label>Campaña</label>
-    <input type="text" placeholder="Nombre de la campaña" [(ngModel)]="campaign">
+    <select [(ngModel)]="campaniaId" name="campaniaId">
+      <option [ngValue]="null">Selecciona una campaña</option>
+      <option *ngFor="let campania of campaniasActivas" [ngValue]="campania.id">
+        {{ campania.nombre }}
+      </option>
+    </select>
   </div>
 
   <div class="form-group">
     <label>Puesto solicitado</label>
-    <input type="text" placeholder="Nombre del puesto" [(ngModel)]="puesto">
+    <select [(ngModel)]="puestoId" name="puestoId">
+      <option [ngValue]="null">Selecciona un puesto</option>
+      <option *ngFor="let puesto of puestosActivos" [ngValue]="puesto.id">
+        {{ puesto.nombre }}
+      </option>
+    </select>
   </div>
 
   <div class="form-group">
     <label>Cantidad de personal a reclutar</label>
-    <input type="number" placeholder="Cantidad de personal" [(ngModel)]="cantidad">
+    <input
+      type="number"
+      placeholder="Cantidad de personal"
+      [(ngModel)]="cantidad"
+      name="cantidad"
+    />
   </div>
 
   <div class="form-group">
     <label>Fecha prevista de inicio del personal</label>
-    <input type="date" title="Selecciona fecha de ingreso" [(ngModel)]="fechaIngreso" (change)="onFechaChange()">
+    <input
+      type="date"
+      title="Selecciona fecha de ingreso"
+      [(ngModel)]="fechaIngreso"
+      name="fechaIngreso"
+      (change)="onFechaChange()"
+    />
   </div>
 
   <div class="form-group">
     <label>Fecha de Inicio de capacitación</label>
-    <input type="date" title="Selecciona fecha de inicio de capacitación" [(ngModel)]="fechaInicioCapacitacion" (change)="onFechaChange()">
-    <div *ngIf="errorFechaInicioCapacitacion" class="error-message">{{ errorFechaInicioCapacitacion }}</div>
+    <input
+      type="date"
+      title="Selecciona fecha de inicio de capacitación"
+      [(ngModel)]="fechaInicioCapacitacion"
+      name="fechaInicioCapacitacion"
+      (change)="onFechaChange()"
+    />
+    <div *ngIf="errorFechaInicioCapacitacion" class="error-message">
+      {{ errorFechaInicioCapacitacion }}
+    </div>
   </div>
 
   <div class="form-group">
     <label>Fecha de Fin de capacitación</label>
-    <input type="date" title="Selecciona fecha de fin de capacitación" [(ngModel)]="fechaFinCapacitacion" (change)="onFechaChange()">
-    <div *ngIf="errorFechaFinCapacitacion" class="error-message">{{ errorFechaFinCapacitacion }}</div>
+    <input
+      type="date"
+      title="Selecciona fecha de fin de capacitación"
+      [(ngModel)]="fechaFinCapacitacion"
+      name="fechaFinCapacitacion"
+      (change)="onFechaChange()"
+    />
+    <div *ngIf="errorFechaFinCapacitacion" class="error-message">
+      {{ errorFechaFinCapacitacion }}
+    </div>
   </div>
 
   <div class="form-group">
     <label>Días de capacitación necesarias</label>
-    <input type="number" min="1" placeholder="Días de capacitación" [(ngModel)]="diasCapacitacion">
+    <input
+      type="number"
+      min="1"
+      placeholder="Días de capacitación"
+      [(ngModel)]="diasCapacitacion"
+      name="diasCapacitacion"
+    />
   </div>
 
   <div class="form-group">
     <label>Comentarios adicionales (opcional)</label>
-    <textarea rows="3" placeholder="Comentarios adicionales" [(ngModel)]="comentarios"></textarea>
+    <textarea
+      rows="3"
+      placeholder="Comentarios adicionales"
+      [(ngModel)]="comentarios"
+      name="comentarios"
+    ></textarea>
   </div>
 
-  <button class="btn-primary" (click)="crearRQ()"
-          [disabled]="campaign.trim() === '' || cantidad <= 0 || !puesto.trim() || !fechaIngreso || !fechaFinCapacitacion || !fechaInicioCapacitacion || diasCapacitacion <= 0">
+  <button
+    class="btn-primary"
+    (click)="crearRQ()"
+    [disabled]="
+      campaniaId === null ||
+      puestoId === null ||
+      cantidad <= 0 ||
+      !fechaIngreso ||
+      !fechaFinCapacitacion ||
+      !fechaInicioCapacitacion ||
+      diasCapacitacion <= 0
+    "
+  >
     Enviar Nuevo Requerimiento
   </button>
 </div>
