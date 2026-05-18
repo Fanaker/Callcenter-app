@@ -42,6 +42,40 @@ export class CrearRq implements OnInit {
     this.puestosActivos = this.rqService.getPuestosActivos();
   }
 
+  isFormValid(): boolean {
+    return (
+      this.campaniaId !== null &&
+      this.puestoId !== null &&
+      this.cantidad > 0 &&
+      this.diasCapacitacion > 0 &&
+      this.fechaIngreso !== '' &&
+      this.fechaInicioCapacitacion !== '' &&
+      this.fechaFinCapacitacion !== '' &&
+      this.errorFechaInicioCapacitacion === '' &&
+      this.errorFechaFinCapacitacion === ''
+    );
+  }
+
+  getSelectedCampaniaName(): string {
+    const campania = this.campaniasActivas.find(
+      (item) => item.id === Number(this.campaniaId)
+    );
+
+    return campania?.nombre || 'Sin campaña seleccionada';
+  }
+
+  getSelectedPuestoName(): string {
+    const puesto = this.puestosActivos.find(
+      (item) => item.id === Number(this.puestoId)
+    );
+
+    return puesto?.nombre || 'Sin puesto seleccionado';
+  }
+
+  goBack(): void {
+    this.router.navigate(['/planeamiento']);
+  }
+
   crearRQ(): void {
     this.errorFechaFinCapacitacion = '';
     this.errorFechaInicioCapacitacion = '';
@@ -82,7 +116,7 @@ export class CrearRq implements OnInit {
       campaign: campaniaSeleccionada.nombre,
       puestoId: puestoIdSeleccionado,
       puesto: puestoSeleccionado.nombre,
-      comentarios: this.comentarios,
+      comentarios: this.comentarios.trim(),
       cantidad: this.cantidad,
       diasCapacitacion: this.diasCapacitacion,
       fechaIngreso: this.fechaIngreso,

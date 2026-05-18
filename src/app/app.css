@@ -25,6 +25,10 @@
   transition: margin-left 0.25s ease, padding 0.25s ease;
 }
 
+:host-context(.sidebar-collapsed) .app-main {
+  margin-left: 80px;
+}
+
 .app-page-shell {
   width: 100%;
   max-width: 1320px;
@@ -49,7 +53,8 @@
     flex-direction: column;
   }
 
-  .app-main {
+  .app-main,
+  :host-context(.sidebar-collapsed) .app-main {
     margin-left: 0;
     min-height: calc(100vh - 96px);
     padding: 20px 16px;

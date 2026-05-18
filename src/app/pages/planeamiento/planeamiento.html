@@ -1,97 +1,231 @@
-<h2 class="dashboard-title">DASHBOARD DE ESTADO ACTUAL</h2>
+<section class="planeamiento-page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Módulo de planeamiento</span>
+      <h2>Dashboard de estado actual</h2>
+      <p>
+        Monitorea los requerimientos creados, personal solicitado y avance general de postulantes.
+      </p>
+    </div>
 
-<div class="dashboard">
-  <div class="metric">
-    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="currentColor"/>
-    </svg>
-    <h3>Requerimientos<br>Totales</h3>
-    <p>{{ getTotalRQs() }}</p>
+    <a [routerLink]="['/planeamiento/crear-rq']" class="btn-primary">
+      Crear requerimiento
+    </a>
+  </header>
+
+  <div class="dashboard">
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M8 6H16M8 10H16M8 14H13M6 3H18C19.1046 3 20 3.89543 20 5V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19V5C4 3.89543 4.89543 3 6 3Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Requerimientos<br />totales</h3>
+      <p>{{ getTotalRQs() }}</p>
+    </div>
+
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Requerimientos<br />activos</h3>
+      <p>{{ getActiveRQs() }}</p>
+    </div>
+
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12ZM5 20C5 16.6863 8.13401 14 12 14C15.866 14 19 16.6863 19 20"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Personal<br />a incorporar</h3>
+      <p>{{ getTotalPersonalRequerido() }}</p>
+    </div>
+
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M16 11C17.6569 11 19 9.65685 19 8C19 6.34315 17.6569 5 16 5M8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11ZM8 14C5.23858 14 3 15.7909 3 18V19H13V18C13 15.7909 10.7614 14 8 14ZM16 14C18.7614 14 21 15.7909 21 18V19H16"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Postulantes<br />totales</h3>
+      <p>{{ getTotalPostulantes() }}</p>
+    </div>
+
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M8 21H16M12 17V21M7 4H17V10C17 12.7614 14.7614 15 12 15C9.23858 15 7 12.7614 7 10V4ZM5 6H7V9C5.89543 9 5 8.10457 5 7V6ZM17 6H19V7C19 8.10457 18.1046 9 17 9V6Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Trabajadores<br />contratados</h3>
+      <p>{{ getContratados() }}</p>
+    </div>
   </div>
-  <div class="metric">
-    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
-    </svg>
-    <h3>Requerimientos<br>Activos</h3>
-    <p>{{ getActiveRQs() }}</p>
-  </div>
-  <div class="metric">
-    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
-    </svg>
-    <h3>Personal<br>necesario a incorporar</h3>
-    <p>{{ getTotalPersonalRequerido() }}</p>
-  </div>
-  <div class="metric">
-    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 7v-2.5c0-1.88 3.13-2.85 5-2.85s5 .97 5 2.85V17H6zm9-6v-3h3v-2h-3V4h-2v3h-3v2h3v3h2z" fill="currentColor"/>
-    </svg>
-    <h3>Postulantes<br>Totales</h3>
-    <p>{{ getTotalPostulantes() }}</p>
-  </div>
-  <div class="metric">
-    <svg class="metric-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
-    </svg>
-    <h3>Trabajadores<br>Contratados</h3>
-    <p>{{ getContratados() }}</p>
-  </div>
-</div>
 
-<div class="actions">
-  <a [routerLink]="['/planeamiento/crear-rq']" class="link-button">Crear Requerimiento</a>
-</div>
+  <section class="table-section">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Listado</span>
+        <h3>Tabla de requerimientos</h3>
+        <p>Filtra, revisa y ordena los requerimientos registrados por planeamiento.</p>
+      </div>
+    </div>
 
-<hr>
+    <div class="filters">
+      <div class="filter-group">
+        <label>Estado</label>
+        <select title="Filtrar por estado" [(ngModel)]="statusFilter">
+          <option value="todos">Todos</option>
+          <option value="abierto">Abierto</option>
+          <option value="cerrado">Cerrado</option>
+        </select>
+      </div>
 
-<h3>Tabla de Requerimientos</h3>
+      <div class="filter-group">
+        <label>Campaña</label>
+        <select title="Filtrar por campaña" [(ngModel)]="campaignFilter">
+          <option value="">Todas las campañas</option>
+          <option *ngFor="let camp of uniqueCampaigns" [value]="camp">
+            {{ camp }}
+          </option>
+        </select>
+      </div>
+    </div>
 
-<div class="filters">
-  <label>Estado:</label>
-  <select title="Filtrar por estado" [(ngModel)]="statusFilter">
-    <option value="todos">Todos</option>
-    <option value="abierto">Abierto</option>
-    <option value="cerrado">Cerrado</option>
-  </select>
+    <div *ngIf="filteredAndSortedRqs.length > 0; else noRqs" class="rqs-list">
+      <table class="rqs-table">
+        <colgroup>
+          <col class="col-codigo" />
+          <col class="col-campania" />
+          <col class="col-puesto" />
+          <col class="col-cantidad" />
+          <col class="col-fecha" />
+          <col class="col-fecha" />
+          <col class="col-dias" />
+          <col class="col-fecha" />
+          <col class="col-estado" />
+        </colgroup>
 
-  <label>Campaña:</label>
-  <select title="Filtrar por campaña" [(ngModel)]="campaignFilter">
-    <option value="">Todas las campañas</option>
-    <option *ngFor="let camp of uniqueCampaigns" [value]="camp">{{ camp }}</option>
-  </select>
-</div>
+        <thead>
+          <tr>
+            <th (click)="sortBy('codigo')">
+              Código
+              <span class="sort-arrow" *ngIf="sortColumn === 'codigo'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
 
-<div *ngIf="filteredAndSortedRqs.length > 0" class="rqs-list">
-  <table class="rqs-table">
-    <thead>
-      <tr>
-        <th (click)="sortBy('codigo')">Código <span class="sort-arrow" *ngIf="sortColumn === 'codigo'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-        <th (click)="sortBy('campaign')">Campaña <span class="sort-arrow" *ngIf="sortColumn === 'campaign'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-        <th (click)="sortBy('puesto')">Puesto <span class="sort-arrow" *ngIf="sortColumn === 'puesto'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-        <th (click)="sortBy('cantidad')">Cantidad <span class="sort-arrow" *ngIf="sortColumn === 'cantidad'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-        <th (click)="sortBy('fechaInicioCapacitacion')">Inicio Capacitación <span class="sort-arrow" *ngIf="sortColumn === 'fechaInicioCapacitacion'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-        <th (click)="sortBy('fechaFinCapacitacion')">Fin Capacitación <span class="sort-arrow" *ngIf="sortColumn === 'fechaFinCapacitacion'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-        <th (click)="sortBy('diasCapacitacion')">DÍAS DE CAPACITACION <span class="sort-arrow" *ngIf="sortColumn === 'diasCapacitacion'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-        <th (click)="sortBy('fechaIngreso')">Fecha de Ingreso <span class="sort-arrow" *ngIf="sortColumn === 'fechaIngreso'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-        <th>Estado</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let rq of filteredAndSortedRqs" class="rq-row">
-        <td>{{ rq.codigo }}</td>
-        <td>{{ rq.campaign }}</td>
-        <td>{{ rq.puesto }}</td>
-        <td>{{ rq.cantidad }}</td>
-        <td>{{ rq.fechaInicioCapacitacion }}</td>
-        <td>{{ rq.fechaFinCapacitacion }}</td>
-        <td>{{ rq.diasCapacitacion }}</td>
-        <td>{{ rq.fechaIngreso }}</td>
-        <td><span class="estado-badge" [class.estado-cerrado]="rq.estado === 'CERRADO'">{{ rq.estado }}</span></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+            <th (click)="sortBy('campaign')">
+              Campaña
+              <span class="sort-arrow" *ngIf="sortColumn === 'campaign'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
 
-<div *ngIf="filteredAndSortedRqs.length === 0" class="no-rqs">
-  <p>No hay RQs que coincidan con los filtros seleccionados.</p>
-</div>
+            <th (click)="sortBy('puesto')">
+              Puesto
+              <span class="sort-arrow" *ngIf="sortColumn === 'puesto'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('cantidad')">
+              Cant.
+              <span class="sort-arrow" *ngIf="sortColumn === 'cantidad'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('fechaInicioCapacitacion')">
+              Inicio<br />capac.
+              <span class="sort-arrow" *ngIf="sortColumn === 'fechaInicioCapacitacion'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('fechaFinCapacitacion')">
+              Fin<br />capac.
+              <span class="sort-arrow" *ngIf="sortColumn === 'fechaFinCapacitacion'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('diasCapacitacion')">
+              Días<br />capac.
+              <span class="sort-arrow" *ngIf="sortColumn === 'diasCapacitacion'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('fechaIngreso')">
+              Fecha<br />ingreso
+              <span class="sort-arrow" *ngIf="sortColumn === 'fechaIngreso'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th>Estado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let rq of filteredAndSortedRqs">
+            <td class="codigo-cell">{{ rq.codigo }}</td>
+            <td class="text-wrap">{{ rq.campaign }}</td>
+            <td class="text-wrap">{{ rq.puesto }}</td>
+            <td>{{ rq.cantidad }}</td>
+            <td>{{ rq.fechaInicioCapacitacion }}</td>
+            <td>{{ rq.fechaFinCapacitacion }}</td>
+            <td>{{ rq.diasCapacitacion }}</td>
+            <td>{{ rq.fechaIngreso }}</td>
+            <td>
+              <span class="estado-badge" [class.estado-cerrado]="rq.estado === 'CERRADO'">
+                {{ rq.estado }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noRqs>
+      <div class="no-rqs">
+        <h3>No hay RQs disponibles</h3>
+        <p>No hay requerimientos que coincidan con los filtros seleccionados.</p>
+      </div>
+    </ng-template>
+  </section>
+</section>

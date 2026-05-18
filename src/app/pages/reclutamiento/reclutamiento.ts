@@ -2,7 +2,19 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+
 import { RqService } from '../../services/rq';
+import { Rq } from '../../models/rq.model';
+
+type SortField =
+  | 'codigo'
+  | 'campaign'
+  | 'puesto'
+  | 'cantidad'
+  | 'fechaInicioCapacitacion'
+  | 'fechaFinCapacitacion'
+  | 'diasCapacitacion'
+  | 'fechaIngreso';
 
 @Component({
   selector: 'app-reclutamiento',
@@ -12,79 +24,101 @@ import { RqService } from '../../services/rq';
   styleUrl: './reclutamiento.css'
 })
 export class Reclutamiento {
-  rqs: any[] = [];
-  statusFilter: string = 'todos';
-  campaignFilter: string = '';
-  sortColumn: string = '';
+  rqs: Rq[] = [];
+  statusFilter = 'todos';
+  campaignFilter = '';
+  sortColumn: SortField | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(private rqService: RqService) {
     this.rqs = this.rqService.getAll();
   }
 
-  sortBy(column: string) {
+  sortBy(column: SortField): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortColumn = column;
-      this.sortDirection = 'asc';
+      return;
     }
+
+    this.sortColumn = column;
+    this.sortDirection = 'asc';
   }
 
-  get filteredAndSortedRqs() {
-    let filtered = this.rqs;
+  get filteredAndSortedRqs(): Rq[] {
+    let filtered = [...this.rqs];
 
     if (this.statusFilter !== 'todos') {
-      filtered = filtered.filter(rq => rq.estado.toLowerCase() === this.statusFilter);
+      filtered = filtered.filter(
+        (rq) => rq.estado.toLowerCase() === this.statusFilter
+      );
     }
 
     if (this.campaignFilter) {
-      filtered = filtered.filter(rq => rq.campaign === this.campaignFilter);
+      filtered = filtered.filter((rq) => rq.campaign === this.campaignFilter);
     }
 
-    if (this.sortColumn) {
-      filtered.sort((a, b) => {
-        let aVal = a[this.sortColumn];
-        let bVal = b[this.sortColumn];
-        let result = 0;
+    const sortColumn = this.sortColumn;
 
-        if (this.sortColumn === 'fechaInicioCapacitacion' || this.sortColumn === 'fechaFinCapacitacion' || this.sortColumn === 'fechaIngreso') {
-          result = new Date(aVal).getTime() - new Date(bVal).getTime();
-        } else if (this.sortColumn === 'cantidad' || this.sortColumn === 'diasCapacitacion') {
-          result = aVal - bVal;
-        } else {
-          result = aVal.localeCompare(bVal);
-        }
-
-        return this.sortDirection === 'asc' ? result : -result;
-      });
+    if (sortColumn === '') {
+      return filtered;
     }
+
+    filtered.sort((a, b) => {
+      let result = 0;
+
+      if (
+        sortColumn === 'fechaInicioCapacitacion' ||
+        sortColumn === 'fechaFinCapacitacion' ||
+        sortColumn === 'fechaIngreso'
+      ) {
+        result =
+          new Date(String(a[sortColumn])).getTime() -
+          new Date(String(b[sortColumn])).getTime();
+      } else if (sortColumn === 'cantidad' || sortColumn === 'diasCapacitacion') {
+        result = Number(a[sortColumn] || 0) - Number(b[sortColumn] || 0);
+      } else {
+        result = String(a[sortColumn] || '').localeCompare(
+          String(b[sortColumn] || '')
+        );
+      }
+
+      return this.sortDirection === 'asc' ? result : -result;
+    });
 
     return filtered;
   }
 
-  get uniqueCampaigns() {
-    return [...new Set(this.rqs.map(rq => rq.campaign))];
+  get uniqueCampaigns(): string[] {
+    return [...new Set(this.rqs.map((rq) => rq.campaign).filter(Boolean))];
   }
 
-  getTotalRQs() {
+  getTotalRQs(): number {
     return this.rqs.length;
   }
 
-  getActiveRQs() {
-    return this.rqs.filter(rq => rq.estado.toLowerCase() === 'abierto').length;
+  getActiveRQs(): number {
+    return this.rqs.filter((rq) => rq.estado.toLowerCase() === 'abierto').length;
   }
 
-  getTotalPersonalRequerido() {
-    return this.rqs.filter(rq => rq.estado.toLowerCase() === 'abierto').reduce((sum, rq) => sum + (rq.cantidad || 0), 0);
+  getTotalPersonalRequerido(): number {
+    return this.rqs
+      .filter((rq) => rq.estado.toLowerCase() === 'abierto')
+      .reduce((sum, rq) => sum + (rq.cantidad || 0), 0);
   }
 
-  getTotalPostulantes() {
-    const allDnis = this.rqs.flatMap(rq => rq.candidatos ? rq.candidatos.map((c: any) => c.dni) : []);
+  getTotalPostulantes(): number {
+    const allDnis = this.rqs.flatMap((rq) =>
+      rq.candidatos ? rq.candidatos.map((candidate) => candidate.dni) : []
+    );
+
     return new Set(allDnis).size;
   }
 
-  getContratados() {
-    return this.rqs.flatMap(rq => rq.candidatos ? rq.candidatos.filter((c: any) => c.contratar) : []).length;
+  getContratados(): number {
+    return this.rqs.flatMap((rq) =>
+      rq.candidatos
+        ? rq.candidatos.filter((candidate) => candidate.contratar)
+        : []
+    ).length;
   }
 }

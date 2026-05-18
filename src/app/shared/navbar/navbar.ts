@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -9,21 +9,25 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
-export class Navbar {
+export class Navbar implements OnDestroy {
   isCollapsed = false;
 
   constructor(private router: Router) {}
 
-  toggleCollapsed() {
+  toggleCollapsed(): void {
     this.isCollapsed = !this.isCollapsed;
     document.body.classList.toggle('sidebar-collapsed', this.isCollapsed);
   }
 
-  logout() {
+  logout(): void {
     this.router.navigate(['/']);
   }
 
-  reportIssue() {
+  reportIssue(): void {
     alert('Funcionalidad de reportar problema próximamente disponible.');
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('sidebar-collapsed');
   }
 }

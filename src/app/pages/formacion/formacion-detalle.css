@@ -1,121 +1,621 @@
-/* Formación Detalle Styles - Quantia Design System */
+/* =========================================================
+   FORMACION DETALLE - CLEAN UI
+   ========================================================= */
 
-:host ::ng-deep .rq-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #4A148C !important;
-  text-transform: uppercase;
-  margin-bottom: 24px;
+:host {
+  display: block;
+  width: 100%;
 }
 
-.header-section {
+.formacion-detail-page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  gap: 22px;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-head {
+  display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 14px;
 }
 
-.rq-info-box {
-  background-color: rgba(155, 89, 182, 0.08);
-  border: 2px solid rgba(155, 89, 182, 0.25);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.eyebrow {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--primary-fuchsia);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
-.rq-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.rq-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 20px;
-  align-items: start;
-}
-
-.rq-label {
-  font-weight: 600;
-  color: #6B4A8A;
-  font-size: 14px;
+.page-head h2 {
+  margin: 0;
+  color: var(--purple-medium);
+  font-size: 28px;
+  font-weight: 850;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
 }
 
-.rq-value {
-  font-weight: 500;
-  color: #333333;
-  font-size: 14px;
+.page-head p {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.btn-back {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary-fuchsia);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(214, 51, 132, 0.2);
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.btn-back:hover {
+  background: var(--primary-fuchsia-hover);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   SUMMARY CARD
+   ========================================================= */
+
+.rq-summary-card,
+.config-card,
+.training-panel {
+  padding: 22px;
+  border: 1px solid rgba(91, 44, 131, 0.16);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-sm);
+}
+
+.rq-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rq-summary-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.rq-code {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--primary-fuchsia);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rq-summary-top h3 {
+  margin: 0;
+  color: var(--purple-dark);
+  font-size: 21px;
+  font-weight: 850;
+  line-height: 1.15;
+}
+
+.rq-summary-top p {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   METRICS
+   ========================================================= */
+
+.summary-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.metric-tile {
+  min-height: 78px;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.metric-tile span,
+.detail-pill span,
+.rq-comments span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.metric-tile strong {
+  color: var(--primary-fuchsia);
+  font-size: 25px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+/* =========================================================
+   RQ DETAILS
+   ========================================================= */
+
+.rq-details-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.detail-pill {
+  min-height: 66px;
+  padding: 13px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.detail-pill strong {
+  display: block;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .rq-comments {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
 }
 
+.rq-comments p {
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
 
-.config-panel {
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
+.config-card {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 24px;
-  padding: 16px;
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
 }
 
-.config-row {
-  display: flex;
-  gap: 24px;
+.config-head h3,
+.training-head h3 {
+  margin: 0;
+  color: var(--purple-dark);
+  font-size: 22px;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.config-head p,
+.training-head p {
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) auto;
+  gap: 14px;
   align-items: end;
 }
 
-.config-item {
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+.form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
-.config-item label {
-  font-weight: 500;
-  color: var(--text-main);
-  font-size: 14px;
+.form-group label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 850;
 }
 
-.config-item input {
-  padding: 8px 12px;
+.form-group input,
+.form-group select,
+.training-table input {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 11px;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  font-size: 14px;
-  width: 60px;
-}
-
-.filters {
-  background-color: rgba(155, 89, 182, 0.08);
-  border: 2px solid rgba(155, 89, 182, 0.35);
-  border-radius: 18px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-.filters label {
-  color: var(--purple-medium);
-  text-transform: uppercase;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--text-main);
+  font-size: 13px;
   font-weight: 700;
+  outline: none;
 }
 
-.filters select {
-  margin-left: 8px;
-  padding: 4px;
+.form-group input:focus,
+.form-group select:focus,
+.training-table input:focus {
+  border-color: var(--primary-fuchsia);
+  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.11);
 }
 
-.save-results-btn {
-  margin-top: 24px;
+.btn-primary {
+  min-height: 38px;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary-fuchsia);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-primary:hover {
+  background: var(--primary-fuchsia-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(214, 51, 132, 0.22);
+}
+
+/* =========================================================
+   STATUS / MESSAGE
+   ========================================================= */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--status-active-bg);
+  color: var(--status-active-text);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-badge.status-closed {
+  background: var(--status-closed-bg);
+  color: var(--status-closed-text);
+}
+
+.message {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--status-info-bg);
+  color: var(--status-info-text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   TRAINING PANEL
+   ========================================================= */
+
+.training-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.training-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.total-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--primary-fuchsia-soft);
+  color: var(--primary-fuchsia);
+  font-size: 12px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.filter-card {
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: #fafafa;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-shell {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.training-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.col-dni {
+  width: 12%;
+}
+
+.col-candidate {
+  width: 24%;
+}
+
+.col-test {
+  width: 13%;
+}
+
+.col-average {
+  width: 13%;
+}
+
+.col-result {
+  width: 16%;
+}
+
+.training-table thead {
+  background: #f9fafb;
+}
+
+.training-table th {
+  padding: 12px 10px;
+  color: var(--purple-medium);
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable-header:hover {
+  background: #f3e8ff;
+}
+
+.sort-icon {
+  margin-left: 4px;
+  color: var(--primary-fuchsia);
+  font-size: 11px;
+}
+
+.training-table td {
+  padding: 13px 10px;
+  color: var(--text-main);
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-color);
+  word-break: break-word;
+}
+
+.training-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.training-table tbody tr:hover {
+  background: #faf7ff;
+}
+
+.dni-cell {
+  color: var(--primary-fuchsia);
+  font-weight: 850;
+}
+
+.candidate-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.candidate-avatar {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary-fuchsia), var(--purple-medium));
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.candidate-cell strong {
+  display: block;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.candidate-cell span {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.average-cell {
+  color: var(--purple-dark);
+  font-weight: 850;
+}
+
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--status-active-bg);
+  color: var(--status-active-text);
+  font-size: 12px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.result-badge.not-approved {
+  background: var(--status-danger-bg);
+  color: var(--status-danger-text);
+}
+
+.panel-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-state {
+  padding: 34px 20px;
+  border: 1px dashed var(--border-color);
+  border-radius: 18px;
+  background: #ffffff;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px 0;
+  color: var(--purple-dark);
+  font-size: 18px;
+  font-weight: 850;
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .summary-metrics {
+    grid-template-columns: repeat(3, minmax(130px, 1fr));
+  }
+
+  .rq-details-grid {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .config-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .config-grid .btn-primary {
+    grid-column: 1 / -1;
+  }
+
+  .table-shell {
+    overflow-x: auto;
+  }
+
+  .training-table {
+    min-width: 980px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-head h2 {
+    font-size: 23px;
+  }
+
+  .rq-summary-top,
+  .training-head {
+    flex-direction: column;
+  }
+
+  .summary-metrics,
+  .rq-details-grid,
+  .config-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .training-panel,
+  .rq-summary-card,
+  .config-card {
+    padding: 16px;
+  }
+
+  .total-chip,
+  .btn-primary {
+    width: 100%;
+  }
+
+  .panel-actions {
+    justify-content: stretch;
+  }
 }

@@ -1,109 +1,211 @@
-<h2 class="form-title">CREAR NUEVO REQUERIMIENTO</h2>
+<section class="crear-rq-page">
+  <header class="page-head">
+    <button class="btn-back" title="Volver a planeamiento" type="button" (click)="goBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M15 18L9 12L15 6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
 
-<div class="form-container">
-  <div class="form-group">
-    <label>Campaña</label>
-    <select [(ngModel)]="campaniaId" name="campaniaId">
-      <option [ngValue]="null">Selecciona una campaña</option>
-      <option *ngFor="let campania of campaniasActivas" [ngValue]="campania.id">
-        {{ campania.nombre }}
-      </option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>Puesto solicitado</label>
-    <select [(ngModel)]="puestoId" name="puestoId">
-      <option [ngValue]="null">Selecciona un puesto</option>
-      <option *ngFor="let puesto of puestosActivos" [ngValue]="puesto.id">
-        {{ puesto.nombre }}
-      </option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>Cantidad de personal a reclutar</label>
-    <input
-      type="number"
-      placeholder="Cantidad de personal"
-      [(ngModel)]="cantidad"
-      name="cantidad"
-    />
-  </div>
-
-  <div class="form-group">
-    <label>Fecha prevista de inicio del personal</label>
-    <input
-      type="date"
-      title="Selecciona fecha de ingreso"
-      [(ngModel)]="fechaIngreso"
-      name="fechaIngreso"
-      (change)="onFechaChange()"
-    />
-  </div>
-
-  <div class="form-group">
-    <label>Fecha de Inicio de capacitación</label>
-    <input
-      type="date"
-      title="Selecciona fecha de inicio de capacitación"
-      [(ngModel)]="fechaInicioCapacitacion"
-      name="fechaInicioCapacitacion"
-      (change)="onFechaChange()"
-    />
-    <div *ngIf="errorFechaInicioCapacitacion" class="error-message">
-      {{ errorFechaInicioCapacitacion }}
+    <div>
+      <span class="eyebrow">Planeamiento</span>
+      <h2>Crear nuevo requerimiento</h2>
+      <p>Registra la necesidad de personal, fechas de capacitación y datos base del requerimiento.</p>
     </div>
-  </div>
+  </header>
 
-  <div class="form-group">
-    <label>Fecha de Fin de capacitación</label>
-    <input
-      type="date"
-      title="Selecciona fecha de fin de capacitación"
-      [(ngModel)]="fechaFinCapacitacion"
-      name="fechaFinCapacitacion"
-      (change)="onFechaChange()"
-    />
-    <div *ngIf="errorFechaFinCapacitacion" class="error-message">
-      {{ errorFechaFinCapacitacion }}
-    </div>
-  </div>
+  <div class="crear-rq-layout">
+    <form class="form-card" (ngSubmit)="crearRQ()">
+      <section class="form-section">
+        <div class="section-head">
+          <span class="section-number">01</span>
+          <div>
+            <h3>Datos del requerimiento</h3>
+            <p>Selecciona la campaña activa, el puesto y la cantidad de personal solicitado.</p>
+          </div>
+        </div>
 
-  <div class="form-group">
-    <label>Días de capacitación necesarias</label>
-    <input
-      type="number"
-      min="1"
-      placeholder="Días de capacitación"
-      [(ngModel)]="diasCapacitacion"
-      name="diasCapacitacion"
-    />
-  </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Campaña</label>
+            <select [(ngModel)]="campaniaId" name="campaniaId">
+              <option [ngValue]="null">Selecciona una campaña</option>
+              <option *ngFor="let campania of campaniasActivas" [ngValue]="campania.id">
+                {{ campania.nombre }}
+              </option>
+            </select>
+          </div>
 
-  <div class="form-group">
-    <label>Comentarios adicionales (opcional)</label>
-    <textarea
-      rows="3"
-      placeholder="Comentarios adicionales"
-      [(ngModel)]="comentarios"
-      name="comentarios"
-    ></textarea>
-  </div>
+          <div class="form-group">
+            <label>Puesto solicitado</label>
+            <select [(ngModel)]="puestoId" name="puestoId">
+              <option [ngValue]="null">Selecciona un puesto</option>
+              <option *ngFor="let puesto of puestosActivos" [ngValue]="puesto.id">
+                {{ puesto.nombre }}
+              </option>
+            </select>
+          </div>
 
-  <button
-    class="btn-primary"
-    (click)="crearRQ()"
-    [disabled]="
-      campaniaId === null ||
-      puestoId === null ||
-      cantidad <= 0 ||
-      !fechaIngreso ||
-      !fechaFinCapacitacion ||
-      !fechaInicioCapacitacion ||
-      diasCapacitacion <= 0
-    "
-  >
-    Enviar Nuevo Requerimiento
-  </button>
-</div>
+          <div class="form-group">
+            <label>Cantidad de personal a reclutar</label>
+            <input
+              type="number"
+              min="1"
+              placeholder="Ej. 10"
+              [(ngModel)]="cantidad"
+              name="cantidad"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Días de capacitación necesarios</label>
+            <input
+              type="number"
+              min="1"
+              placeholder="Ej. 7"
+              [(ngModel)]="diasCapacitacion"
+              name="diasCapacitacion"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-head">
+          <span class="section-number">02</span>
+          <div>
+            <h3>Fechas del proceso</h3>
+            <p>Define el inicio y cierre de capacitación antes del ingreso previsto a operación.</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha prevista de inicio del personal</label>
+            <input
+              type="date"
+              title="Selecciona fecha de ingreso"
+              [(ngModel)]="fechaIngreso"
+              name="fechaIngreso"
+              (change)="onFechaChange()"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha de inicio de capacitación</label>
+            <input
+              type="date"
+              title="Selecciona fecha de inicio de capacitación"
+              [(ngModel)]="fechaInicioCapacitacion"
+              name="fechaInicioCapacitacion"
+              (change)="onFechaChange()"
+            />
+            <div *ngIf="errorFechaInicioCapacitacion" class="error-message">
+              {{ errorFechaInicioCapacitacion }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Fecha de fin de capacitación</label>
+            <input
+              type="date"
+              title="Selecciona fecha de fin de capacitación"
+              [(ngModel)]="fechaFinCapacitacion"
+              name="fechaFinCapacitacion"
+              (change)="onFechaChange()"
+            />
+            <div *ngIf="errorFechaFinCapacitacion" class="error-message">
+              {{ errorFechaFinCapacitacion }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-head">
+          <span class="section-number">03</span>
+          <div>
+            <h3>Comentarios adicionales</h3>
+            <p>Agrega observaciones útiles para reclutamiento o formación.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Comentarios <span>(opcional)</span></label>
+          <textarea
+            rows="4"
+            maxlength="255"
+            placeholder="Ej. Requerimiento para campaña comercial outbound."
+            [(ngModel)]="comentarios"
+            name="comentarios"
+          ></textarea>
+          <small>{{ comentarios.length }}/255 caracteres</small>
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <button class="btn-secondary" type="button" (click)="goBack()">
+          Cancelar
+        </button>
+
+        <button class="btn-primary" type="submit" [disabled]="!isFormValid()">
+          Crear requerimiento
+        </button>
+      </div>
+    </form>
+
+    <aside class="summary-card">
+      <span class="eyebrow">Vista previa</span>
+      <h3>Resumen del RQ</h3>
+
+      <div class="summary-list">
+        <div>
+          <span>Campaña</span>
+          <strong>{{ getSelectedCampaniaName() }}</strong>
+        </div>
+
+        <div>
+          <span>Puesto</span>
+          <strong>{{ getSelectedPuestoName() }}</strong>
+        </div>
+
+        <div>
+          <span>Personal requerido</span>
+          <strong>{{ cantidad > 0 ? cantidad : 'Sin definir' }}</strong>
+        </div>
+
+        <div>
+          <span>Días de capacitación</span>
+          <strong>{{ diasCapacitacion > 0 ? diasCapacitacion : 'Sin definir' }}</strong>
+        </div>
+
+        <div>
+          <span>Inicio capacitación</span>
+          <strong>{{ fechaInicioCapacitacion || 'Sin fecha' }}</strong>
+        </div>
+
+        <div>
+          <span>Fin capacitación</span>
+          <strong>{{ fechaFinCapacitacion || 'Sin fecha' }}</strong>
+        </div>
+
+        <div>
+          <span>Inicio laboral previsto</span>
+          <strong>{{ fechaIngreso || 'Sin fecha' }}</strong>
+        </div>
+      </div>
+
+      <div class="summary-note">
+        <strong>Regla de fechas</strong>
+        <p>
+          La capacitación debe finalizar antes del ingreso previsto y debe tener al menos 3 días entre inicio y fin.
+        </p>
+      </div>
+    </aside>
+  </div>
+</section>
