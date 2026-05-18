@@ -28,6 +28,7 @@ export class Postular {
   message = '';
   errorDni = '';
   errorEmail = '';
+  errorTelefono = '';
   errorCvUrl = '';
 
   constructor(
@@ -47,9 +48,10 @@ export class Postular {
 
     if (this.dni && !dniRegex.test(this.dni)) {
       this.errorDni = 'El DNI debe tener exactamente 8 dígitos numéricos.';
-    } else {
-      this.errorDni = '';
+      return;
     }
+
+    this.errorDni = '';
   }
 
   validateEmail(): void {
@@ -57,9 +59,21 @@ export class Postular {
 
     if (this.correo && !emailRegex.test(this.correo)) {
       this.errorEmail = 'El correo debe ser válido.';
-    } else {
-      this.errorEmail = '';
+      return;
     }
+
+    this.errorEmail = '';
+  }
+
+  validateTelefono(): void {
+    const telefonoRegex = /^[0-9]{9}$/;
+
+    if (this.telefono && !telefonoRegex.test(this.telefono)) {
+      this.errorTelefono = 'El teléfono debe tener exactamente 9 dígitos numéricos.';
+      return;
+    }
+
+    this.errorTelefono = '';
   }
 
   validateCvUrl(): void {
@@ -86,6 +100,7 @@ export class Postular {
   isFormValid(): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const dniRegex = /^[0-9]{8}$/;
+    const telefonoRegex = /^[0-9]{9}$/;
     const cvUrl = this.cvUrl.trim();
 
     return (
@@ -95,12 +110,13 @@ export class Postular {
       this.apellido.trim() !== '' &&
       dniRegex.test(this.dni) &&
       emailRegex.test(this.correo) &&
-      this.telefono.trim() !== '' &&
+      telefonoRegex.test(this.telefono) &&
       cvUrl !== '' &&
       cvUrl.startsWith('https://') &&
       cvUrl.includes('drive.google.com') &&
       !this.errorDni &&
       !this.errorEmail &&
+      !this.errorTelefono &&
       !this.errorCvUrl
     );
   }
@@ -118,6 +134,7 @@ export class Postular {
 
     this.validateDni();
     this.validateEmail();
+    this.validateTelefono();
     this.validateCvUrl();
 
     if (!this.isFormValid()) {
@@ -136,7 +153,7 @@ export class Postular {
       comentarios: this.comentarios.trim()
     });
 
-    this.message = 'Tu postulación se envió correctamente. Gracias por postular.';
+    this.message = 'Tu postulación se envió correctamente. El equipo de reclutamiento revisará tu información.';
 
     this.nombre = '';
     this.apellido = '';
@@ -148,6 +165,7 @@ export class Postular {
     this.comentarios = '';
     this.errorDni = '';
     this.errorEmail = '';
+    this.errorTelefono = '';
     this.errorCvUrl = '';
   }
 }

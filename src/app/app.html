@@ -1,6 +1,7 @@
-<ng-container *ngIf="!isLoginPage(); else authLayout">
+<ng-container *ngIf="shouldShowInternalLayout(); else publicLayout">
   <div class="app-shell">
     <app-navbar></app-navbar>
+
     <main class="app-main">
       <div class="app-page-shell">
         <router-outlet></router-outlet>
@@ -9,6 +10,6 @@
   </div>
 </ng-container>
 
-<ng-template #authLayout>
+<ng-template #publicLayout>
   <router-outlet></router-outlet>
 </ng-template>
