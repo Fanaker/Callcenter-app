@@ -2,7 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { RqService } from '../../services/rq';
+import { Rq } from '../../models/rq.model';
+import { Postulante, MedioPreferido } from '../../models/postulante.model';
+
+type SortField = 'dni' | 'nombre' | 'apellido' | 'correo' | 'telefono' | 'medioPreferido';
 
 @Component({
   selector: 'app-rq-detalle',
@@ -12,10 +17,9 @@ import { RqService } from '../../services/rq';
   styleUrl: './rq-detalle.css'
 })
 export class RqDetalle {
-  rq: any;
+  rq: Rq | undefined;
   message = '';
-  applyUrl = '';
-  sortField: string = '';
+  sortField: SortField | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(
@@ -25,74 +29,86 @@ export class RqDetalle {
   ) {
     const codigo = this.route.snapshot.paramMap.get('codigo') || '';
     this.rq = this.rqService.getByCodigo(codigo);
-    if (this.rq) {
-      this.applyUrl = window.location.origin + this.rq.applyPath;
-    }
   }
 
-  getResults() {
+  getApprovedCandidates(): Postulante[] {
     if (!this.rq) {
       return [];
     }
-    let results = this.rq.candidatos.filter((candidate: any) => candidate.apto && candidate.entrevistaAprobada);
 
-    if (this.sortField) {
-      results.sort((a: any, b: any) => {
-        let aValue = a[this.sortField] || '';
-        let bValue = b[this.sortField] || '';
+    const results = this.rq.candidatos.filter(
+      (candidate) => candidate.apto && candidate.entrevistaAprobada
+    );
 
-        const aStr = String(aValue).toLowerCase();
-        const bStr = String(bValue).toLowerCase();
-
-        if (this.sortDirection === 'asc') {
-          return aStr.localeCompare(bStr);
-        } else {
-          return bStr.localeCompare(aStr);
-        }
-      });
+    if (!this.sortField) {
+      return results;
     }
 
-    return results;
+    return [...results].sort((a, b) => {
+      const aValue = String(a[this.sortField as SortField] || '').toLowerCase();
+      const bValue = String(b[this.sortField as SortField] || '').toLowerCase();
+
+      if (this.sortDirection === 'asc') {
+        return aValue.localeCompare(bValue);
+      }
+
+      return bValue.localeCompare(aValue);
+    });
   }
 
-  sortBy(field: string) {
+  getTotalApproved(): number {
+    return this.getApprovedCandidates().length;
+  }
+
+  getTotalHired(): number {
+    return this.getApprovedCandidates().filter(
+      (candidate) => candidate.contratar
+    ).length;
+  }
+
+  getTotalPendingDecision(): number {
+    return this.getApprovedCandidates().filter(
+      (candidate) => !candidate.contratar
+    ).length;
+  }
+
+  sortBy(field: SortField): void {
     if (this.sortField === field) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortField = field;
-      this.sortDirection = 'asc';
+      return;
     }
+
+    this.sortField = field;
+    this.sortDirection = 'asc';
   }
 
-  saveCandidate(candidate: any) {
+  saveCandidate(candidate: Postulante): void {
+    if (!this.rq) {
+      return;
+    }
+
     this.rqService.updateCandidate(this.rq.codigo, candidate);
-    this.message = 'Cambios guardados correctamente';
+    this.message = `Decisión guardada para ${candidate.nombre} ${candidate.apellido}.`;
+
+    setTimeout(() => {
+      this.message = '';
+    }, 3000);
   }
 
-  copyApplyLink() {
-    if (!this.applyUrl) {
-      return;
+  getMedioPreferidoLabel(medio: MedioPreferido): string {
+    switch (medio) {
+      case 'whatsapp':
+        return 'Whatsapp';
+      case 'llamada':
+        return 'Llamada';
+      case 'email':
+        return 'Email';
+      default:
+        return 'No disponible';
     }
-
-    navigator.clipboard
-      .writeText(this.applyUrl)
-      .then(() => {
-        this.message = 'Link copiado al portapapeles';
-      })
-      .catch(() => {
-        this.message = 'No se pudo copiar el link';
-      });
   }
 
-  openApplyLink() {
-    if (!this.applyUrl) {
-      return;
-    }
-
-    window.open(this.applyUrl, '_blank');
-  }
-
-  goBack() {
+  goBack(): void {
     this.router.navigate(['/reclutamiento']);
   }
 }

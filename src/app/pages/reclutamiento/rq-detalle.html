@@ -1,95 +1,221 @@
-<div *ngIf="rq; else noRq">
-  <button class="btn-back" title="Volver a reclutamiento" (click)="goBack()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
+<section *ngIf="rq; else noRq" class="rq-results-page">
+  <header class="page-head">
+    <button class="btn-back" title="Volver a reclutamiento" (click)="goBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M15 18L9 12L15 6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
 
-  <h2 class="rq-title">RESULTADO DEL REQUERIMIENTO {{ rq.codigo }} PARA EL PUESTO {{ rq.puesto | uppercase }}</h2>
+    <div>
+      <span class="eyebrow">Resultado del requerimiento</span>
+      <h2>RQ {{ rq.codigo }} · {{ rq.puesto }}</h2>
+      <p>Gestiona la decisión final de contratación de los candidatos aprobados.</p>
+    </div>
+  </header>
 
-  <div class="rq-info-box">
-    <div class="rq-info-grid">
-      <div class="rq-label">CAMPAÑA</div>
-      <div class="rq-value">{{ rq.campaign }}</div>
-      <div class="rq-label">PUESTO</div>
-      <div class="rq-value">{{ rq.puesto }}</div>
-      <div class="rq-label">CANTIDAD</div>
-      <div class="rq-value">{{ rq.cantidad }}</div>
+  <section class="rq-summary-card">
+    <div class="rq-summary-top">
+      <div>
+        <span class="rq-code">{{ rq.codigo }}</span>
+        <h3>{{ rq.campaign }}</h3>
+        <p>{{ rq.puesto }}</p>
+      </div>
+
+      <span class="status-badge" [class.status-closed]="rq.estado === 'CERRADO'">
+        {{ rq.estado }}
+      </span>
     </div>
 
-    <div class="rq-badges">
-      <span class="rq-badge">Inicio labores: {{ rq.fechaIngreso }}</span>
-      <span class="rq-badge">Inicio capacitación: {{ rq.fechaInicioCapacitacion }}</span>
-      <span class="rq-badge">Fin capacitación: {{ rq.fechaFinCapacitacion }}</span>
+    <div class="summary-metrics">
+      <div class="metric-tile">
+        <span>Personal requerido</span>
+        <strong>{{ rq.cantidad }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Aprobados</span>
+        <strong>{{ getTotalApproved() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Contratar</span>
+        <strong>{{ getTotalHired() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Pendientes</span>
+        <strong>{{ getTotalPendingDecision() }}</strong>
+      </div>
+    </div>
+
+    <div class="rq-details-grid">
+      <div class="detail-pill">
+        <span>Inicio labores</span>
+        <strong>{{ rq.fechaIngreso }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Inicio capacitación</span>
+        <strong>{{ rq.fechaInicioCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Fin capacitación</span>
+        <strong>{{ rq.fechaFinCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Días capacitación</span>
+        <strong>{{ rq.diasCapacitacion }}</strong>
+      </div>
     </div>
 
     <div class="rq-comments">
-      <div class="rq-label">COMENTARIOS</div>
-      <div class="rq-value">{{ rq.comentarios || 'Sin comentarios' }}</div>
+      <span>Comentarios</span>
+      <p>{{ rq.comentarios || 'Sin comentarios registrados.' }}</p>
     </div>
-  </div>
+  </section>
+
   <p *ngIf="message" class="message">{{ message }}</p>
 
-  <h3 class="candidates-title">Candidatos aprobados y disponibles para su contratación</h3>
+  <section class="results-panel">
+    <div class="results-head">
+      <div>
+        <span class="eyebrow">Candidatos aprobados</span>
+        <h3>Disponibles para contratación</h3>
+        <p>
+          Solo se muestran postulantes que cumplen requisito y aprobaron entrevista.
+        </p>
+      </div>
 
-  <div *ngIf="getResults().length > 0" class="candidates-list">
-    <table class="candidates-table">
-      <thead>
-        <tr>
-          <th (click)="sortBy('dni')" class="sortable-header">
-            DNI
-            <span class="sort-icon" *ngIf="sortField === 'dni'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
-          </th>
-          <th (click)="sortBy('nombre')" class="sortable-header">
-            Nombre
-            <span class="sort-icon" *ngIf="sortField === 'nombre'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
-          </th>
-          <th (click)="sortBy('apellido')" class="sortable-header">
-            Apellido
-            <span class="sort-icon" *ngIf="sortField === 'apellido'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
-          </th>
-          <th (click)="sortBy('correo')" class="sortable-header">
-            Correo
-            <span class="sort-icon" *ngIf="sortField === 'correo'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
-          </th>
-          <th (click)="sortBy('telefono')" class="sortable-header">
-            Teléfono
-            <span class="sort-icon" *ngIf="sortField === 'telefono'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
-          </th>
-          <th>Medio preferido</th>
-          <th>Contratar</th>
-          <th>Guardar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let candidate of getResults()" class="candidate-row">
-          <td>{{ candidate.dni }}</td>
-          <td>{{ candidate.nombre }}</td>
-          <td>{{ candidate.apellido }}</td>
-          <td>{{ candidate.correo }}</td>
-          <td>{{ candidate.telefono }}</td>
-          <td>{{ candidate.medioPreferido }}</td>
-          <td>
-            <select title="Seleccionar si contratar" [(ngModel)]="candidate.contratar">
-              <option [ngValue]="true">Sí</option>
-              <option [ngValue]="false">No</option>
-            </select>
-          </td>
-          <td>
-            <button class="btn-primary" title="Guardar candidato" (click)="saveCandidate(candidate)">Guardar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <span class="total-chip">
+        {{ getTotalApproved() }} candidatos
+      </span>
+    </div>
 
-  <div *ngIf="getResults().length === 0" class="no-rqs">
-    <p>No hay candidatos aprobados para esta RQ.</p>
-  </div>
-</div>
+    <div *ngIf="getApprovedCandidates().length > 0; else noCandidates" class="table-shell">
+      <table class="results-table">
+        <colgroup>
+          <col class="col-dni" />
+          <col class="col-candidate" />
+          <col class="col-contact" />
+          <col class="col-medium" />
+          <col class="col-decision" />
+          <col class="col-action" />
+        </colgroup>
+
+        <thead>
+          <tr>
+            <th (click)="sortBy('dni')" class="sortable-header">
+              DNI
+              <span class="sort-icon" *ngIf="sortField === 'dni'">
+                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('nombre')" class="sortable-header">
+              Candidato
+              <span class="sort-icon" *ngIf="sortField === 'nombre'">
+                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('correo')" class="sortable-header">
+              Contacto
+              <span class="sort-icon" *ngIf="sortField === 'correo'">
+                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('medioPreferido')" class="sortable-header">
+              Medio
+              <span class="sort-icon" *ngIf="sortField === 'medioPreferido'">
+                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+              </span>
+            </th>
+
+            <th>Decisión</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let candidate of getApprovedCandidates()">
+            <td class="dni-cell">
+              {{ candidate.dni }}
+            </td>
+
+            <td>
+              <div class="candidate-cell">
+                <div class="candidate-avatar">
+                  {{ candidate.nombre.charAt(0) }}{{ candidate.apellido.charAt(0) }}
+                </div>
+
+                <div>
+                  <strong>{{ candidate.nombre }} {{ candidate.apellido }}</strong>
+                  <span>Aprobado para contratación</span>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="contact-cell">
+                <strong>{{ candidate.correo }}</strong>
+                <span>{{ candidate.telefono }}</span>
+              </div>
+            </td>
+
+            <td>
+              <span class="medium-chip">
+                {{ getMedioPreferidoLabel(candidate.medioPreferido) }}
+              </span>
+            </td>
+
+            <td>
+              <select
+                title="Seleccionar si contratar"
+                [(ngModel)]="candidate.contratar"
+              >
+                <option [ngValue]="true">Contratar</option>
+                <option [ngValue]="false">No contratar</option>
+              </select>
+            </td>
+
+            <td>
+              <button
+                class="btn-save"
+                type="button"
+                title="Guardar decisión"
+                (click)="saveCandidate(candidate)"
+              >
+                Guardar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noCandidates>
+      <div class="empty-state">
+        <h3>No hay candidatos aprobados</h3>
+        <p>
+          Este requerimiento aún no tiene postulantes que cumplan requisito y tengan entrevista aprobada.
+        </p>
+      </div>
+    </ng-template>
+  </section>
+</section>
 
 <ng-template #noRq>
-  <div class="no-rqs">
-    <p>RQ no encontrada.</p>
+  <div class="empty-state">
+    <h3>RQ no encontrada</h3>
+    <p>No se encontró información para el requerimiento solicitado.</p>
   </div>
 </ng-template>
