@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RqService } from '../../services/rq';
+import { Rq } from '../../models/rq.model';
 
 @Component({
   selector: 'app-crear-rq',
@@ -36,7 +37,7 @@ export class CrearRq {
       return;
     }
 
-    const rq = {
+    const rq: Partial<Rq> = {
       codigo: this.rqService.generateCode(),
       campaign: this.campaign,
       puesto: this.puesto,

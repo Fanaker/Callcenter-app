@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RqService } from '../../services/rq';
+import { Postulante } from '../../models/postulante.model';
 
 @Component({
   selector: 'app-postular',
@@ -18,9 +19,10 @@ export class Postular {
   dni = '';
   correo = '';
   telefono = '';
-  medioPreferido = 'whatsapp';
+  medioPreferido: 'whatsapp' | 'llamada' | 'email' = 'whatsapp';
   comentarios = '';
   cvName = '';
+  cvUrl = '';
   message = '';
   errorDni = '';
   errorEmail = '';
@@ -37,6 +39,7 @@ export class Postular {
     const file = event.target.files?.[0];
     if (file) {
       this.cvName = file.name;
+      this.cvUrl = file.name;
     }
   }
 
@@ -89,7 +92,7 @@ export class Postular {
       telefono: this.telefono,
       medioPreferido: this.medioPreferido,
       comentarios: this.comentarios,
-      cvName: this.cvName
+      cvUrl: this.cvUrl
     });
 
     this.message = 'Tu postulación se envió correctamente. Gracias por postular.';
@@ -101,6 +104,7 @@ export class Postular {
     this.medioPreferido = 'whatsapp';
     this.comentarios = '';
     this.cvName = '';
+    this.cvUrl = '';
     this.errorDni = '';
     this.errorEmail = '';
   }

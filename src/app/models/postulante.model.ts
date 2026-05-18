@@ -1,17 +1,27 @@
+export type MedioPreferido = 'whatsapp' | 'llamada' | 'email';
+
 export interface Postulante {
   id: number;
-  rqId: string;
-  dni: string;
+  rqCodigo: string;
+
   nombre: string;
   apellido: string;
+  dni: string;
   correo: string;
   telefono: string;
-  medioPreferido: 'WHATSAPP' | 'LLAMADA' | 'CORREO';
+  medioPreferido: MedioPreferido;
+
   cvUrl: string;
-  fechaRegistro: string;
+  comentarios: string;
 
   apto: boolean;
   entrevistaAprobada: boolean;
-  seleccionado: boolean;
-  contratado: boolean;
+  elegido: boolean;
+  contratar: boolean;
+
+  test1: number;
+  test2: number;
+  test3: number;
+  test4: number;
+  test5: number;
 }
