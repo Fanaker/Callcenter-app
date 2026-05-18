@@ -1,0 +1,964 @@
+AWSTemplateFormatVersion: '2010-09-12'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Recruitment Management System - Backend Infrastructure (SAM)'
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Database Configuration"
+        Parameters:
+          - DbHost
+          - DbName
+          - DbUser
+          - DbPassword
+      - Label:
+          default: "Network Configuration"
+        Parameters:
+          - VpcId
+          - PrivateSubnet1
+          - PrivateSubnet2
+          - LambdaSecurityGroup
+      - Label:
+          default: "API Configuration"
+        Parameters:
+          - CorsOrigin
+          - ApiStageName
+      - Label:
+          default: "Monitoring"
+        Parameters:
+          - AlertEmail
+          - LogRetentionDays
+    ParameterLabels:
+      DbHost:
+        default: "RDS Endpoint"
+      DbName:
+        default: "Database Name"
+      DbUser:
+        default: "Database User"
+      DbPassword:
+        default: "Database Password"
+
+Parameters:
+  DbHost:
+    Type: String
+    Description: "RDS endpoint hostname (e.g., rds-instance.cxyz.us-east-1.rds.amazonaws.com)"
+    AllowedPattern: "^[a-zA-Z0-9.-]+\\.[a-zA-Z0-9.-]+$"
+    ConstraintDescription: "Must be a valid RDS endpoint"
+
+  DbName:
+    Type: String
+    Default: "callcenter"
+    Description: "Database name"
+    AllowedPattern: "^[a-zA-Z0-9_-]+$"
+    MaxLength: 64
+
+  DbUser:
+    Type: String
+    Description: "Database username"
+    AllowedPattern: "^[a-zA-Z0-9_]+$"
+    MaxLength: 32
+
+  DbPassword:
+    Type: String
+    NoEcho: true
+    Description: "Database password (will be stored in Secrets Manager)"
+    MinLength: 8
+    MaxLength: 128
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: "VPC ID where Lambda will run"
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet::Id
+    Description: "First private subnet for Lambda (must be in the VPC)"
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet::Id
+    Description: "Second private subnet for Lambda (must be in the VPC)"
+
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: "Security group for Lambda (must be in the VPC)"
+
+  CorsOrigin:
+    Type: String
+    Default: "*"
+    Description: "CORS origin for API Gateway (use * for development, specific domain for production)"
+    MaxLength: 255
+
+  ApiStageName:
+    Type: String
+    Default: "prod"
+    Description: "API Gateway stage name"
+    AllowedValues:
+      - dev
+      - staging
+      - prod
+    ConstraintDescription: "Must be dev, staging, or prod"
+
+  AlertEmail:
+    Type: String
+    Description: "Email address for CloudWatch alarm notifications"
+    AllowedPattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+
+  LogRetentionDays:
+    Type: Number
+    Default: 7
+    Description: "CloudWatch logs retention in days"
+    AllowedValues:
+      - 1
+      - 3
+      - 5
+      - 7
+      - 14
+      - 30
+      - 60
+      - 90
+      - 120
+      - 150
+      - 180
+      - 365
+      - 400
+      - 545
+      - 731
+      - 1827
+      - 3653
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: python3.11
+    Tracing: Active
+    Environment:
+      Variables:
+        CORS_ORIGIN: !Ref CorsOrigin
+        POWERTOOLS_SERVICE_NAME: recruitment-backend
+        LOG_LEVEL: INFO
+    Layers:
+      - !Ref OdbcDependencyLayer
+
+Conditions:
+  IsProd: !Equals [!Ref ApiStageName, "prod"]
+  EnableSecretsManager: !Equals ["true", "true"]
+
+Resources:
+  # ============================================================================
+  # SECRETS MANAGER - DATABASE PASSWORD
+  # ============================================================================
+
+  DatabaseSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "recruitment-backend/database/${ApiStageName}"
+      Description: "Database credentials for Recruitment Management System"
+      SecretString: !Sub |
+        {
+          "host": "${DbHost}",
+          "username": "${DbUser}",
+          "password": "${DbPassword}",
+          "database": "${DbName}"
+        }
+      Tags:
+        - Key: Environment
+          Value: !Ref ApiStageName
+        - Key: Application
+          Value: RecruitmentBackend
+
+  # ============================================================================
+  # SNS TOPIC FOR ALARMS
+  # ============================================================================
+
+  AlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub "recruitment-backend-alarms-${ApiStageName}"
+      DisplayName: "Recruitment Backend Alarms"
+      Tags:
+        - Key: Environment
+          Value: !Ref ApiStageName
+
+  AlarmTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: email
+      TopicArn: !Ref AlarmTopic
+      Endpoint: !Ref AlertEmail
+
+  # ============================================================================
+  # IAM ROLE FOR LAMBDA
+  # ============================================================================
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "recruitment-backend-lambda-role-${ApiStageName}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+        - "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
+        - "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"
+      Policies:
+        - PolicyName: SecretsManagerAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetSecretValue"
+                Resource: !GetAtt DatabaseSecret.Arn
+        - PolicyName: CloudWatchLogs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/recruitment-backend-*"
+      Tags:
+        - Key: Environment
+          Value: !Ref ApiStageName
+
+  # ============================================================================
+  # LAMBDA LAYER - ODBC DEPENDENCIES
+  # ============================================================================
+
+  OdbcDependencyLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      LayerName: !Sub "recruitment-odbc-layer-${ApiStageName}"
+      Description: "ODBC, pyodbc, pydantic and dependencies for Recruitment Backend"
+      Content:
+        S3Bucket: !Sub "lambda-layers-${AWS::AccountId}-${AWS::Region}"
+        S3Key: "layers/odbc-dependencies.zip"
+      CompatibleRuntimes:
+        - python3.11
+      RetentionPolicy: Delete
+
+  # ============================================================================
+  # LAMBDA FUNCTION
+  # ============================================================================
+
+  RecruitmentBackendFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "recruitment-backend-${ApiStageName}"
+      CodeUri: ../
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.11
+      Timeout: 30
+      MemorySize: 512
+      ReservedConcurrentExecutions: 100
+      EphemeralStorage:
+        Size: 512
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - !Ref PrivateSubnet1
+          - !Ref PrivateSubnet2
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Tracing: Active
+      LoggingConfig:
+        LogFormat: JSON
+      Environment:
+        Variables:
+          DB_HOST: !Ref DbHost
+          DB_NAME: !Ref DbName
+          DB_USER: !Ref DbUser
+          DB_PASS: !Ref DbPassword
+          CORS_ORIGIN: !Ref CorsOrigin
+          ENVIRONMENT: !Ref ApiStageName
+          SECRET_ARN: !GetAtt DatabaseSecret.Arn
+      Layers:
+        - !Ref OdbcDependencyLayer
+      Events:
+        # GET /campanias/activas
+        GetCampaniasActivas:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/campanias/activas
+            Method: GET
+        # GET /puestos/activos
+        GetPuestosActivos:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/puestos/activos
+            Method: GET
+        # GET /requerimientos
+        GetRequerimientos:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/requerimientos
+            Method: GET
+        # POST /requerimientos
+        PostRequerimientos:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/requerimientos
+            Method: POST
+        # GET /requerimientos/{codigo}
+        GetRequerimientoByCodigo:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/requerimientos/{codigo}
+            Method: GET
+        # GET /requerimientos/{codigo}/postulaciones
+        GetRequerimientoPostulaciones:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/requerimientos/{codigo}/postulaciones
+            Method: GET
+        # POST /postulaciones
+        PostPostulaciones:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/postulaciones
+            Method: POST
+        # PUT /postulaciones/{idPostulacion}/requisito
+        PutPostulacionRequisito:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/postulaciones/{idPostulacion}/requisito
+            Method: PUT
+        # PUT /postulaciones/{idPostulacion}/entrevista
+        PutPostulacionEntrevista:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/postulaciones/{idPostulacion}/entrevista
+            Method: PUT
+        # PUT /postulaciones/{idPostulacion}/contratacion
+        PutPostulacionContratacion:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v1/postulaciones/{idPostulacion}/contratacion
+            Method: PUT
+      Tags:
+        Environment: !Ref ApiStageName
+        Application: RecruitmentBackend
+
+  # ============================================================================
+  # API GATEWAY
+  # ============================================================================
+
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: !Sub "recruitment-api-${ApiStageName}"
+      Description: "Recruitment Management System API"
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Policy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action: "execute-api:Invoke"
+            Resource: "execute-api:/*"
+      Tags:
+        - Key: Environment
+          Value: !Ref ApiStageName
+
+  # API Gateway CORS Configuration
+  ApiGatewayCorsOptions:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !GetAtt ApiGateway.RootResourceId
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+        RequestTemplates:
+          application/json: |
+            {
+              "statusCode": 200
+            }
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: !Sub "'${CorsOrigin}'"
+      MethodResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+
+  # API Gateway Stage
+  ApiStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      StageName: !Ref ApiStageName
+      RestApiId: !Ref ApiGateway
+      DeploymentId: !Ref ApiDeployment
+      ThrottleSettings:
+        BurstLimit: 100
+        RateLimit: 10
+      LoggingLevel: INFO
+      DataTraceEnabled: !If [IsProd, false, true]
+      TracingEnabled: true
+      MethodSettings:
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          LoggingLevel: INFO
+          DataTraceEnabled: !If [IsProd, false, true]
+          MetricsEnabled: true
+          CachingEnabled: false
+      Tags:
+        - Key: Environment
+          Value: !Ref ApiStageName
+
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - GetCampaniasActivasMethod
+      - GetPuestosActivosMethod
+      - GetRequerimientosMethod
+      - PostRequerimientosMethod
+      - GetRequerimientoByCodigo
+      - GetRequerimientoPostulacionesMethod
+      - PostPostulacionesMethod
+      - PutPostulacionRequisitoMethod
+      - PutPostulacionEntrevistaMethod
+      - PutPostulacionContratacionMethod
+    Properties:
+      RestApiId: !Ref ApiGateway
+
+  # ============================================================================
+  # API GATEWAY RESOURCES & METHODS
+  # ============================================================================
+
+  # /v1 Resource
+  V1Resource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !GetAtt ApiGateway.RootResourceId
+      PathPart: v1
+
+  # /v1/campanias Resource
+  CampaniasResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref V1Resource
+      PathPart: campanias
+
+  # /v1/campanias/activas Resource
+  CampaniasActivasResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref CampaniasResource
+      PathPart: activas
+
+  # GET /v1/campanias/activas
+  GetCampaniasActivasMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref CampaniasActivasResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # /v1/puestos Resource
+  PuestosResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref V1Resource
+      PathPart: puestos
+
+  # /v1/puestos/activos Resource
+  PuestosActivosResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref PuestosResource
+      PathPart: activos
+
+  # GET /v1/puestos/activos
+  GetPuestosActivosMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref PuestosActivosResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # /v1/requerimientos Resource
+  RequerimientosResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref V1Resource
+      PathPart: requerimientos
+
+  # GET /v1/requerimientos
+  GetRequerimientosMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref RequerimientosResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.querystring.estado: false
+        method.request.querystring.campaniaId: false
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # POST /v1/requerimientos
+  PostRequerimientosMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref RequerimientosResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # /v1/requerimientos/{codigo} Resource
+  RequerimientoCodResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref RequerimientosResource
+      PathPart: "{codigo}"
+
+  # GET /v1/requerimientos/{codigo}
+  GetRequerimientoByCodigo:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref RequerimientoCodResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.path.codigo: true
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # /v1/requerimientos/{codigo}/postulaciones Resource
+  RequerimientoPostulacionesResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref RequerimientoCodResource
+      PathPart: postulaciones
+
+  # GET /v1/requerimientos/{codigo}/postulaciones
+  GetRequerimientoPostulacionesMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref RequerimientoPostulacionesResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.path.codigo: true
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # /v1/postulaciones Resource
+  PostulacionesResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref V1Resource
+      PathPart: postulaciones
+
+  # POST /v1/postulaciones
+  PostPostulacionesMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref PostulacionesResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # /v1/postulaciones/{idPostulacion} Resource
+  PostulacionIdResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref PostulacionesResource
+      PathPart: "{idPostulacion}"
+
+  # /v1/postulaciones/{idPostulacion}/requisito Resource
+  PostulacionRequisitoResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref PostulacionIdResource
+      PathPart: requisito
+
+  # PUT /v1/postulaciones/{idPostulacion}/requisito
+  PutPostulacionRequisitoMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref PostulacionRequisitoResource
+      HttpMethod: PUT
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.path.idPostulacion: true
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # /v1/postulaciones/{idPostulacion}/entrevista Resource
+  PostulacionEntrevistaResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref PostulacionIdResource
+      PathPart: entrevista
+
+  # PUT /v1/postulaciones/{idPostulacion}/entrevista
+  PutPostulacionEntrevistaMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref PostulacionEntrevistaResource
+      HttpMethod: PUT
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.path.idPostulacion: true
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # /v1/postulaciones/{idPostulacion}/contratacion Resource
+  PostulacionContratacionResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref PostulacionIdResource
+      PathPart: contratacion
+
+  # PUT /v1/postulaciones/{idPostulacion}/contratacion
+  PutPostulacionContratacionMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref PostulacionContratacionResource
+      HttpMethod: PUT
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.path.idPostulacion: true
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${RecruitmentBackendFunction.Arn}/invocations"
+
+  # ============================================================================
+  # LAMBDA PERMISSIONS FOR API GATEWAY
+  # ============================================================================
+
+  LambdaApiGatewayInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref RecruitmentBackendFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*"
+
+  # ============================================================================
+  # CLOUDWATCH LOG GROUP FOR LAMBDA
+  # ============================================================================
+
+  LambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/recruitment-backend-${ApiStageName}"
+      RetentionInDays: !Ref LogRetentionDays
+
+  # ============================================================================
+  # CLOUDWATCH ALARMS
+  # ============================================================================
+
+  # Lambda Errors Alarm
+  LambdaErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "recruitment-lambda-errors-${ApiStageName}"
+      AlarmDescription: "Alert when Lambda function errors exceed threshold"
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 5
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref RecruitmentBackendFunction
+      AlarmActions:
+        - !Ref AlarmTopic
+      TreatMissingData: notBreaching
+
+  # Lambda Duration Alarm (p99)
+  LambdaDurationAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "recruitment-lambda-duration-${ApiStageName}"
+      AlarmDescription: "Alert when Lambda p99 duration exceeds 10 seconds"
+      MetricName: Duration
+      Namespace: AWS/Lambda
+      Statistic: p99
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 10000
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref RecruitmentBackendFunction
+      AlarmActions:
+        - !Ref AlarmTopic
+      TreatMissingData: notBreaching
+
+  # Lambda Throttles Alarm
+  LambdaThrottlesAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "recruitment-lambda-throttles-${ApiStageName}"
+      AlarmDescription: "Alert when Lambda is throttled"
+      MetricName: Throttles
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref RecruitmentBackendFunction
+      AlarmActions:
+        - !Ref AlarmTopic
+      TreatMissingData: notBreaching
+
+  # API Gateway 5xx Errors Alarm
+  ApiGateway5xxAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "recruitment-api-5xx-${ApiStageName}"
+      AlarmDescription: "Alert when API Gateway 5xx errors exceed 1%"
+      MetricName: 5XXError
+      Namespace: AWS/ApiGateway
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 0.01
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: ApiName
+          Value: !Sub "recruitment-api-${ApiStageName}"
+        - Name: Stage
+          Value: !Ref ApiStageName
+      AlarmActions:
+        - !Ref AlarmTopic
+      TreatMissingData: notBreaching
+
+  # API Gateway 4xx Errors Alarm
+  ApiGateway4xxAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "recruitment-api-4xx-${ApiStageName}"
+      AlarmDescription: "Alert when API Gateway 4xx errors are high"
+      MetricName: 4XXError
+      Namespace: AWS/ApiGateway
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 100
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: ApiName
+          Value: !Sub "recruitment-api-${ApiStageName}"
+        - Name: Stage
+          Value: !Ref ApiStageName
+      AlarmActions:
+        - !Ref AlarmTopic
+      TreatMissingData: notBreaching
+
+  # API Gateway Latency Alarm (p99)
+  ApiGatewayLatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "recruitment-api-latency-${ApiStageName}"
+      AlarmDescription: "Alert when API Gateway p99 latency exceeds 5000ms"
+      MetricName: Latency
+      Namespace: AWS/ApiGateway
+      ExtendedStatistic: p99
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 5000
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: ApiName
+          Value: !Sub "recruitment-api-${ApiStageName}"
+        - Name: Stage
+          Value: !Ref ApiStageName
+      AlarmActions:
+        - !Ref AlarmTopic
+      TreatMissingData: notBreaching
+
+  # ============================================================================
+  # CLOUDWATCH DASHBOARD
+  # ============================================================================
+
+  MonitoringDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: !Sub "recruitment-backend-${ApiStageName}"
+      DashboardBody: !Sub |
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "properties": {
+                "metrics": [
+                  [ "AWS/Lambda", "Invocations", { "stat": "Sum" } ],
+                  [ ".", "Errors", { "stat": "Sum" } ],
+                  [ ".", "Duration", { "stat": "Average" } ],
+                  [ ".", "Duration", { "stat": "p99" } ],
+                  [ ".", "Throttles", { "stat": "Sum" } ]
+                ],
+                "period": 300,
+                "stat": "Average",
+                "region": "${AWS::Region}",
+                "title": "Lambda Metrics",
+                "dimensions": {
+                  "FunctionName": "${RecruitmentBackendFunction}"
+                }
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "metrics": [
+                  [ "AWS/ApiGateway", "Count", { "stat": "Sum" } ],
+                  [ ".", "4XXError", { "stat": "Sum" } ],
+                  [ ".", "5XXError", { "stat": "Sum" } ],
+                  [ ".", "Latency", { "stat": "Average" } ],
+                  [ ".", "Latency", { "stat": "p99" } ]
+                ],
+                "period": 300,
+                "stat": "Average",
+                "region": "${AWS::Region}",
+                "title": "API Gateway Metrics",
+                "dimensions": {
+                  "ApiName": "recruitment-api-${ApiStageName}",
+                  "Stage": "${ApiStageName}"
+                }
+              }
+            },
+            {
+              "type": "log",
+              "properties": {
+                "query": "fields @timestamp, @message, level | filter level = 'ERROR' | stats count() by level",
+                "region": "${AWS::Region}",
+                "title": "Lambda Errors (Last 1h)"
+              }
+            }
+          ]
+        }
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${ApiStageName}"
+    Export:
+      Name: !Sub "recruitment-api-url-${ApiStageName}"
+
+  ApiGatewayId:
+    Description: "API Gateway REST API ID"
+    Value: !Ref ApiGateway
+    Export:
+      Name: !Sub "recruitment-api-id-${ApiStageName}"
+
+  LambdaFunctionArn:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt RecruitmentBackendFunction.Arn
+    Export:
+      Name: !Sub "recruitment-lambda-arn-${ApiStageName}"
+
+  LambdaFunctionName:
+    Description: "Lambda Function Name"
+    Value: !Ref RecruitmentBackendFunction
+    Export:
+      Name: !Sub "recruitment-lambda-name-${ApiStageName}"
+
+  DatabaseSecretArn:
+    Description: "Secrets Manager Secret ARN for database credentials"
+    Value: !GetAtt DatabaseSecret.Arn
+    Export:
+      Name: !Sub "recruitment-db-secret-${ApiStageName}"
+
+  CloudWatchLogGroup:
+    Description: "CloudWatch Log Group for Lambda"
+    Value: !Ref LambdaLogGroup
+    Export:
+      Name: !Sub "recruitment-logs-${ApiStageName}"
+
+  AlarmTopicArn:
+    Description: "SNS Topic ARN for CloudWatch Alarms"
+    Value: !Ref AlarmTopic
+    Export:
+      Name: !Sub "recruitment-alarms-topic-${ApiStageName}"
+
+  DashboardUrl:
+    Description: "CloudWatch Dashboard URL"
+    Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=recruitment-backend-${ApiStageName}"
+
+  DeploymentTime:
+    Description: "Template deployment timestamp"
+    Value: !Sub "${AWS::StackName} deployed at ${AWS::StackId}"

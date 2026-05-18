@@ -1,0 +1,88 @@
+# SAM CLI Configuration for Recruitment Backend
+# Generated template - customize before deployment
+
+version = 0.1
+
+[default]
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.validate.parameters]
+region = "us-east-1"
+
+[default.deploy.parameters]
+stack_name = "recruitment-backend"
+s3_bucket = "{{ YOUR_S3_BUCKET }}"
+s3_prefix = "recruitment-backend"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
+parameter_overrides = [
+    "ApiStageName=prod",
+    "CorsOrigin=https://yourdomain.com"
+]
+no_fail_on_empty_changeset = true
+tags = [
+    "Environment=prod",
+    "Application=RecruitmentBackend",
+    "ManagedBy=SAM"
+]
+
+[prod]
+[prod.build.parameters]
+cached = true
+parallel = true
+
+[prod.deploy.parameters]
+stack_name = "recruitment-backend-prod"
+s3_bucket = "{{ YOUR_S3_BUCKET }}"
+s3_prefix = "recruitment-backend-prod"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
+parameter_overrides = [
+    "ApiStageName=prod",
+    "CorsOrigin=https://yourdomain.com"
+]
+no_fail_on_empty_changeset = true
+tags = [
+    "Environment=prod",
+    "Application=RecruitmentBackend"
+]
+
+[dev]
+[dev.deploy.parameters]
+stack_name = "recruitment-backend-dev"
+s3_bucket = "{{ YOUR_S3_BUCKET }}"
+s3_prefix = "recruitment-backend-dev"
+region = "us-east-1"
+confirm_changeset = false
+capabilities = "CAPABILITY_NAMED_IAM"
+parameter_overrides = [
+    "ApiStageName=dev",
+    "CorsOrigin=*"
+]
+no_fail_on_empty_changeset = true
+tags = [
+    "Environment=dev",
+    "Application=RecruitmentBackend"
+]
+
+[staging]
+[staging.deploy.parameters]
+stack_name = "recruitment-backend-staging"
+s3_bucket = "{{ YOUR_S3_BUCKET }}"
+s3_prefix = "recruitment-backend-staging"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
+parameter_overrides = [
+    "ApiStageName=staging",
+    "CorsOrigin=https://staging.yourdomain.com"
+]
+no_fail_on_empty_changeset = true
+tags = [
+    "Environment=staging",
+    "Application=RecruitmentBackend"
+]
