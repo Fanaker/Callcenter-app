@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { RqService } from '../../../services/rq';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+import { RqService } from '../../../services/rq';
+import { Rq } from '../../../models/rq.model';
+import { Postulante } from '../../../models/postulante.model';
 import { CandidatosListadoComponent } from '../candidatos-listado/candidatos-listado.component';
 
 @Component({
@@ -13,44 +16,74 @@ import { CandidatosListadoComponent } from '../candidatos-listado/candidatos-lis
   styleUrl: './reclutamiento-candidatos.css'
 })
 export class ReclutamientoCandidatos implements OnInit {
-  rq: any;
+  rq: Rq | undefined;
   message = '';
-  selectedCandidate: any = null;
+  selectedCandidate: Postulante | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private rqService: RqService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const codigo = this.route.snapshot.paramMap.get('codigo');
+
     if (codigo) {
       this.rq = this.rqService.getByCodigo(codigo);
     }
   }
 
-  copyApplyLink() {
+  copyApplyLink(): void {
+    if (!this.rq) {
+      return;
+    }
+
     const link = `${window.location.origin}/postular/${this.rq.codigo}`;
+
     navigator.clipboard.writeText(link).then(() => {
       this.message = 'Link copiado al portapapeles';
     });
   }
 
-  openApplyLink() {
+  openApplyLink(): void {
+    if (!this.rq) {
+      return;
+    }
+
     const link = `${window.location.origin}/postular/${this.rq.codigo}`;
     window.open(link, '_blank');
   }
 
-  verDetallePostulante(candidate: any) {
+  verDetallePostulante(candidate: Postulante): void {
     this.selectedCandidate = candidate;
   }
 
-  openCv(url: string) {
+  cerrarDetalle(): void {
+    this.selectedCandidate = null;
+  }
+
+  openCv(url: string): void {
+    if (!url) {
+      return;
+    }
+
     window.open(url, '_blank');
   }
 
-  getAllCandidates() {
+  getAllCandidates(): Postulante[] {
     return this.rq?.candidatos || [];
+  }
+
+  getMedioPreferidoLabel(medio: string): string {
+    switch (medio) {
+      case 'whatsapp':
+        return 'Whatsapp';
+      case 'llamada':
+        return 'Llamada';
+      case 'email':
+        return 'Email';
+      default:
+        return 'No disponible';
+    }
   }
 }

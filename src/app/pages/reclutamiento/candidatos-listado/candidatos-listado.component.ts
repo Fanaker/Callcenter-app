@@ -1,31 +1,36 @@
-import { Component, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  Input,
+  Output,
+  EventEmitter,
+  SimpleChanges
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Candidato } from '../models/candidato.model';
 
-/**
- * Componente para listar todos los candidatos
- * Permite filtrar y ver detalles de candidatos exportados
- */
+import { Postulante } from '../../../models/postulante.model';
+
+type FiltroCandidato = 'apto-si' | 'apto-no' | 'entrevista-si' | 'entrevista-no' | null;
+type SortField = 'dni' | 'nombre' | 'apellido';
+
 @Component({
   selector: 'app-candidatos-listado',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './candidatos-listado.component.html',
   styleUrls: ['./candidatos-listado.component.css']
 })
 export class CandidatosListadoComponent implements OnInit, OnChanges {
-  @Input() candidatos: Candidato[] = [];
-  @Output() verDetalle = new EventEmitter<Candidato>();
+  @Input() candidatos: Postulante[] = [];
+  @Output() verDetalle = new EventEmitter<Postulante>();
 
-  candidatosFiltrados: Candidato[] = [];
-  candidatosOriginales: Candidato[] = [];
+  candidatosFiltrados: Postulante[] = [];
+  candidatosOriginales: Postulante[] = [];
   cargando = false;
-  filtroActual: string | null = null;
-  sortField: string = '';
+  filtroActual: FiltroCandidato = null;
+  sortField: SortField | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   ngOnInit(): void {
@@ -44,129 +49,114 @@ export class CandidatosListadoComponent implements OnInit, OnChanges {
     this.aplicarOrdenamiento();
   }
 
-  /**
-   * Aplica un filtro a la tabla
-   */
-  aplicarFiltro(filtro: string | null): void {
+  aplicarFiltro(filtro: FiltroCandidato): void {
     this.filtroActual = filtro;
 
     switch (filtro) {
       case 'apto-si':
-        this.candidatosFiltrados = this.candidatosOriginales.filter(c => c.apto === 'si');
+        this.candidatosFiltrados = this.candidatosOriginales.filter(
+          (candidato) => candidato.apto
+        );
         break;
+
       case 'apto-no':
-        this.candidatosFiltrados = this.candidatosOriginales.filter(c => c.apto === 'no');
+        this.candidatosFiltrados = this.candidatosOriginales.filter(
+          (candidato) => !candidato.apto
+        );
         break;
+
       case 'entrevista-si':
-        this.candidatosFiltrados = this.candidatosOriginales.filter(c => c.entrevista === 'si');
+        this.candidatosFiltrados = this.candidatosOriginales.filter(
+          (candidato) => candidato.entrevistaAprobada
+        );
         break;
+
+      case 'entrevista-no':
+        this.candidatosFiltrados = this.candidatosOriginales.filter(
+          (candidato) => !candidato.entrevistaAprobada
+        );
+        break;
+
       default:
         this.candidatosFiltrados = [...this.candidatosOriginales];
+        break;
     }
+
     this.aplicarOrdenamiento();
   }
 
-  /**
-   * Ordena la tabla por un campo específico
-   */
-  sortBy(field: string): void {
+  sortBy(field: SortField): void {
     if (this.sortField === field) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortField = field;
       this.sortDirection = 'asc';
     }
+
     this.aplicarOrdenamiento();
   }
 
-  /**
-   * Aplica el ordenamiento actual a la lista filtrada
-   */
   private aplicarOrdenamiento(): void {
-    if (!this.sortField) return;
+    if (!this.sortField) {
+      return;
+    }
 
     this.candidatosFiltrados.sort((a, b) => {
-      let aValue: any = a[this.sortField as keyof Candidato];
-      let bValue: any = b[this.sortField as keyof Candidato];
-
-      // Handle DNI field which might be in 'id' property
-      if (this.sortField === 'dni') {
-        aValue = a.dni || a.id || '';
-        bValue = b.dni || b.id || '';
-      }
-
-      // Convert to strings for comparison
-      const aStr = String(aValue || '').toLowerCase();
-      const bStr = String(bValue || '').toLowerCase();
+      const aValue = String(a[this.sortField as SortField] || '').toLowerCase();
+      const bValue = String(b[this.sortField as SortField] || '').toLowerCase();
 
       if (this.sortDirection === 'asc') {
-        return aStr.localeCompare(bStr);
-      } else {
-        return bStr.localeCompare(aStr);
+        return aValue.localeCompare(bValue);
       }
+
+      return bValue.localeCompare(aValue);
     });
   }
 
-  /**
-   * Verifica si se puede marcar entrevista (solo si apto = 'si')
-   */
-  puedeMarcarEntrevista(candidato: Candidato): boolean {
-    return candidato.apto === 'si';
+  puedeMarcarEntrevista(candidato: Postulante): boolean {
+    return candidato.apto;
   }
 
-  /**
-   * Cambia el valor del campo Apto y ajusta entrevista si es necesario
-   */
-  cambiarApto(candidato: Candidato, valor: 'si' | 'no'): void {
+  cambiarApto(candidato: Postulante, valor: boolean): void {
     candidato.apto = valor;
-    if (valor === 'no') {
-      candidato.entrevista = 'no';
+
+    if (!valor) {
+      candidato.entrevistaAprobada = false;
+      candidato.elegido = false;
+      candidato.contratar = false;
     }
+
     this.aplicarFiltro(this.filtroActual);
   }
 
-  /**
-   * Cambia el valor del campo Entrevista (con validación)
-   */
-  cambiarEntrevista(candidato: Candidato, valor: 'si' | 'no'): void {
-    if (valor === 'si' && candidato.apto !== 'si') {
+  cambiarEntrevista(candidato: Postulante, valor: boolean): void {
+    if (valor && !candidato.apto) {
       return;
     }
-    candidato.entrevista = valor;
+
+    candidato.entrevistaAprobada = valor;
+
+    if (!valor) {
+      candidato.elegido = false;
+      candidato.contratar = false;
+    }
+
+    this.aplicarFiltro(this.filtroActual);
   }
 
-  /**
-   * Muestra el detalle del candidato
-   */
-  verDetalleCandidato(candidato: Candidato): void {
+  verDetalleCandidato(candidato: Postulante): void {
     this.verDetalle.emit(candidato);
   }
 
-  /**
-   * Cuenta candidatos aptos
-   */
-  contarApto(valor: 'si' | 'no'): number {
-    return this.candidatosOriginales.filter(c => c.apto === valor).length;
+  contarApto(valor: boolean): number {
+    return this.candidatosOriginales.filter(
+      (candidato) => candidato.apto === valor
+    ).length;
   }
 
-  /**
-   * Cuenta candidatos con resultado de entrevista
-   */
-  contarEntrevista(valor: 'si' | 'no'): number {
-    return this.candidatosOriginales.filter(c => c.entrevista === valor).length;
-  }
-
-  /**
-   * Obtiene el color para el chip de estado
-   */
-  obtenerColorEstado(estado: string): string {
-    switch (estado) {
-      case 'finalizado':
-        return 'accent';
-      case 'en_evaluacion':
-        return 'warn';
-      default:
-        return '';
-    }
+  contarEntrevista(valor: boolean): number {
+    return this.candidatosOriginales.filter(
+      (candidato) => candidato.entrevistaAprobada === valor
+    ).length;
   }
 }

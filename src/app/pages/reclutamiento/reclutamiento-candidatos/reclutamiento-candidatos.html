@@ -1,7 +1,13 @@
 <div *ngIf="rq; else noRq" class="reclutamiento-candidatos-container">
   <button class="btn-back" title="Volver a reclutamiento" [routerLink]="['/reclutamiento']">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path
+        d="M15 18L9 12L15 6"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>
   </button>
 
@@ -11,30 +17,37 @@
     <div class="rq-content">
       <div class="rq-grid">
         <div class="rq-label">CAMPAÑA:</div>
-        <div class="rq-value">{{ rq.campania || rq['campaña'] || rq.campaign || 'SIN CAMPAÑA' }}</div>
-        
+        <div class="rq-value">{{ rq.campaign || 'SIN CAMPAÑA' }}</div>
+
         <div class="rq-label">PUESTO:</div>
         <div class="rq-value">{{ rq.puesto }}</div>
-        
+
         <div class="rq-label">PERSONAL NECESARIO:</div>
         <div class="rq-value">{{ rq.cantidad }}</div>
-        
+
+        <div class="rq-label">ESTADO:</div>
+        <div class="rq-value">
+          <span class="status-badge" [class.status-no-apto]="rq.estado === 'CERRADO'">
+            {{ rq.estado }}
+          </span>
+        </div>
+
         <div class="rq-label">INICIO LABORES:</div>
         <div class="rq-value">{{ rq.fechaIngreso }}</div>
-        
+
         <div class="rq-label">INICIO CAPACITACIÓN:</div>
         <div class="rq-value">{{ rq.fechaInicioCapacitacion }}</div>
-        
+
         <div class="rq-label">FIN CAPACITACIÓN:</div>
         <div class="rq-value">{{ rq.fechaFinCapacitacion }}</div>
       </div>
-      
+
       <div class="rq-comments">
         <div class="rq-label">COMENTARIOS:</div>
         <div class="rq-value">{{ rq.comentarios || 'SIN COMENTARIOS' }}</div>
       </div>
     </div>
-    
+
     <div class="rq-actions">
       <button class="btn-action" (click)="copyApplyLink()">Copiar link</button>
       <button class="btn-action" (click)="openApplyLink()">Ver link</button>
@@ -44,67 +57,94 @@
   <p *ngIf="message" class="message">{{ message }}</p>
 
   <app-candidatos-listado
-      *ngIf="!selectedCandidate"
-      [candidatos]="getAllCandidates()"
-      (verDetalle)="verDetallePostulante($event)">
-    </app-candidatos-listado>
+    *ngIf="!selectedCandidate"
+    [candidatos]="getAllCandidates()"
+    (verDetalle)="verDetallePostulante($event)"
+  >
+  </app-candidatos-listado>
 
-    <div *ngIf="selectedCandidate" class="detalle-completo">
-      <button class="btn-back" title="Volver a lista de candidatos" (click)="selectedCandidate = null">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <h3>Datos del Postulante</h3>
-      <div class="postulante-card">
-        <div class="postulante-grid">
-          <div class="postulante-label">DNI:</div>
-          <div class="postulante-value">{{ selectedCandidate.dni || selectedCandidate.id || 'No disponible' }}</div>
-          
-          <div class="postulante-label">Nombre:</div>
-          <div class="postulante-value">{{ selectedCandidate.nombre }}</div>
-          
-          <div class="postulante-label">Apellido:</div>
-          <div class="postulante-value">{{ selectedCandidate.apellido }}</div>
-          
-          <div class="postulante-label">Email:</div>
-          <div class="postulante-value">{{ selectedCandidate.email || selectedCandidate.correo || 'No disponible' }}</div>
-          
-          <div class="postulante-label">Teléfono:</div>
-          <div class="postulante-value">{{ selectedCandidate.telefono || 'No disponible' }}</div>
-          
-          <div class="postulante-label">Requisito:</div>
-          <div class="postulante-value">
-            <span class="status-badge" [class.status-no-cumple]="selectedCandidate.apto === 'no'">
-              {{ selectedCandidate.apto === 'si' ? 'Cumple' : 'No cumple' }}
-            </span>
-          </div>
-          
-          <div class="postulante-label">Entrevista:</div>
-          <div class="postulante-value">
-            <span class="status-badge" [class.status-no-apto]="selectedCandidate.entrevista === 'no'">
-              {{ selectedCandidate.entrevista === 'si' ? 'Apto' : 'No apto' }}
-            </span>
-          </div>
-          
-          <div class="postulante-label">Medio preferido:</div>
-          <div class="postulante-value">
-            <span class="status-badge" [class.status-whatsapp]="selectedCandidate.medioPreferido === 'WhatsApp'">
-              {{ selectedCandidate.medioPreferido || 'No disponible' }}
-            </span>
-          </div>
+  <div *ngIf="selectedCandidate" class="detalle-completo">
+    <button class="btn-back" title="Volver a lista de candidatos" (click)="cerrarDetalle()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M15 18L9 12L15 6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+    <h3>Datos del Postulante</h3>
+
+    <div class="postulante-card">
+      <div class="postulante-grid">
+        <div class="postulante-label">DNI:</div>
+        <div class="postulante-value">{{ selectedCandidate.dni || 'No disponible' }}</div>
+
+        <div class="postulante-label">Nombre:</div>
+        <div class="postulante-value">{{ selectedCandidate.nombre }}</div>
+
+        <div class="postulante-label">Apellido:</div>
+        <div class="postulante-value">{{ selectedCandidate.apellido }}</div>
+
+        <div class="postulante-label">Correo:</div>
+        <div class="postulante-value">{{ selectedCandidate.correo || 'No disponible' }}</div>
+
+        <div class="postulante-label">Teléfono:</div>
+        <div class="postulante-value">{{ selectedCandidate.telefono || 'No disponible' }}</div>
+
+        <div class="postulante-label">Requisito:</div>
+        <div class="postulante-value">
+          <span class="status-badge" [class.status-no-cumple]="!selectedCandidate.apto">
+            {{ selectedCandidate.apto ? 'Cumple' : 'No cumple' }}
+          </span>
         </div>
-        
-        <div class="cv-section">
-          <div class="postulante-label">CV:</div>
-          <div class="postulante-value">
-            <button *ngIf="selectedCandidate.cvUrl" class="btn-cv" (click)="openCv(selectedCandidate.cvUrl)">Ver CV</button>
-            <span *ngIf="!selectedCandidate.cvUrl" class="status-badge status-cv-pending">CV pendiente</span>
-          </div>
+
+        <div class="postulante-label">Entrevista:</div>
+        <div class="postulante-value">
+          <span class="status-badge" [class.status-no-apto]="!selectedCandidate.entrevistaAprobada">
+            {{ selectedCandidate.entrevistaAprobada ? 'Apto' : 'No apto' }}
+          </span>
+        </div>
+
+        <div class="postulante-label">Medio preferido:</div>
+        <div class="postulante-value">
+          <span class="status-badge" [class.status-whatsapp]="selectedCandidate.medioPreferido === 'whatsapp'">
+            {{ getMedioPreferidoLabel(selectedCandidate.medioPreferido) }}
+          </span>
+        </div>
+
+        <div class="postulante-label">Contratar:</div>
+        <div class="postulante-value">
+          <span class="status-badge" [class.status-no-apto]="!selectedCandidate.contratar">
+            {{ selectedCandidate.contratar ? 'Sí' : 'No' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="cv-section">
+        <div class="postulante-label">CV:</div>
+        <div class="postulante-value">
+          <button
+            *ngIf="selectedCandidate.cvUrl"
+            class="btn-cv"
+            type="button"
+            (click)="openCv(selectedCandidate.cvUrl)"
+          >
+            Ver CV
+          </button>
+
+          <span *ngIf="!selectedCandidate.cvUrl" class="status-badge status-cv-pending">
+            CV pendiente
+          </span>
         </div>
       </div>
     </div>
   </div>
+</div>
+
 <ng-template #noRq>
   <div class="no-rq">
     <p>RQ no encontrada.</p>
