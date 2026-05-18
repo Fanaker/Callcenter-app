@@ -1,71 +1,7 @@
-<div *ngIf="rq; else noRq" class="reclutamiento-candidatos-container">
-  <button class="btn-back" title="Volver a reclutamiento" [routerLink]="['/reclutamiento']">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M15 18L9 12L15 6"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-  </button>
-
-  <h2 class="rq-title">REQUERIMIENTO NÚMERO {{ rq.codigo }}</h2>
-
-  <div class="rq-info-box">
-    <div class="rq-content">
-      <div class="rq-grid">
-        <div class="rq-label">CAMPAÑA:</div>
-        <div class="rq-value">{{ rq.campaign || 'SIN CAMPAÑA' }}</div>
-
-        <div class="rq-label">PUESTO:</div>
-        <div class="rq-value">{{ rq.puesto }}</div>
-
-        <div class="rq-label">PERSONAL NECESARIO:</div>
-        <div class="rq-value">{{ rq.cantidad }}</div>
-
-        <div class="rq-label">ESTADO:</div>
-        <div class="rq-value">
-          <span class="status-badge" [class.status-no-apto]="rq.estado === 'CERRADO'">
-            {{ rq.estado }}
-          </span>
-        </div>
-
-        <div class="rq-label">INICIO LABORES:</div>
-        <div class="rq-value">{{ rq.fechaIngreso }}</div>
-
-        <div class="rq-label">INICIO CAPACITACIÓN:</div>
-        <div class="rq-value">{{ rq.fechaInicioCapacitacion }}</div>
-
-        <div class="rq-label">FIN CAPACITACIÓN:</div>
-        <div class="rq-value">{{ rq.fechaFinCapacitacion }}</div>
-      </div>
-
-      <div class="rq-comments">
-        <div class="rq-label">COMENTARIOS:</div>
-        <div class="rq-value">{{ rq.comentarios || 'SIN COMENTARIOS' }}</div>
-      </div>
-    </div>
-
-    <div class="rq-actions">
-      <button class="btn-action" (click)="copyApplyLink()">Copiar link</button>
-      <button class="btn-action" (click)="openApplyLink()">Ver link</button>
-    </div>
-  </div>
-
-  <p *ngIf="message" class="message">{{ message }}</p>
-
-  <app-candidatos-listado
-    *ngIf="!selectedCandidate"
-    [candidatos]="getAllCandidates()"
-    (verDetalle)="verDetallePostulante($event)"
-  >
-  </app-candidatos-listado>
-
-  <div *ngIf="selectedCandidate" class="detalle-completo">
-    <button class="btn-back" title="Volver a lista de candidatos" (click)="cerrarDetalle()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<section *ngIf="rq; else noRq" class="reclutamiento-candidatos-page">
+  <header class="page-head">
+    <button class="btn-back" title="Volver a reclutamiento" [routerLink]="['/reclutamiento']">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
         <path
           d="M15 18L9 12L15 6"
           stroke="currentColor"
@@ -76,74 +12,192 @@
       </svg>
     </button>
 
-    <h3>Datos del Postulante</h3>
+    <div class="page-head-text">
+      <span class="eyebrow">Gestión de postulantes</span>
+      <h2>Requerimiento {{ rq.codigo }}</h2>
+      <p>Valida requisitos, revisa entrevistas y consulta los CV registrados.</p>
+    </div>
+  </header>
 
-    <div class="postulante-card">
-      <div class="postulante-grid">
-        <div class="postulante-label">DNI:</div>
-        <div class="postulante-value">{{ selectedCandidate.dni || 'No disponible' }}</div>
-
-        <div class="postulante-label">Nombre:</div>
-        <div class="postulante-value">{{ selectedCandidate.nombre }}</div>
-
-        <div class="postulante-label">Apellido:</div>
-        <div class="postulante-value">{{ selectedCandidate.apellido }}</div>
-
-        <div class="postulante-label">Correo:</div>
-        <div class="postulante-value">{{ selectedCandidate.correo || 'No disponible' }}</div>
-
-        <div class="postulante-label">Teléfono:</div>
-        <div class="postulante-value">{{ selectedCandidate.telefono || 'No disponible' }}</div>
-
-        <div class="postulante-label">Requisito:</div>
-        <div class="postulante-value">
-          <span class="status-badge" [class.status-no-cumple]="!selectedCandidate.apto">
-            {{ selectedCandidate.apto ? 'Cumple' : 'No cumple' }}
-          </span>
-        </div>
-
-        <div class="postulante-label">Entrevista:</div>
-        <div class="postulante-value">
-          <span class="status-badge" [class.status-no-apto]="!selectedCandidate.entrevistaAprobada">
-            {{ selectedCandidate.entrevistaAprobada ? 'Apto' : 'No apto' }}
-          </span>
-        </div>
-
-        <div class="postulante-label">Medio preferido:</div>
-        <div class="postulante-value">
-          <span class="status-badge" [class.status-whatsapp]="selectedCandidate.medioPreferido === 'whatsapp'">
-            {{ getMedioPreferidoLabel(selectedCandidate.medioPreferido) }}
-          </span>
-        </div>
-
-        <div class="postulante-label">Contratar:</div>
-        <div class="postulante-value">
-          <span class="status-badge" [class.status-no-apto]="!selectedCandidate.contratar">
-            {{ selectedCandidate.contratar ? 'Sí' : 'No' }}
-          </span>
-        </div>
+  <section class="rq-card">
+    <div class="rq-card-top">
+      <div>
+        <span class="rq-code">{{ rq.codigo }}</span>
+        <h3>{{ rq.campaign }}</h3>
+        <p>{{ rq.puesto }}</p>
       </div>
 
-      <div class="cv-section">
-        <div class="postulante-label">CV:</div>
-        <div class="postulante-value">
-          <button
-            *ngIf="selectedCandidate.cvUrl"
-            class="btn-cv"
-            type="button"
-            (click)="openCv(selectedCandidate.cvUrl)"
-          >
-            Ver CV
-          </button>
+      <span class="badge-state" [class.closed]="rq.estado === 'CERRADO'">
+        {{ rq.estado }}
+      </span>
+    </div>
 
-          <span *ngIf="!selectedCandidate.cvUrl" class="status-badge status-cv-pending">
-            CV pendiente
-          </span>
-        </div>
+    <div class="rq-metrics">
+      <div class="metric-tile">
+        <span>Personal requerido</span>
+        <strong>{{ rq.cantidad }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Postulantes</span>
+        <strong>{{ getTotalCandidatos() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Cumplen requisito</span>
+        <strong>{{ getCandidatosAptos() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Entrevista apta</span>
+        <strong>{{ getEntrevistasAprobadas() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Contratados</span>
+        <strong>{{ getContratados() }}</strong>
       </div>
     </div>
-  </div>
-</div>
+
+    <div class="rq-details">
+      <div class="detail-pill">
+        <span>Inicio labores</span>
+        <strong>{{ rq.fechaIngreso }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Inicio capacitación</span>
+        <strong>{{ rq.fechaInicioCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Fin capacitación</span>
+        <strong>{{ rq.fechaFinCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Días</span>
+        <strong>{{ rq.diasCapacitacion }}</strong>
+      </div>
+    </div>
+
+    <div class="rq-footer">
+      <div class="rq-comments">
+        <span>Comentarios</span>
+        <p>{{ rq.comentarios || 'Sin comentarios registrados.' }}</p>
+      </div>
+
+      <div class="rq-actions">
+        <button type="button" class="btn-action ghost" (click)="copyApplyLink()">
+          Copiar link
+        </button>
+
+        <button type="button" class="btn-action" (click)="openApplyLink()">
+          Ver formulario
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+  <app-candidatos-listado
+    *ngIf="!selectedCandidate"
+    [candidatos]="getAllCandidates()"
+    (verDetalle)="verDetallePostulante($event)"
+  >
+  </app-candidatos-listado>
+
+  <section *ngIf="selectedCandidate" class="candidate-detail">
+    <header class="detail-head">
+      <button class="btn-back" title="Volver a lista de candidatos" (click)="cerrarDetalle()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M15 18L9 12L15 6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+
+      <div>
+        <span class="eyebrow">Detalle del postulante</span>
+        <h3>Ficha del candidato</h3>
+      </div>
+    </header>
+
+    <article class="candidate-card">
+      <div class="candidate-main">
+        <div class="candidate-avatar">
+          {{ selectedCandidate.nombre.charAt(0) }}{{ selectedCandidate.apellido.charAt(0) }}
+        </div>
+
+        <div class="candidate-identity">
+          <h3>{{ selectedCandidate.nombre }} {{ selectedCandidate.apellido }}</h3>
+          <p>DNI {{ selectedCandidate.dni || 'No disponible' }}</p>
+        </div>
+
+        <div class="candidate-status">
+          <span class="badge-state" [class.danger]="!selectedCandidate.apto">
+            {{ selectedCandidate.apto ? 'Cumple requisito' : 'No cumple requisito' }}
+          </span>
+
+          <span class="badge-state" [class.danger]="!selectedCandidate.entrevistaAprobada">
+            {{ selectedCandidate.entrevistaAprobada ? 'Entrevista apta' : 'Entrevista no apta' }}
+          </span>
+
+          <span class="badge-state" [class.danger]="!selectedCandidate.contratar">
+            {{ selectedCandidate.contratar ? 'Contratar' : 'No contratar' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="candidate-grid">
+        <div class="candidate-field">
+          <span>Correo</span>
+          <strong>{{ selectedCandidate.correo || 'No disponible' }}</strong>
+        </div>
+
+        <div class="candidate-field">
+          <span>Teléfono</span>
+          <strong>{{ selectedCandidate.telefono || 'No disponible' }}</strong>
+        </div>
+
+        <div class="candidate-field">
+          <span>Medio preferido</span>
+          <strong>{{ getMedioPreferidoLabel(selectedCandidate.medioPreferido) }}</strong>
+        </div>
+
+        <div class="candidate-field">
+          <span>Comentarios</span>
+          <strong>{{ selectedCandidate.comentarios || 'Sin comentarios.' }}</strong>
+        </div>
+      </div>
+
+      <div class="cv-panel">
+        <div>
+          <span>Currículum vitae</span>
+          <p>Enlace registrado por el postulante en Google Drive.</p>
+        </div>
+
+        <button
+          *ngIf="selectedCandidate.cvUrl"
+          class="btn-action"
+          type="button"
+          (click)="openCv(selectedCandidate.cvUrl)"
+        >
+          Ver CV
+        </button>
+
+        <span *ngIf="!selectedCandidate.cvUrl" class="badge-state muted">
+          CV pendiente
+        </span>
+      </div>
+    </article>
+  </section>
+</section>
 
 <ng-template #noRq>
   <div class="no-rq">

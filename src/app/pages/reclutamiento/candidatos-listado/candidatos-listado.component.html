@@ -1,59 +1,80 @@
-<div class="candidatos-container">
-  <div class="header">
-    <h2>Postulantes</h2>
-  </div>
+<section class="candidatos-panel">
+  <header class="list-head">
+    <div>
+      <span class="eyebrow">Postulantes registrados</span>
+      <h2>Listado de candidatos</h2>
+    </div>
 
-  <div class="filtros">
+    <span class="total-chip">
+      {{ candidatosOriginales.length }} postulantes
+    </span>
+  </header>
+
+  <div class="filter-row">
     <button
-      class="btn-filter"
+      class="filter-chip"
       [class.active]="filtroActual === null"
       type="button"
       (click)="aplicarFiltro(null)"
     >
-      Todos ({{ candidatosOriginales.length }})
+      Todos
+      <strong>{{ candidatosOriginales.length }}</strong>
     </button>
 
     <button
-      class="btn-filter"
+      class="filter-chip"
       [class.active]="filtroActual === 'apto-si'"
       type="button"
       (click)="aplicarFiltro('apto-si')"
     >
-      Cumplen Requisito ({{ contarApto(true) }})
+      Cumplen
+      <strong>{{ contarApto(true) }}</strong>
     </button>
 
     <button
-      class="btn-filter"
+      class="filter-chip"
       [class.active]="filtroActual === 'apto-no'"
       type="button"
       (click)="aplicarFiltro('apto-no')"
     >
-      No Cumplen Requisito ({{ contarApto(false) }})
+      No cumplen
+      <strong>{{ contarApto(false) }}</strong>
     </button>
 
     <button
-      class="btn-filter"
+      class="filter-chip"
       [class.active]="filtroActual === 'entrevista-si'"
       type="button"
       (click)="aplicarFiltro('entrevista-si')"
     >
-      Entrevista Aprobada ({{ contarEntrevista(true) }})
+      Entrevista apta
+      <strong>{{ contarEntrevista(true) }}</strong>
     </button>
 
     <button
-      class="btn-filter"
+      class="filter-chip"
       [class.active]="filtroActual === 'entrevista-no'"
       type="button"
       (click)="aplicarFiltro('entrevista-no')"
     >
-      Entrevista No Aprobada ({{ contarEntrevista(false) }})
+      No apta
+      <strong>{{ contarEntrevista(false) }}</strong>
     </button>
   </div>
 
-  <div class="tabla-container">
+  <div class="table-shell">
     <div *ngIf="cargando" class="spinner">Cargando...</div>
 
     <table class="candidatos-table" *ngIf="!cargando">
+      <colgroup>
+        <col class="col-dni" />
+        <col class="col-name" />
+        <col class="col-name" />
+        <col class="col-select" />
+        <col class="col-select" />
+        <col class="col-action" />
+      </colgroup>
+
       <thead>
         <tr>
           <th (click)="sortBy('dni')" class="sortable-header">
@@ -79,13 +100,13 @@
 
           <th>Requisito</th>
           <th>Entrevista</th>
-          <th>Acciones</th>
+          <th>Acción</th>
         </tr>
       </thead>
 
       <tbody>
         <tr *ngFor="let candidato of candidatosFiltrados">
-          <td>{{ candidato.dni || '—' }}</td>
+          <td class="dni-cell">{{ candidato.dni || '—' }}</td>
           <td>{{ candidato.nombre }}</td>
           <td>{{ candidato.apellido }}</td>
 
@@ -114,7 +135,7 @@
 
           <td>
             <button
-              class="btn-action"
+              class="detail-button"
               type="button"
               (click)="verDetalleCandidato(candidato)"
             >
@@ -126,7 +147,7 @@
     </table>
 
     <div *ngIf="candidatosFiltrados.length === 0 && !cargando" class="sin-resultados">
-      No hay candidatos que mostrar
+      No hay candidatos que mostrar.
     </div>
   </div>
-</div>
+</section>

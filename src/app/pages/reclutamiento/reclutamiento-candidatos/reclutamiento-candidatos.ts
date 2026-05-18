@@ -41,7 +41,11 @@ export class ReclutamientoCandidatos implements OnInit {
     const link = `${window.location.origin}/postular/${this.rq.codigo}`;
 
     navigator.clipboard.writeText(link).then(() => {
-      this.message = 'Link copiado al portapapeles';
+      this.message = 'Link de postulación copiado al portapapeles.';
+
+      setTimeout(() => {
+        this.message = '';
+      }, 3000);
     });
   }
 
@@ -72,6 +76,24 @@ export class ReclutamientoCandidatos implements OnInit {
 
   getAllCandidates(): Postulante[] {
     return this.rq?.candidatos || [];
+  }
+
+  getTotalCandidatos(): number {
+    return this.getAllCandidates().length;
+  }
+
+  getCandidatosAptos(): number {
+    return this.getAllCandidates().filter((candidate) => candidate.apto).length;
+  }
+
+  getEntrevistasAprobadas(): number {
+    return this.getAllCandidates().filter(
+      (candidate) => candidate.entrevistaAprobada
+    ).length;
+  }
+
+  getContratados(): number {
+    return this.getAllCandidates().filter((candidate) => candidate.contratar).length;
   }
 
   getMedioPreferidoLabel(medio: string): string {

@@ -1,82 +1,107 @@
-/* Sidebar Navbar - Design System Quantia */
+/* =========================================================
+   SIDEBAR NAVBAR - QUANTIA
+   ========================================================= */
+
+:host {
+  display: block;
+}
 
 .navbar {
-  display: flex;
-  flex-direction: column;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 50;
+
   width: 250px;
   height: 100vh;
-  padding: 24px 16px;
-  gap: 24px;
-  background-color: var(--sidebar-bg);
-  color: white;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
+  padding: 22px 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+
+  background:
+    linear-gradient(180deg, rgba(91, 44, 131, 0.92), rgba(46, 26, 71, 1)),
+    var(--sidebar-bg);
+  color: #ffffff;
+
   overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 10px 0 28px rgba(46, 26, 71, 0.15);
+
   transition: width 0.25s ease, padding 0.25s ease;
-  box-sizing: border-box;
-  z-index: 10;
 }
 
 .navbar.collapsed {
   width: 80px;
-  padding: 16px 12px;
+  padding: 18px 12px;
 }
 
-/* Navbar Brand (Logo) */
+/* =========================================================
+   BRAND
+   ========================================================= */
+
 .navbar-brand {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  position: relative;
-  z-index: 1;
+  min-height: 46px;
 }
 
 .navbar.collapsed .navbar-brand {
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .brand-logo {
-  max-width: 150px;
+  display: block;
   height: auto;
   object-fit: contain;
 }
 
-.navbar.collapsed .brand-logo {
-  max-width: 40px;
-  height: auto;
+.brand-logo-full {
+  max-width: 150px;
+  max-height: 42px;
 }
 
-/* Toggle Button */
+.brand-logo-compact {
+  max-width: 40px;
+  max-height: 40px;
+}
+
+/* =========================================================
+   TOGGLE
+   ========================================================= */
+
 .navbar-toggle {
-  border: none;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.7);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
   display: grid;
   place-items: center;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  flex: 0 0 auto;
+
+  width: 36px;
+  height: 36px;
   padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.78);
+
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
 .navbar-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .toggle-icon {
   display: inline-flex;
   width: 20px;
   height: 20px;
-  color: inherit;
 }
 
 .toggle-icon svg,
@@ -90,49 +115,62 @@
   transform: rotate(180deg);
 }
 
-/* Navbar Menu (Navigation Links) */
+/* =========================================================
+   MENU
+   ========================================================= */
+
 .navbar-menu {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 8px;
-  position: relative;
-  z-index: 1;
-  flex: 1;
 }
 
 .navbar-link {
+  position: relative;
+
   display: flex;
   align-items: center;
   gap: 12px;
+
+  min-height: 42px;
   padding: 10px 12px;
-  border-radius: 8px;
-  color: #D1D5DB;
-  text-decoration: none;
-  font-weight: 500;
+  border-radius: 14px;
+
+  color: rgba(255, 255, 255, 0.76);
   font-size: 14px;
-  transition: all 0.2s ease;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
 .navbar-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+  transform: translateX(2px);
 }
 
 .navbar-link.active {
-  background-color: var(--primary-fuchsia);
-  color: white;
-  font-weight: 600;
+  background: var(--primary-fuchsia);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(214, 51, 132, 0.28);
 }
 
 .navbar.collapsed .navbar-link {
   justify-content: center;
-  padding: 10px 0;
+  padding: 10px;
+}
+
+.navbar.collapsed .navbar-link:hover {
+  transform: translateX(0);
 }
 
 .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   width: 24px;
   height: 24px;
   flex-shrink: 0;
@@ -140,34 +178,42 @@
 
 .label {
   white-space: nowrap;
-  transition: opacity 0.2s ease;
 }
 
 .navbar.collapsed .label {
   display: none;
 }
 
-/* Navbar User Section (Footer) */
+/* =========================================================
+   USER FOOTER
+   ========================================================= */
+
 .navbar-user {
   margin-top: auto;
+  padding-top: 16px;
+
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 1;
+  gap: 10px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .navbar.collapsed .navbar-user {
   align-items: center;
-  gap: 8px;
 }
 
-.user-info,
-.user-role {
-  transition: opacity 0.2s ease;
+.user-info {
+  color: #ffffff;
   font-size: 13px;
+  font-weight: 800;
+}
+
+.user-role {
+  margin-top: -6px;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .navbar.collapsed .user-info,
@@ -175,112 +221,165 @@
   display: none;
 }
 
-.user-info {
-  font-weight: 600;
-  color: #ffffff;
-}
+/* =========================================================
+   NAVBAR BUTTONS
+   ========================================================= */
 
-.user-role {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
-}
-
-/* Navbar Buttons */
 .navbar-button {
   width: 100%;
-  padding: 10px 12px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 13px;
+  min-height: 40px;
+  padding: 9px 11px;
+
   display: inline-flex;
   align-items: center;
-  gap: 10px;
   justify-content: flex-start;
-  transition: all 0.2s ease;
+  gap: 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
 .navbar-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .navbar.collapsed .navbar-button {
+  width: 42px;
   justify-content: center;
-  padding: 10px 0;
-  width: auto;
+  padding: 9px;
 }
 
 .navbar-button.logout {
-  background: rgba(239, 68, 68, 0.2);
-  color: #fca5a5;
-}
-
-.navbar-button.logout:hover {
-  background: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.16);
   color: #fecaca;
 }
 
-/* Responsive */
+.navbar-button.logout:hover {
+  background: rgba(239, 68, 68, 0.26);
+  color: #ffffff;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
 @media (max-width: 960px) {
   .navbar {
+    position: relative;
+    inset: auto;
+
     width: 100%;
-    min-height: 0;
     height: auto;
+    min-height: 0;
+    padding: 14px 16px;
+
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
     align-items: center;
-    position: relative;
-    top: auto;
-    padding: 16px;
-    gap: 16px;
+    gap: 12px;
+
+    border-radius: 0 0 22px 22px;
   }
 
   .navbar.collapsed {
     width: 100%;
+    padding: 14px 16px;
   }
 
   .navbar-brand {
     width: 100%;
+  }
+
+  .navbar.collapsed .navbar-brand {
+    flex-direction: row;
     justify-content: space-between;
+  }
+
+  .brand-logo-full {
+    max-width: 140px;
   }
 
   .navbar-menu {
     width: 100%;
+    flex: none;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
-    flex: none;
   }
 
-  .navbar-link {
-    flex: 1;
-    min-width: 100px;
+  .navbar-link,
+  .navbar.collapsed .navbar-link {
+    flex: 1 1 150px;
     justify-content: center;
     padding: 10px 12px;
   }
 
+  .navbar.collapsed .label {
+    display: inline;
+  }
+
   .navbar-user {
     width: 100%;
-    border-top: none;
     padding-top: 0;
+    border-top: none;
+
     flex-direction: row;
-    align-items: center;
     justify-content: flex-end;
-    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .navbar.collapsed .navbar-user {
+    align-items: center;
   }
 
   .navbar-user .user-info,
-  .navbar-user .user-role {
+  .navbar-user .user-role,
+  .navbar.collapsed .user-info,
+  .navbar.collapsed .user-role {
     display: none;
   }
 
-  .navbar-button {
+  .navbar-button,
+  .navbar.collapsed .navbar-button {
     width: auto;
+    min-height: 38px;
     padding: 8px 12px;
+  }
+
+  .navbar.collapsed .navbar-button .label {
+    display: inline;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar-menu {
+    flex-direction: column;
+  }
+
+  .navbar-link,
+  .navbar.collapsed .navbar-link {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .navbar-user {
+    justify-content: stretch;
+  }
+
+  .navbar-button,
+  .navbar.collapsed .navbar-button {
+    width: 100%;
+    justify-content: center;
   }
 }
