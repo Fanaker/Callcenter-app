@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+
 import { RqService } from '../../services/rq';
-import { Postulante } from '../../models/postulante.model';
+import { Rq } from '../../models/rq.model';
 
 @Component({
   selector: 'app-postular',
@@ -13,19 +14,21 @@ import { Postulante } from '../../models/postulante.model';
   styleUrl: './postular.css'
 })
 export class Postular {
-  rq: any;
+  rq: Rq | undefined;
+
   nombre = '';
   apellido = '';
   dni = '';
   correo = '';
   telefono = '';
   medioPreferido: 'whatsapp' | 'llamada' | 'email' = 'whatsapp';
-  comentarios = '';
-  cvName = '';
   cvUrl = '';
+  comentarios = '';
+
   message = '';
   errorDni = '';
   errorEmail = '';
+  errorCvUrl = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -35,49 +38,87 @@ export class Postular {
     this.rq = this.rqService.getByCodigo(codigo);
   }
 
-  onFileChange(event: any) {
-    const file = event.target.files?.[0];
-    if (file) {
-      this.cvName = file.name;
-      this.cvUrl = file.name;
-    }
+  get formularioBloqueado(): boolean {
+    return !this.rq || this.rq.estado === 'CERRADO';
   }
 
-  validateDni() {
-    if (this.dni && this.dni.length !== 8) {
-      this.errorDni = 'El DNI debe tener 8 dígitos';
+  validateDni(): void {
+    const dniRegex = /^[0-9]{8}$/;
+
+    if (this.dni && !dniRegex.test(this.dni)) {
+      this.errorDni = 'El DNI debe tener exactamente 8 dígitos numéricos.';
     } else {
       this.errorDni = '';
     }
   }
 
-  validateEmail() {
+  validateEmail(): void {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (this.correo && !emailRegex.test(this.correo)) {
-      this.errorEmail = 'El correo debe ser válido';
+      this.errorEmail = 'El correo debe ser válido.';
     } else {
       this.errorEmail = '';
     }
   }
 
+  validateCvUrl(): void {
+    const url = this.cvUrl.trim();
+
+    if (!url) {
+      this.errorCvUrl = 'Debes ingresar el enlace de tu CV.';
+      return;
+    }
+
+    if (!url.startsWith('https://')) {
+      this.errorCvUrl = 'El enlace del CV debe iniciar con https://';
+      return;
+    }
+
+    if (!url.includes('drive.google.com')) {
+      this.errorCvUrl = 'El enlace debe ser de Google Drive.';
+      return;
+    }
+
+    this.errorCvUrl = '';
+  }
+
   isFormValid(): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const dniRegex = /^[0-9]{8}$/;
+    const cvUrl = this.cvUrl.trim();
+
     return (
+      !!this.rq &&
+      this.rq.estado === 'ABIERTO' &&
       this.nombre.trim() !== '' &&
       this.apellido.trim() !== '' &&
-      this.dni.trim().length === 8 &&
-      /^[0-9]{8}$/.test(this.dni) &&
+      dniRegex.test(this.dni) &&
       emailRegex.test(this.correo) &&
       this.telefono.trim() !== '' &&
+      cvUrl !== '' &&
+      cvUrl.startsWith('https://') &&
+      cvUrl.includes('drive.google.com') &&
       !this.errorDni &&
-      !this.errorEmail
+      !this.errorEmail &&
+      !this.errorCvUrl
     );
   }
 
-  enviar() {
+  enviar(): void {
     if (!this.rq) {
+      alert('No se encontró el requerimiento.');
       return;
     }
+
+    if (this.rq.estado === 'CERRADO') {
+      alert('Este requerimiento ya está cerrado. No se pueden registrar más postulantes.');
+      return;
+    }
+
+    this.validateDni();
+    this.validateEmail();
+    this.validateCvUrl();
 
     if (!this.isFormValid()) {
       alert('Completa todos los campos obligatorios correctamente.');
@@ -85,27 +126,28 @@ export class Postular {
     }
 
     this.rqService.addCandidate(this.rq.codigo, {
-      nombre: this.nombre,
-      apellido: this.apellido,
-      dni: this.dni,
-      correo: this.correo,
-      telefono: this.telefono,
+      nombre: this.nombre.trim(),
+      apellido: this.apellido.trim(),
+      dni: this.dni.trim(),
+      correo: this.correo.trim(),
+      telefono: this.telefono.trim(),
       medioPreferido: this.medioPreferido,
-      comentarios: this.comentarios,
-      cvUrl: this.cvUrl
+      cvUrl: this.cvUrl.trim(),
+      comentarios: this.comentarios.trim()
     });
 
     this.message = 'Tu postulación se envió correctamente. Gracias por postular.';
+
     this.nombre = '';
     this.apellido = '';
     this.dni = '';
     this.correo = '';
     this.telefono = '';
     this.medioPreferido = 'whatsapp';
-    this.comentarios = '';
-    this.cvName = '';
     this.cvUrl = '';
+    this.comentarios = '';
     this.errorDni = '';
     this.errorEmail = '';
+    this.errorCvUrl = '';
   }
 }
