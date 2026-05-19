@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Candidato } from '../models/candidato.model';
 import { ReclutamientoValidadorService } from './reclutamiento-validador.service';
+import { environment } from '../../../../../environments/environment';
 
 /**
  * Servicio de Candidatos
@@ -13,7 +14,7 @@ import { ReclutamientoValidadorService } from './reclutamiento-validador.service
   providedIn: 'root'
 })
 export class CandidatoService {
-  private apiUrl = 'http://localhost:3000/api/candidatos'; // Ajusta según tu backend
+  private apiUrl = `${environment.apiUrl}/api/candidatos`;
 
   private candidatosSubject = new BehaviorSubject<Candidato[]>([]);
   public candidatos$ = this.candidatosSubject.asObservable();

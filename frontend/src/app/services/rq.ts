@@ -5,12 +5,13 @@ import { Rq } from '../models/rq.model';
 import { Postulante } from '../models/postulante.model';
 import { Campania } from '../models/campania.model';
 import { Puesto } from '../models/puesto.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RqService {
-  private apiBaseUrl = 'http://localhost:3000/api';
+  private apiBaseUrl = `${environment.apiUrl}/api`;
   private apiUrl = `${this.apiBaseUrl}/requerimientos`;
   private rqs: Rq[] = [];
 
