@@ -42,3 +42,11 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Angular / Node local files
+node_modules/
+dist/
+.angular/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
