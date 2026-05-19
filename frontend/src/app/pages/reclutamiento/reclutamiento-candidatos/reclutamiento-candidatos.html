@@ -1,0 +1,206 @@
+<section *ngIf="rq; else noRq" class="reclutamiento-candidatos-page">
+  <header class="page-head">
+    <button class="btn-back" title="Volver a reclutamiento" [routerLink]="['/reclutamiento']">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M15 18L9 12L15 6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+    <div class="page-head-text">
+      <span class="eyebrow">Gestión de postulantes</span>
+      <h2>Requerimiento {{ rq.codigo }}</h2>
+      <p>Valida requisitos, revisa entrevistas y consulta los CV registrados.</p>
+    </div>
+  </header>
+
+  <section class="rq-card">
+    <div class="rq-card-top">
+      <div>
+        <span class="rq-code">{{ rq.codigo }}</span>
+        <h3>{{ rq.campaign }}</h3>
+        <p>{{ rq.puesto }}</p>
+      </div>
+
+      <span class="badge-state" [class.closed]="rq.estado === 'CERRADO'">
+        {{ rq.estado }}
+      </span>
+    </div>
+
+    <div class="rq-metrics">
+      <div class="metric-tile">
+        <span>Personal requerido</span>
+        <strong>{{ rq.cantidad }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Postulantes</span>
+        <strong>{{ getTotalCandidatos() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Cumplen requisito</span>
+        <strong>{{ getCandidatosAptos() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Entrevista apta</span>
+        <strong>{{ getEntrevistasAprobadas() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Contratados</span>
+        <strong>{{ getContratados() }}</strong>
+      </div>
+    </div>
+
+    <div class="rq-details">
+      <div class="detail-pill">
+        <span>Inicio labores</span>
+        <strong>{{ rq.fechaIngreso }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Inicio capacitación</span>
+        <strong>{{ rq.fechaInicioCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Fin capacitación</span>
+        <strong>{{ rq.fechaFinCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Días</span>
+        <strong>{{ rq.diasCapacitacion }}</strong>
+      </div>
+    </div>
+
+    <div class="rq-footer">
+      <div class="rq-comments">
+        <span>Comentarios</span>
+        <p>{{ rq.comentarios || 'Sin comentarios registrados.' }}</p>
+      </div>
+
+      <div class="rq-actions">
+        <button type="button" class="btn-action ghost" (click)="copyApplyLink()">
+          Copiar link
+        </button>
+
+        <button type="button" class="btn-action" (click)="openApplyLink()">
+          Ver formulario
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+  <app-candidatos-listado
+    *ngIf="!selectedCandidate"
+    [candidatos]="getAllCandidates()"
+    (verDetalle)="verDetallePostulante($event)"
+  >
+  </app-candidatos-listado>
+
+  <section *ngIf="selectedCandidate" class="candidate-detail">
+    <header class="detail-head">
+      <button class="btn-back" title="Volver a lista de candidatos" (click)="cerrarDetalle()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M15 18L9 12L15 6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+
+      <div>
+        <span class="eyebrow">Detalle del postulante</span>
+        <h3>Ficha del candidato</h3>
+      </div>
+    </header>
+
+    <article class="candidate-card">
+      <div class="candidate-main">
+        <div class="candidate-avatar">
+          {{ selectedCandidate.nombre.charAt(0) }}{{ selectedCandidate.apellido.charAt(0) }}
+        </div>
+
+        <div class="candidate-identity">
+          <h3>{{ selectedCandidate.nombre }} {{ selectedCandidate.apellido }}</h3>
+          <p>DNI {{ selectedCandidate.dni || 'No disponible' }}</p>
+        </div>
+
+        <div class="candidate-status">
+          <span class="badge-state" [class.danger]="!selectedCandidate.apto">
+            {{ selectedCandidate.apto ? 'Cumple requisito' : 'No cumple requisito' }}
+          </span>
+
+          <span class="badge-state" [class.danger]="!selectedCandidate.entrevistaAprobada">
+            {{ selectedCandidate.entrevistaAprobada ? 'Entrevista apta' : 'Entrevista no apta' }}
+          </span>
+
+          <span class="badge-state" [class.danger]="!selectedCandidate.contratar">
+            {{ selectedCandidate.contratar ? 'Contratar' : 'No contratar' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="candidate-grid">
+        <div class="candidate-field">
+          <span>Correo</span>
+          <strong>{{ selectedCandidate.correo || 'No disponible' }}</strong>
+        </div>
+
+        <div class="candidate-field">
+          <span>Teléfono</span>
+          <strong>{{ selectedCandidate.telefono || 'No disponible' }}</strong>
+        </div>
+
+        <div class="candidate-field">
+          <span>Medio preferido</span>
+          <strong>{{ getMedioPreferidoLabel(selectedCandidate.medioPreferido) }}</strong>
+        </div>
+
+        <div class="candidate-field">
+          <span>Comentarios</span>
+          <strong>{{ selectedCandidate.comentarios || 'Sin comentarios.' }}</strong>
+        </div>
+      </div>
+
+      <div class="cv-panel">
+        <div>
+          <span>Currículum vitae</span>
+          <p>Enlace registrado por el postulante en Google Drive.</p>
+        </div>
+
+        <button
+          *ngIf="selectedCandidate.cvUrl"
+          class="btn-action"
+          type="button"
+          (click)="openCv(selectedCandidate.cvUrl)"
+        >
+          Ver CV
+        </button>
+
+        <span *ngIf="!selectedCandidate.cvUrl" class="badge-state muted">
+          CV pendiente
+        </span>
+      </div>
+    </article>
+  </section>
+</section>
+
+<ng-template #noRq>
+  <div class="no-rq">
+    <p>RQ no encontrada.</p>
+  </div>
+</ng-template>

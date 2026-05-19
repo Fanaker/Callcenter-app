@@ -1,0 +1,149 @@
+<div class="form-container">
+  <h2>{{ esEdicion ? 'Editar Candidato' : 'Nuevo Candidato' }}</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+
+    <!-- Datos Personales -->
+    <div class="seccion">
+      <h3>Datos Personales</h3>
+
+      <div class="form-field">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" formControlName="nombre" required>
+        <div *ngIf="formulario.get('nombre')?.hasError('required') && formulario.get('nombre')?.touched" class="error">
+          El nombre es requerido
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="apellido">Apellido</label>
+        <input id="apellido" type="text" formControlName="apellido" required>
+        <div *ngIf="formulario.get('apellido')?.hasError('required') && formulario.get('apellido')?.touched" class="error">
+          El apellido es requerido
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" required>
+        <div *ngIf="formulario.get('email')?.hasError('required') && formulario.get('email')?.touched" class="error">
+          El email es requerido
+        </div>
+        <div *ngIf="formulario.get('email')?.hasError('email') && formulario.get('email')?.touched" class="error">
+          Email inválido
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" type="text" formControlName="telefono" required>
+        <div *ngIf="formulario.get('telefono')?.hasError('required') && formulario.get('telefono')?.touched" class="error">
+          El teléfono es requerido
+        </div>
+      </div>
+    </div>
+
+    <!-- Información Laboral -->
+    <div class="seccion">
+      <h3>Información Laboral</h3>
+
+      <div class="form-field">
+        <label for="puesto">Puesto Solicitado</label>
+        <select id="puesto" formControlName="puesto" required>
+          <option value="">Seleccionar...</option>
+          <option value="Developer">Developer</option>
+          <option value="QA">QA</option>
+          <option value="Product Manager">Product Manager</option>
+          <option value="Diseñador">Diseñador</option>
+        </select>
+        <div *ngIf="formulario.get('puesto')?.hasError('required') && formulario.get('puesto')?.touched" class="error">
+          El puesto es requerido
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="fechaPostulacion">Fecha de Postulación</label>
+        <input id="fechaPostulacion" type="date" formControlName="fechaPostulacion" required>
+      </div>
+    </div>
+
+    <!-- Evaluación APTO -->
+    <div class="seccion evaluacion">
+      <h3>Evaluación de Aptitud</h3>
+
+      <div class="form-field">
+        <label for="apto">¿Apto?</label>
+        <select id="apto" formControlName="apto" (change)="onAptoChange()">
+          <option [value]="null">No evaluado</option>
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Evaluación ENTREVISTA -->
+    <div class="seccion evaluacion">
+      <h3>Resultado de Entrevista</h3>
+
+      <div class="form-field">
+        <label for="entrevista">¿Pasó la entrevista?</label>
+        <select id="entrevista" formControlName="entrevista" [disabled]="!puedeMarcarEntrevista()" (change)="onEntrevistaChange()">
+          <option [value]="null">No evaluado</option>
+          <option value="si" [disabled]="!puedeMarcarEntrevista()">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div *ngIf="!puedeMarcarEntrevista()" class="advertencia">
+        <strong>⚠️ Restricción:</strong> Solo se puede marcar "Sí" en entrevista si Apto es "Sí"
+      </div>
+
+      <div *ngIf="formulario.get('entrevista')?.value === 'si'" class="form-field">
+        <label for="fechaEntrevista">Fecha de Entrevista</label>
+        <input id="fechaEntrevista" type="date" formControlName="fechaEntrevista">
+      </div>
+    </div>
+
+    <!-- Estado -->
+    <div class="seccion">
+      <h3>Estado</h3>
+
+      <div class="form-field">
+        <label for="estado">Estado del Candidato</label>
+        <select id="estado" formControlName="estado">
+          <option value="pendiente">Pendiente</option>
+          <option value="en_evaluacion">En Evaluación</option>
+          <option value="finalizado">Finalizado</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Observaciones -->
+    <div class="seccion">
+      <h3>Observaciones</h3>
+
+      <div class="form-field">
+        <label for="observaciones">Notas Adicionales</label>
+        <textarea id="observaciones" formControlName="observaciones" rows="4"></textarea>
+      </div>
+    </div>
+
+    <!-- Resumen de validación -->
+    <div *ngIf="mostrarResumenValidacion" class="resumen-validacion">
+      <p><strong>Resumen:</strong></p>
+      <p>Apto: {{ formulario.get('apto')?.value || 'No evaluado' }}</p>
+      <p>Entrevista: {{ formulario.get('entrevista')?.value || 'No evaluado' }}</p>
+      <p *ngIf="!puedeMarcarEntrevista()" class="advertencia">
+        El campo de entrevista está deshabilitado hasta que Apto sea "Sí"
+      </p>
+    </div>
+
+    <!-- Acciones -->
+    <div class="acciones">
+      <button type="button" class="btn-secondary" (click)="onCancel()">Cancelar</button>
+      <button type="submit" class="btn-primary" [disabled]="!formulario.valid">
+        {{ esEdicion ? 'Guardar Cambios' : 'Crear Candidato' }}
+      </button>
+    </div>
+  </form>
+</div>

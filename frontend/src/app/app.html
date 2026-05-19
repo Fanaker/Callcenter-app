@@ -1,0 +1,15 @@
+<ng-container *ngIf="shouldShowInternalLayout(); else publicLayout">
+  <div class="app-shell">
+    <app-navbar></app-navbar>
+
+    <main class="app-main">
+      <div class="app-page-shell">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</ng-container>
+
+<ng-template #publicLayout>
+  <router-outlet></router-outlet>
+</ng-template>

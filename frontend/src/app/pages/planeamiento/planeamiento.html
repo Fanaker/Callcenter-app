@@ -1,0 +1,241 @@
+<section class="planeamiento-page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Módulo de planeamiento</span>
+      <h2>Dashboard de estado actual</h2>
+      <p>
+        Monitorea los requerimientos creados, personal solicitado y avance general de postulantes.
+      </p>
+    </div>
+
+    <a [routerLink]="['/planeamiento/crear-rq']" class="btn-primary">
+      Crear requerimiento
+    </a>
+  </header>
+
+  <div class="dashboard">
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M8 6H16M8 10H16M8 14H13M6 3H18C19.1046 3 20 3.89543 20 5V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19V5C4 3.89543 4.89543 3 6 3Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Requerimientos<br />totales</h3>
+      <p>{{ getTotalRQs() }}</p>
+    </div>
+
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Requerimientos<br />activos</h3>
+      <p>{{ getActiveRQs() }}</p>
+    </div>
+
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12ZM5 20C5 16.6863 8.13401 14 12 14C15.866 14 19 16.6863 19 20"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Personal<br />a incorporar</h3>
+      <p>{{ getTotalPersonalRequerido() }}</p>
+    </div>
+
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M16 11C17.6569 11 19 9.65685 19 8C19 6.34315 17.6569 5 16 5M8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11ZM8 14C5.23858 14 3 15.7909 3 18V19H13V18C13 15.7909 10.7614 14 8 14ZM16 14C18.7614 14 21 15.7909 21 18V19H16"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Postulantes<br />totales</h3>
+      <p>{{ getTotalPostulantes() }}</p>
+    </div>
+
+    <div class="metric">
+      <div class="metric-icon-wrap">
+        <svg class="metric-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M8 21H16M12 17V21M7 4H17V10C17 12.7614 14.7614 15 12 15C9.23858 15 7 12.7614 7 10V4ZM5 6H7V9C5.89543 9 5 8.10457 5 7V6ZM17 6H19V7C19 8.10457 18.1046 9 17 9V6Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h3>Trabajadores<br />contratados</h3>
+      <p>{{ getContratados() }}</p>
+    </div>
+  </div>
+
+  <section class="table-section">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Listado</span>
+        <h3>Tabla de requerimientos</h3>
+        <p>Filtra, revisa y ordena los requerimientos registrados por planeamiento.</p>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div class="filter-group">
+        <label>Estado</label>
+        <select title="Filtrar por estado" [(ngModel)]="statusFilter">
+          <option value="todos">Todos</option>
+          <option value="abierto">Abierto</option>
+          <option value="cerrado">Cerrado</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Campaña</label>
+        <select title="Filtrar por campaña" [(ngModel)]="campaignFilter">
+          <option value="">Todas las campañas</option>
+          <option *ngFor="let camp of uniqueCampaigns" [value]="camp">
+            {{ camp }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="no-rqs">
+      <h3>Cargando requerimientos</h3>
+      <p>Consultando la tabla requerimientos.</p>
+    </div>
+
+    <div *ngIf="!loading && error" class="no-rqs">
+      <h3>No se pudo cargar la tabla</h3>
+      <p>{{ error }}</p>
+    </div>
+
+    <div *ngIf="!loading && !error && filteredAndSortedRqs.length > 0; else noRqs" class="rqs-list">
+      <table class="rqs-table">
+        <colgroup>
+          <col class="col-codigo" />
+          <col class="col-campania" />
+          <col class="col-puesto" />
+          <col class="col-cantidad" />
+          <col class="col-fecha" />
+          <col class="col-fecha" />
+          <col class="col-dias" />
+          <col class="col-fecha" />
+          <col class="col-estado" />
+        </colgroup>
+
+        <thead>
+          <tr>
+            <th (click)="sortBy('codigo')">
+              Código
+              <span class="sort-arrow" *ngIf="sortColumn === 'codigo'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('campaign')">
+              Campaña
+              <span class="sort-arrow" *ngIf="sortColumn === 'campaign'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('puesto')">
+              Puesto
+              <span class="sort-arrow" *ngIf="sortColumn === 'puesto'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('cantidad')">
+              Cant.
+              <span class="sort-arrow" *ngIf="sortColumn === 'cantidad'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('fechaInicioCapacitacion')">
+              Inicio<br />capac.
+              <span class="sort-arrow" *ngIf="sortColumn === 'fechaInicioCapacitacion'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('fechaFinCapacitacion')">
+              Fin<br />capac.
+              <span class="sort-arrow" *ngIf="sortColumn === 'fechaFinCapacitacion'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('diasCapacitacion')">
+              Días<br />capac.
+              <span class="sort-arrow" *ngIf="sortColumn === 'diasCapacitacion'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('fechaIngreso')">
+              Fecha<br />ingreso
+              <span class="sort-arrow" *ngIf="sortColumn === 'fechaIngreso'">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            </th>
+
+            <th>Estado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let rq of filteredAndSortedRqs">
+            <td class="codigo-cell">{{ rq.codigo }}</td>
+            <td class="text-wrap">{{ rq.campaign }}</td>
+            <td class="text-wrap">{{ rq.puesto }}</td>
+            <td>{{ rq.cantidad }}</td>
+            <td>{{ rq.fechaInicioCapacitacion }}</td>
+            <td>{{ rq.fechaFinCapacitacion }}</td>
+            <td>{{ rq.diasCapacitacion }}</td>
+            <td>{{ rq.fechaIngreso }}</td>
+            <td>
+              <span class="estado-badge" [class.estado-cerrado]="rq.estado === 'CERRADO'">
+                {{ rq.estado }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noRqs>
+      <div *ngIf="!loading && !error" class="no-rqs">
+        <h3>No hay RQs disponibles</h3>
+        <p>No hay requerimientos en la tabla o no coinciden con los filtros seleccionados.</p>
+      </div>
+    </ng-template>
+  </section>
+</section>

@@ -1,0 +1,479 @@
+/* =========================================================
+   PUBLIC POSTULAR PAGE - QUANTIA
+   ========================================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.public-postular-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(380px, 44%) minmax(0, 1fr);
+  background: var(--bg-page);
+}
+
+/* =========================================================
+   BRAND PANEL
+   ========================================================= */
+
+.brand-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(214, 51, 132, 0.26), transparent 28%),
+    radial-gradient(circle at 80% 82%, rgba(255, 255, 255, 0.08), transparent 26%),
+    linear-gradient(145deg, #2e1a47 0%, #472267 52%, #5b2c83 100%);
+  color: #ffffff;
+}
+
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  top: -120px;
+  right: -110px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.brand-panel::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: -90px;
+  bottom: -110px;
+  border-radius: 50%;
+  background: rgba(214, 51, 132, 0.14);
+}
+
+.brand-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 470px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 34px;
+  text-align: center;
+}
+
+.brand-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.brand-symbol {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.22));
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #f9a8d4;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.brand-copy h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 46px;
+  font-weight: 850;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.brand-copy p {
+  margin: 14px auto 0;
+  max-width: 400px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* =========================================================
+   RQ SUMMARY
+   ========================================================= */
+
+.rq-public-card {
+  width: 100%;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+  text-align: left;
+}
+
+.rq-public-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.rq-public-header span {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rq-public-header strong {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.18);
+  color: #bbf7d0;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.rq-public-body {
+  display: grid;
+  gap: 14px;
+}
+
+.rq-public-body div {
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.rq-public-body span {
+  display: block;
+  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 10px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rq-public-body strong {
+  display: block;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+/* =========================================================
+   FORM PANEL
+   ========================================================= */
+
+.form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 42px;
+  background:
+    radial-gradient(circle at top right, rgba(214, 51, 132, 0.08), transparent 34%),
+    var(--bg-page);
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 760px;
+}
+
+.form-heading {
+  margin-bottom: 22px;
+}
+
+.form-heading .eyebrow {
+  color: var(--primary-fuchsia);
+}
+
+.form-heading h2 {
+  margin: 0;
+  color: var(--purple-dark);
+  font-size: 30px;
+  font-weight: 850;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.form-heading p {
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.postular-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 26px;
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: var(--shadow-md);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.form-group label span {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.postular-form input,
+.postular-form select,
+.postular-form textarea {
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--text-main);
+  font-family: 'Inter', inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.postular-form input:focus,
+.postular-form select:focus,
+.postular-form textarea:focus {
+  border-color: var(--primary-fuchsia);
+  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.12);
+}
+
+.postular-form textarea {
+  min-height: 108px;
+  resize: vertical;
+}
+
+.error-message {
+  margin-top: 2px;
+  color: var(--status-danger-text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   CV CARD
+   ========================================================= */
+
+.cv-card {
+  padding: 18px;
+  border: 1px solid rgba(214, 51, 132, 0.16);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(214, 51, 132, 0.06), rgba(91, 44, 131, 0.04));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cv-copy h3 {
+  margin: 0;
+  color: var(--purple-dark);
+  font-size: 17px;
+  font-weight: 850;
+}
+
+.cv-copy p {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   BUTTONS / MESSAGES
+   ========================================================= */
+
+.btn-submit {
+  min-height: 46px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary-fuchsia);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(214, 51, 132, 0.24);
+  transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: var(--primary-fuchsia-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(214, 51, 132, 0.3);
+}
+
+.btn-submit:disabled {
+  background: #c9c9c9;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.success-message {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(30, 142, 62, 0.2);
+  border-radius: 18px;
+  background: var(--status-active-bg);
+  color: var(--status-active-text);
+  box-shadow: var(--shadow-xs);
+}
+
+.success-message strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.success-message p {
+  color: var(--status-active-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.blocked-card,
+.not-found-card {
+  padding: 24px;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+.blocked-card {
+  border-color: rgba(153, 27, 27, 0.18);
+  background: var(--status-danger-bg);
+  color: var(--status-danger-text);
+}
+
+.blocked-card h3,
+.not-found-card h2 {
+  margin: 0 0 8px 0;
+  color: inherit;
+  font-size: 22px;
+  font-weight: 850;
+}
+
+.blocked-card p,
+.not-found-card p {
+  color: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .public-postular-page {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-panel {
+    min-height: auto;
+    padding: 40px 28px;
+  }
+
+  .brand-content {
+    max-width: 100%;
+  }
+
+  .rq-public-body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .form-panel {
+    padding: 34px 24px;
+  }
+
+  .brand-symbol {
+    width: 120px;
+    height: 120px;
+  }
+
+  .brand-copy h1 {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 720px) {
+  .brand-copy h1 {
+    font-size: 32px;
+  }
+
+  .form-heading h2 {
+    font-size: 25px;
+  }
+
+  .form-grid,
+  .rq-public-body {
+    grid-template-columns: 1fr;
+  }
+
+  .postular-form {
+    padding: 20px;
+  }
+
+  .form-panel {
+    padding: 24px 16px;
+  }
+
+  .brand-panel {
+    padding: 32px 20px;
+  }
+
+  .brand-symbol {
+    width: 104px;
+    height: 104px;
+  }
+
+  .btn-submit {
+    width: 100%;
+  }
+}

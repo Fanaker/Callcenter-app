@@ -1,0 +1,259 @@
+<section *ngIf="rq; else noRq" class="formacion-detail-page">
+  <header class="page-head">
+    <button class="btn-back" title="Volver a formación" type="button" (click)="goBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M15 18L9 12L15 6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+    <div>
+      <span class="eyebrow">Evaluación de formación</span>
+      <h2>RQ {{ rq.codigo }} · {{ rq.puesto }}</h2>
+      <p>Registra las calificaciones de capacitación y valida el resultado final de cada postulante.</p>
+    </div>
+  </header>
+
+  <section class="rq-summary-card">
+    <div class="rq-summary-top">
+      <div>
+        <span class="rq-code">{{ rq.codigo }}</span>
+        <h3>{{ rq.campaign }}</h3>
+        <p>{{ rq.puesto }}</p>
+      </div>
+
+      <span class="status-badge" [class.status-closed]="rq.estado === 'CERRADO'">
+        {{ rq.estado }}
+      </span>
+    </div>
+
+    <div class="summary-metrics">
+      <div class="metric-tile">
+        <span>Postulantes en formación</span>
+        <strong>{{ getTrainingCandidates().length }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Evaluaciones</span>
+        <strong>{{ getSafeTestCount() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Nota aprobatoria</span>
+        <strong>{{ rq.aprobacionPromedio }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>Aprobados</span>
+        <strong>{{ getApprovedCount() }}</strong>
+      </div>
+
+      <div class="metric-tile">
+        <span>No aprobados</span>
+        <strong>{{ getNotApprovedCount() }}</strong>
+      </div>
+    </div>
+
+    <div class="rq-details-grid">
+      <div class="detail-pill">
+        <span>Inicio capacitación</span>
+        <strong>{{ rq.fechaInicioCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Fin capacitación</span>
+        <strong>{{ rq.fechaFinCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Días capacitación</span>
+        <strong>{{ rq.diasCapacitacion }}</strong>
+      </div>
+
+      <div class="detail-pill">
+        <span>Inicio labores</span>
+        <strong>{{ rq.fechaIngreso }}</strong>
+      </div>
+    </div>
+
+    <div class="rq-comments">
+      <span>Comentarios</span>
+      <p>{{ rq.comentarios || 'Sin comentarios registrados.' }}</p>
+    </div>
+  </section>
+
+  <section class="config-card">
+    <div class="config-head">
+      <div>
+        <span class="eyebrow">Configuración</span>
+        <h3>Parámetros de evaluación</h3>
+        <p>Define cuántas evaluaciones se tomarán y la nota mínima para aprobar formación.</p>
+      </div>
+    </div>
+
+    <div class="config-grid">
+      <div class="form-group">
+        <label>Cantidad de evaluaciones</label>
+        <input
+          type="number"
+          min="1"
+          max="5"
+          placeholder="1-5"
+          [(ngModel)]="rq.testCount"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Nota aprobatoria</label>
+        <input
+          type="number"
+          min="0"
+          max="20"
+          placeholder="0-20"
+          [(ngModel)]="rq.aprobacionPromedio"
+        />
+      </div>
+
+      <button class="btn-primary" type="button" (click)="saveConfig()">
+        Aplicar cambios
+      </button>
+    </div>
+  </section>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+  <section class="training-panel" *ngIf="getTrainingCandidates().length > 0; else noCandidates">
+    <div class="training-head">
+      <div>
+        <span class="eyebrow">Calificaciones</span>
+        <h3>Postulantes en capacitación</h3>
+        <p>Solo se muestran postulantes que cumplen requisito y aprobaron entrevista.</p>
+      </div>
+
+      <span class="total-chip">
+        {{ getTrainingCandidates().length }} postulantes
+      </span>
+    </div>
+
+    <div class="filter-card">
+      <div class="form-group">
+        <label>Resultado</label>
+        <select title="Filtrar por resultado" [(ngModel)]="approvalFilter">
+          <option value="todos">Todos</option>
+          <option value="aprobados">Aprobados</option>
+          <option value="no-aprobados">No aprobados</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-shell">
+      <table class="training-table">
+        <colgroup>
+          <col class="col-dni" />
+          <col class="col-candidate" />
+          <col class="col-test" *ngFor="let index of getTestIndexes()" />
+          <col class="col-average" />
+          <col class="col-result" />
+        </colgroup>
+
+        <thead>
+          <tr>
+            <th (click)="sortBy('dni')" class="sortable-header">
+              DNI
+              <span class="sort-icon" *ngIf="sortColumn === 'dni'">
+                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+              </span>
+            </th>
+
+            <th (click)="sortBy('nombre')" class="sortable-header">
+              Postulante
+              <span class="sort-icon" *ngIf="sortColumn === 'nombre'">
+                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+              </span>
+            </th>
+
+            <th *ngFor="let index of getTestIndexes()">
+              Test {{ index }}
+            </th>
+
+            <th (click)="sortBy('promedio')" class="sortable-header">
+              Promedio
+              <span class="sort-icon" *ngIf="sortColumn === 'promedio'">
+                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+              </span>
+            </th>
+
+            <th>Resultado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let candidate of getFilteredAndSortedCandidates()">
+            <td class="dni-cell">{{ candidate.dni }}</td>
+
+            <td>
+              <div class="candidate-cell">
+                <div class="candidate-avatar">
+                  {{ candidate.nombre.charAt(0) }}{{ candidate.apellido.charAt(0) }}
+                </div>
+
+                <div>
+                  <strong>{{ candidate.nombre }} {{ candidate.apellido }}</strong>
+                  <span>{{ candidate.correo }}</span>
+                </div>
+              </div>
+            </td>
+
+            <td *ngFor="let index of getTestIndexes()">
+              <input
+                type="number"
+                min="0"
+                max="20"
+                placeholder="0-20"
+                [ngModel]="getTestValue(candidate, index)"
+                (ngModelChange)="setTestValue(candidate, index, $event)"
+              />
+            </td>
+
+            <td class="average-cell">
+              {{ getAverage(candidate) }}
+            </td>
+
+            <td>
+              <span class="result-badge" [class.not-approved]="!isApproved(candidate)">
+                {{ getResultLabel(candidate) }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel-actions">
+      <button class="btn-primary" type="button" (click)="saveResults()">
+        Guardar resultados
+      </button>
+    </div>
+  </section>
+</section>
+
+<ng-template #noCandidates>
+  <div class="empty-state">
+    <h3>No hay postulantes para formación</h3>
+    <p>
+      Este requerimiento aún no tiene postulantes que cumplan requisito y tengan entrevista aprobada.
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #noRq>
+  <div class="empty-state">
+    <h3>RQ no encontrada</h3>
+    <p>No se encontró información para el requerimiento de formación solicitado.</p>
+  </div>
+</ng-template>

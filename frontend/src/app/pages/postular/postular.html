@@ -1,0 +1,228 @@
+<section *ngIf="rq; else noRq" class="public-postular-page">
+  <aside class="brand-panel">
+    <div class="brand-content">
+      <div class="brand-hero">
+        <img src="/logo.png" alt="Quantia" class="brand-symbol" />
+
+        <div class="brand-copy">
+          <span class="eyebrow">Postulación pública</span>
+          <h1>Postula a Quantia</h1>
+          <p>
+            Completa tus datos para participar en el proceso de selección asociado a este requerimiento.
+          </p>
+        </div>
+      </div>
+
+      <div class="rq-public-card">
+        <div class="rq-public-header">
+          <span>{{ rq.codigo }}</span>
+          <strong>{{ rq.estado }}</strong>
+        </div>
+
+        <div class="rq-public-body">
+          <div>
+            <span>Campaña</span>
+            <strong>{{ rq.campaign }}</strong>
+          </div>
+
+          <div>
+            <span>Puesto</span>
+            <strong>{{ rq.puesto }}</strong>
+          </div>
+
+          <div>
+            <span>Inicio capacitación</span>
+            <strong>{{ rq.fechaInicioCapacitacion }}</strong>
+          </div>
+
+          <div>
+            <span>Inicio laboral previsto</span>
+            <strong>{{ rq.fechaIngreso }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="form-panel">
+    <div class="form-wrapper">
+      <div class="form-heading">
+        <span class="eyebrow">Formulario de registro</span>
+        <h2>{{ rq.puesto }}</h2>
+        <p>
+          Ingresa información real y verificable para que el equipo de reclutamiento pueda contactarte.
+        </p>
+      </div>
+
+      <div *ngIf="formularioBloqueado" class="blocked-card">
+        <h3>Postulación cerrada</h3>
+        <p>Este requerimiento ya se encuentra cerrado. No se pueden registrar más postulantes.</p>
+      </div>
+
+      <form *ngIf="!formularioBloqueado" class="postular-form" (ngSubmit)="enviar()">
+        <input type="hidden" name="rqCodigo" [value]="rq.codigo" />
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input
+              type="text"
+              [(ngModel)]="nombre"
+              name="nombre"
+              placeholder="Ingresa tu nombre"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Apellido</label>
+            <input
+              type="text"
+              [(ngModel)]="apellido"
+              name="apellido"
+              placeholder="Ingresa tu apellido"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Número de DNI</label>
+            <input
+              type="text"
+              [(ngModel)]="dni"
+              name="dni"
+              placeholder="12345678"
+              maxlength="8"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              required
+              (blur)="validateDni()"
+            />
+            <div *ngIf="errorDni" class="error-message">
+              {{ errorDni }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input
+              type="tel"
+              [(ngModel)]="telefono"
+              name="telefono"
+              placeholder="999999999"
+              maxlength="9"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              required
+              (blur)="validateTelefono()"
+            />
+            <div *ngIf="errorTelefono" class="error-message">
+              {{ errorTelefono }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Correo</label>
+            <input
+              type="email"
+              [(ngModel)]="correo"
+              name="correo"
+              placeholder="tu@email.com"
+              required
+              (blur)="validateEmail()"
+            />
+            <div *ngIf="errorEmail" class="error-message">
+              {{ errorEmail }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Medio de comunicación preferido</label>
+            <select
+              title="Selecciona medio de comunicación"
+              [(ngModel)]="medioPreferido"
+              name="medioPreferido"
+            >
+              <option [ngValue]="'whatsapp'">Whatsapp</option>
+              <option [ngValue]="'llamada'">Llamada</option>
+              <option [ngValue]="'email'">Email</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="cv-card">
+          <div class="cv-copy">
+            <h3>CV en Google Drive</h3>
+            <p>
+              Sube tu CV a Google Drive, activa la opción “cualquier persona con el enlace puede ver”
+              y pega aquí el enlace.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label>Enlace del CV</label>
+            <input
+              type="url"
+              [(ngModel)]="cvUrl"
+              name="cvUrl"
+              placeholder="https://drive.google.com/..."
+              required
+              (blur)="validateCvUrl()"
+            />
+            <div *ngIf="errorCvUrl" class="error-message">
+              {{ errorCvUrl }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Comentarios extras <span>(opcional)</span></label>
+          <textarea
+            rows="4"
+            [(ngModel)]="comentarios"
+            name="comentarios"
+            placeholder="Puedes agregar disponibilidad horaria, experiencia relevante u otra información importante."
+          ></textarea>
+        </div>
+
+        <button class="btn-submit" type="submit" [disabled]="!isFormValid()">
+          Enviar postulación
+        </button>
+      </form>
+
+      <div *ngIf="message" class="success-message">
+        <strong>Postulación registrada</strong>
+        <p>{{ message }}</p>
+      </div>
+    </div>
+  </main>
+</section>
+
+<ng-template #noRq>
+  <section class="public-postular-page">
+    <aside class="brand-panel">
+      <div class="brand-content">
+        <div class="brand-hero">
+          <img src="/logo.png" alt="Quantia" class="brand-symbol" />
+
+          <div class="brand-copy">
+            <span class="eyebrow">Postulación pública</span>
+            <h1>Postula a Quantia</h1>
+            <p>El enlace ingresado no corresponde a un requerimiento disponible.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="form-panel">
+      <div class="form-wrapper">
+        <div class="not-found-card">
+          <h2>RQ no encontrada</h2>
+          <p>
+            Verifica que el enlace de postulación sea correcto o solicita un nuevo link al equipo de reclutamiento.
+          </p>
+        </div>
+      </div>
+    </main>
+  </section>
+</ng-template>

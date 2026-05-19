@@ -1,0 +1,79 @@
+<div class="auth-page">
+  <div class="left-side">
+    <div class="auth-brand">
+      <img src="/logonombre.png" alt="Quantia Call Center App" class="auth-logo" />
+      <p class="auth-welcome">Bienvenido a Quantia Call Center App V1.0</p>
+    </div>
+  </div>
+
+  <div class="right-side">
+    <div *ngIf="!isVerificationMode" class="auth-forms">
+      <div *ngIf="!isRegisterMode" class="login-container">
+        <h2>Iniciar Sesión</h2>
+
+        <div class="login-form">
+          <label>Usuario</label>
+          <input type="text" placeholder="Ingresa tu usuario" [(ngModel)]="username">
+
+          <label>Contraseña</label>
+          <input type="password" placeholder="Ingresa tu contraseña" [(ngModel)]="password">
+
+          <button (click)="login()" [disabled]="!username.trim() || !password.trim()">Iniciar Sesión</button>
+        </div>
+
+        <div class="switch-mode">
+          <p>¿No tienes cuenta? <a (click)="switchToRegister()" class="auth-action-link">Crear cuenta</a></p>
+        </div>
+      </div>
+
+      <div *ngIf="isRegisterMode" class="register-container">
+        <h2>Crear Cuenta</h2>
+
+        <div class="register-form">
+          <label>DNI (8 dígitos)</label>
+          <input type="text" placeholder="Ingresa tu DNI" [(ngModel)]="dni" maxlength="8" pattern="[0-9]{8}">
+
+          <label>Nombre</label>
+          <input type="text" placeholder="Ingresa tu nombre" [(ngModel)]="nombre">
+
+          <label>Apellido</label>
+          <input type="text" placeholder="Ingresa tu apellido" [(ngModel)]="apellido">
+
+          <label>Correo</label>
+          <input type="email" placeholder="Ingresa tu correo" [(ngModel)]="correo">
+          <p *ngIf="correo && !isValidEmail(correo)" class="field-error">Correo no válido</p>
+
+          <label>Contraseña</label>
+          <input type="password" placeholder="Ingresa tu contraseña" [(ngModel)]="newPassword">
+
+          <label>Verificar Contraseña</label>
+          <input type="password" placeholder="Confirma tu contraseña" [(ngModel)]="confirmPassword">
+          <p *ngIf="confirmPassword && newPassword !== confirmPassword" class="field-error">Las contraseñas no coinciden</p>
+
+          <button (click)="register()" [disabled]="!dni.trim() || dni.length !== 8 || !nombre.trim() || !apellido.trim() || !correo.trim() || !isValidEmail(correo) || !newPassword.trim() || newPassword !== confirmPassword">Crear Cuenta</button>
+        </div>
+
+        <div class="switch-mode">
+          <p>¿Ya tienes cuenta? <a (click)="switchToLogin()" class="auth-action-link">Iniciar sesión</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isVerificationMode" class="verification-container">
+      <h2>Verificar Correo</h2>
+
+      <div class="verification-form">
+        <p>Se ha enviado un código de verificación a {{ correo }}.</p>
+
+        <label>Código de Verificación</label>
+        <input type="text" placeholder="Ingresa el código" [(ngModel)]="verificationCode" maxlength="6">
+
+        <button (click)="verifyCode()" [disabled]="!verificationCode.trim() || verificationCode.length !== 6">Verificar</button>
+
+        <div class="switch-mode">
+          <p><a (click)="switchToRegister()" class="auth-action-link">Volver a crear cuenta</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

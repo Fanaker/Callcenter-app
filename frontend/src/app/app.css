@@ -1,0 +1,73 @@
+/* =========================================================
+   APP LAYOUT
+   ========================================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  background: var(--bg-page);
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  margin-left: 250px;
+  padding: 28px 32px;
+  background:
+    radial-gradient(circle at top right, rgba(214, 51, 132, 0.07), transparent 32%),
+    var(--bg-page);
+  transition: margin-left 0.25s ease, padding 0.25s ease;
+}
+
+:host-context(.sidebar-collapsed) .app-main {
+  margin-left: 80px;
+}
+
+.app-page-shell {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .app-main {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 960px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .app-main,
+  :host-context(.sidebar-collapsed) .app-main {
+    margin-left: 0;
+    min-height: calc(100vh - 96px);
+    padding: 20px 16px;
+  }
+
+  .app-page-shell {
+    max-width: 100%;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-main {
+    padding: 16px 12px;
+  }
+}

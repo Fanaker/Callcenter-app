@@ -1,0 +1,153 @@
+<section class="candidatos-panel">
+  <header class="list-head">
+    <div>
+      <span class="eyebrow">Postulantes registrados</span>
+      <h2>Listado de candidatos</h2>
+    </div>
+
+    <span class="total-chip">
+      {{ candidatosOriginales.length }} postulantes
+    </span>
+  </header>
+
+  <div class="filter-row">
+    <button
+      class="filter-chip"
+      [class.active]="filtroActual === null"
+      type="button"
+      (click)="aplicarFiltro(null)"
+    >
+      Todos
+      <strong>{{ candidatosOriginales.length }}</strong>
+    </button>
+
+    <button
+      class="filter-chip"
+      [class.active]="filtroActual === 'apto-si'"
+      type="button"
+      (click)="aplicarFiltro('apto-si')"
+    >
+      Cumplen
+      <strong>{{ contarApto(true) }}</strong>
+    </button>
+
+    <button
+      class="filter-chip"
+      [class.active]="filtroActual === 'apto-no'"
+      type="button"
+      (click)="aplicarFiltro('apto-no')"
+    >
+      No cumplen
+      <strong>{{ contarApto(false) }}</strong>
+    </button>
+
+    <button
+      class="filter-chip"
+      [class.active]="filtroActual === 'entrevista-si'"
+      type="button"
+      (click)="aplicarFiltro('entrevista-si')"
+    >
+      Entrevista apta
+      <strong>{{ contarEntrevista(true) }}</strong>
+    </button>
+
+    <button
+      class="filter-chip"
+      [class.active]="filtroActual === 'entrevista-no'"
+      type="button"
+      (click)="aplicarFiltro('entrevista-no')"
+    >
+      No apta
+      <strong>{{ contarEntrevista(false) }}</strong>
+    </button>
+  </div>
+
+  <div class="table-shell">
+    <div *ngIf="cargando" class="spinner">Cargando...</div>
+
+    <table class="candidatos-table" *ngIf="!cargando">
+      <colgroup>
+        <col class="col-dni" />
+        <col class="col-name" />
+        <col class="col-name" />
+        <col class="col-select" />
+        <col class="col-select" />
+        <col class="col-action" />
+      </colgroup>
+
+      <thead>
+        <tr>
+          <th (click)="sortBy('dni')" class="sortable-header">
+            DNI
+            <span class="sort-icon" *ngIf="sortField === 'dni'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
+
+          <th (click)="sortBy('nombre')" class="sortable-header">
+            Nombre
+            <span class="sort-icon" *ngIf="sortField === 'nombre'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
+
+          <th (click)="sortBy('apellido')" class="sortable-header">
+            Apellido
+            <span class="sort-icon" *ngIf="sortField === 'apellido'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
+
+          <th>Requisito</th>
+          <th>Entrevista</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let candidato of candidatosFiltrados">
+          <td class="dni-cell">{{ candidato.dni || '—' }}</td>
+          <td>{{ candidato.nombre }}</td>
+          <td>{{ candidato.apellido }}</td>
+
+          <td>
+            <select
+              [ngModel]="candidato.apto"
+              (ngModelChange)="cambiarApto(candidato, $event)"
+              title="Estado de requisito"
+            >
+              <option [ngValue]="true">Cumple</option>
+              <option [ngValue]="false">No cumple</option>
+            </select>
+          </td>
+
+          <td>
+            <select
+              [ngModel]="candidato.entrevistaAprobada"
+              (ngModelChange)="cambiarEntrevista(candidato, $event)"
+              [disabled]="!puedeMarcarEntrevista(candidato)"
+              title="Resultado de entrevista"
+            >
+              <option [ngValue]="true">Apto</option>
+              <option [ngValue]="false">No apto</option>
+            </select>
+          </td>
+
+          <td>
+            <button
+              class="detail-button"
+              type="button"
+              (click)="verDetalleCandidato(candidato)"
+            >
+              Ver detalle
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="candidatosFiltrados.length === 0 && !cargando" class="sin-resultados">
+      No hay candidatos que mostrar.
+    </div>
+  </div>
+</section>
