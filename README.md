@@ -239,6 +239,6 @@ El sistema evidencia habilidades en:
 ---
 
 ## Autor
+Desarrollado por **Fabián Sebastián** - **Alisson Ayala** 
 
-Desarrollado por **Fabián Sebastián** - **Alisson Ayala** estión de requerimientos, reclutamiento y formación de personal en un entorno de contact center.
-
+Proyecto orientado a la gestión de requerimientos, reclutamiento y formación de personal en un entorno de contact center.
